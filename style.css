@@ -1,5 +1,4 @@
 /*=============== GOOGLE FONTS ===============*/
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500&display=swap");
 
 
@@ -676,7 +675,6 @@ img {
     padding: 0 6rem;
 }
 
-/* kathaltola - 1160, Monipur girls scholl er pichon dike, panir pump niche */
 
 /* MEDIA QUERY FOR RESPONSIVE DESIGN */
 @media only screen and (max-width: 1200px) {
@@ -791,10 +789,12 @@ img {
 
     #footer_container {
         flex-direction: column;
+        row-gap: 2rem;
     }
 
     #footer_list ul {
         flex-direction: column;
+        row-gap: 1.5rem;
     }
 
     #services{
