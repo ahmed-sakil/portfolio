@@ -44,7 +44,7 @@ Object.values(projects).forEach(project => {
                     <div class="project_topic">${project.topic}</div>
                     <h2 class="project_name">${project.title}</h2>
                     <p class="project_description">${project.description}</p>
-                    <a href="${project.link}" class="project_button">Explore Project <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="${project.link}" class="project_button" target="_blank">Explore Project <i class="fa-solid fa-arrow-right"></i></a>
                 </div>`
     
     let project_container = document.getElementById("project_container")
