@@ -264,7 +264,7 @@ img { display: block; max-width: 100%; height: auto; }
   flex-direction: column;
   gap: 1.5rem;
   justify-content: center;
-  border-right: 1px solid var(--glass-border);
+  border-right: 4px solid var(--glass-border);
   padding-right: 1.5rem;
 }
 
@@ -356,7 +356,7 @@ img { display: block; max-width: 100%; height: auto; }
   text-transform: uppercase;
 }
 .stat-divider {
-  width: 1px;
+  width: 4px;
   height: 40px;
   background-color: var(--glass-border);
 }
@@ -390,15 +390,21 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* ==================== 7. GLASS PANELS (Section Dividers) ==================== */
 .glass-panel {
+    /* 1. Size & Centering (Matches your Header) */
+    width: 90%;
+    margin: 4rem auto;   /* Top/Bottom: 4rem, Left/Right: Auto (This centers it) */
+    border-radius: 2rem; /* Rounded corners to match the header */
+
+    /* 2. The Glass Look */
     background: rgba(2, 21, 28, 0.4); 
     backdrop-filter: blur(12px);       
     -webkit-backdrop-filter: blur(12px);
     
-    border-top: 1px solid rgba(255, 255, 255, 0.08);    
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
+    /* 3. Border & Shadow */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Full border all around */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);           
     
-    margin: 4rem 0;  
+    /* 4. Internal Spacing */
     padding-top: 6rem;
     padding-bottom: 6rem;
 }
@@ -697,7 +703,7 @@ img { display: block; max-width: 100%; height: auto; }
   .hero__social {
     flex-direction: row;
     border-right: none;
-    border-top: 1px solid var(--glass-border);
+    border-top: 4px solid var(--glass-border);
     padding-right: 0;
     padding-top: 1.5rem;
     width: 100%;
