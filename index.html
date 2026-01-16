@@ -4,271 +4,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Md. Sakil Ahmed</title>
-    <!-- =====LINKING REMIXICON===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
-        integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- =====LINKING fontawesome===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Sakil Ahmed | Software Engineer</title>
+
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    
-    <!-- =====NAVIGATION BAR===== -->
+    <canvas id="bg-canvas"></canvas>
+    <canvas id="cursor-canvas"></canvas>
+
     <header class="header" id="header">
         <nav class="nav container">
-            <!-- =====NAVIGATION LOGO===== -->
-            <a href="#hero" class="nav__logo">SAKIL</a>
+            
+            <a href="#" class="nav__logo">
+                <img src="img/perfil.png" alt="Profile" class="nav__profile-img">
+                Ahmed <span>Sakil</span>
+            </a>
 
-            <!-- =====NAVIGATION MENU===== -->
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
-                    <li class="nav__item">
-                        <a href="#hero" class="nav__link">
-                            <i class="ri-arrow-right-up-line"></i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#hero" class="nav__link">
-                            <i class="ri-arrow-right-up-line"></i>
-                            <span>About</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#project" class="nav__link">
-                            <i class="ri-arrow-right-up-line"></i>
-                            <span>Projects</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#about_me" class="nav__link">
-                            <i class="ri-arrow-right-up-line"></i>
-                            <span>About me</span>
-                        </a>
-                    </li>
-
-                    <li class="nav__item">
-                        <a href="#services" class="nav__link">
-                            <i class="ri-arrow-right-up-line"></i>
-                            <span>Contact</span>
-                        </a>
-                    </li>
+                    <li class="nav__item"><a href="#home" class="nav__link active-link">Home</a></li>
+                    <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
+                    <li class="nav__item"><a href="#projects" class="nav__link">Projects</a></li>
+                    <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
                 </ul>
 
-                <!-- =====CLOSE BUTTON===== -->
                 <div class="nav__close" id="nav-close">
-                    <i class="ri-close-large-line"></i>
-                </div>
-
-                <!-- =====SOCIAL ICONS===== -->
-                <div class="nav__social">
-                    <a href="https://www.facebook.com/theSakil.09" target="_blank" class="nav__social-link">
-                        <i class="ri-facebook-circle-line"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ahmed-sakil/" target="_blank" class="nav__social-link">
-                        <i class="ri-linkedin-box-line"></i>
-                    </a>
-                    <a href="https://github.com/ahmed-sakil" target="_blank" class="nav__social-link">
-                        <i class="ri-github-line"></i>
-                    </a>
-                    <a href="https://www.instagram.com/_._sakil/" target="_blank" class="nav__social-link">
-                        <i class="ri-instagram-line"></i>
-                    </a>
-                    <a href="https://x.com/thesakil_09" target="_blank" class="nav__social-link">
-                        <i class="ri-twitter-line"></i>
-                    </a>
+                    <i class="ri-close-line"></i>
                 </div>
             </div>
-            <!-- =====END OF NAVIGATION MENU===== -->
 
-            <!-- =====TOGGLE BUTTON===== -->
-            <div class="nav__toggle" id="nav-toggle">
-                <i class="ri-menu-line"></i>
+            <div class="nav__actions">
+                <div class="theme-dropdown">
+                    <button class="theme-btn" id="theme-btn" aria-label="Change Theme">
+                        <i class="ri-palette-line"></i>
+                    </button>
+                    <div class="theme-options" id="theme-options">
+                        <div class="theme-option" data-color="default">
+                            <span class="dot" style="background: #00e0a7;"></span> Cyan
+                        </div>
+                        <div class="theme-option" data-color="red">
+                            <span class="dot" style="background: #ff2e63;"></span> Crimson
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class="ri-menu-line"></i>
+                </div>
             </div>
         </nav>
     </header>
 
-    <section id="hero">
-        <div id="hero_data">
-            <div id="hero_data_1">
-                <div id="hero_data_heading">Hello, I'm <span class="pre">Sakil Ahmed</span></div>
-            </div>
-            <p id="hero_data_bio">A highly skilled and dedicated Software Engineer with expertise in HTML, CSS,
-                JavaScript, Node.js, competitive programming, C, and C++. Seeking a challenging position to utilize my
-                technical knowledge and experience in developing innovative software solutions, while contributing to
-                the growth and success of the organization.</p>
-            <div class="say_hello_button">
-                <a href="#">Say Hello!</a>
-            </div>
-            <div id="hero_data_2">
-                <div class="hero_data_2_container">
-                    <div class="hero_data_2_container_top" id="exp_year">1 Y.</div>
-                    <div class="hero_data_2_container_down">experience</div>
-                </div>
-                <div class="hero_data_2_container">
-                    <div class="hero_data_2_container_top" id="project_number">10+</div>
-                    <div class="hero_data_2_container_down pre">Project Completed</div>
-                </div>
-                <div class="hero_data_2_container">
-                    <div class="hero_data_2_container_top">available</div>
-                    <div class="hero_data_2_container_down">24/7</div>
-                </div>
-            </div>
-        </div>
-        <div id="hero_image">
-            <img src="img/sakil.png" alt="SAKIL" width="400px">
-        </div>
-    </section>
-    <section id="project">
-        <h2 id="project_heading">Project</h2>
-        <p id="project_description">These projects highlight my skills in turning ideas and designs into working web
-            applications.</p>
-        <div id="project_container">
-            <!-- <div class="item_container">
-                <div class="project_img">
-                    <img src="img/project1.jpg" alt="p1" width="400">
-                </div>
-                <div class="project_topic">web development</div>
-                <h2 class="project_name">Lighting Login Page</h2>
-                <p class="project_description">A fast and simple platform to search, book, and manage train tickets
-                    online.</p>
-                <a href="#" class="project_button">Explore Project <i class="fa-solid fa-arrow-right"></i></a>
-            </div> -->
-        </div>
-    </section>
-    <section id="about_me">
-        <div id="what_i_do">
-            <h2>What I do?</h2>
-            <p>I build responsive, fast, and user-friendly websites using modern front-end technologies. From turning
-                designs into code to optimizing performance, I focus on creating seamless web experiences. I work with
-                HTML, CSS, JavaScript, TypeScript, and Angular to bring ideas to life—whether it's a simple landing page
-                or a dynamic web app.</p>
-            <div class="say_hello_button">
-                <a href="#">Say Hello!</a>
-            </div>
-        </div>
-        <div id="card_container">
-            <div class="card">
-                <h2><i class="fa-solid fa-globe"></i>Web Development</h2>
-                <p>I craft modern, responsive websites using HTML, CSS, JavaScript, Angular, and more — optimized for
-                    all devices and browsers.</p>
-            </div>
-            <div class="card">
-                <h2><i class="fa-solid fa-globe"></i>UI Integration</h2>
-                <p>I take your Figma or design files and turn them into clean, pixel-perfect code with attention to
-                    detail and performance.</p>
-            </div>
-            <div class="card">
-                <h2><i class="fa-solid fa-globe"></i>Performance & Optiomization</h2>
-                <p>Speed matters. I build lightweight, fast-loading websites with clean code, SEO-friendly structure,
-                    and smooth user experience.</p>
-            </div>
-        </div>
-    </section>
-    <section id="services">
-        <div id="service_container">
-            <div id="service1">
-                <h2>Let's discuss your project</h2>
-                <p id="serviceP">Every project start with a conversation. Whether you have a clear vision or just an
-                    idea, I’m here to
-                    help you bring it to life with clean, modern web development. </p>
-                <div id="address">
-                    <i class="ri-map-pin-2-fill"></i>
-                    <div>
-                        <p class="service_short_heading">Address:</p>
-                        <p class="service_details">Mirpur, Dhaka</p>
-                    </div>
-                </div>
-                <div id="service_email">
-                    <i class="ri-mail-unread-fill"></i>
-                    <div>
-                        <p class="service_short_heading">My Email:</p>
-                        <p class="service_details">thesakil.09@gmail.com</p>
-                    </div>
-                </div>
-                <div id="service_phone">
-                    <i class="ri-phone-fill"></i>
-                    <div>
-                        <p class="service_short_heading">Call Me Now:</p>
-                        <p class="service_details">+880 1705966679</p>
-                    </div>
-                </div>
-                <div id="social_site">
-                    <a href="https://www.facebook.com/theSakil.09" target="_blank">
-                        <i class="ri-facebook-circle-fill"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ahmed-sakil/" target="_blank">
-                        <i class="ri-linkedin-box-fill"></i>
-                    </a>
-                    <a href="https://github.com/ahmed-sakil" target="_blank">
-                        <i class="ri-github-fill"></i>
-                    </a>
-                    <a href="https://www.instagram.com/_._sakil/" target="_blank">
-                        <i class="ri-instagram-fill"></i>
-                    </a>
-                    <a href="https://x.com/thesakil_09" target="_blank">
-                        <i class="ri-twitter-fill"></i>
-                    </a>
-                </div>
-            </div>
+    <main class="main">
 
-            <div id="message">
-                <p>Feel free to write me a message if you're interested in working together or have any questions!</p>
-                <form action="post" id="form">
-                    <label for="name">Name*</label>
-                    <input type="text" name="name" id="name" required>
-                    <label for="email">Email*</label>
-                    <input type="email" name="email" id="email" required>
-                    <label for="location">Location</label>
-                    <input type="text" name="location" id="location">
-                    <div id="message2">
-                        <div id="message21">
-                            <label for="budget">Budget*</label>
-                            <input type="text" name="budget" id="budget" required>
+        <section class="hero section" id="home">
+            <div class="hero__container container">
+                
+                <div class="hero__content">
+                    <div class="hero__social">
+                        <a href="https://github.com/ahmed-sakil" target="_blank" class="social-icon"><i class="ri-github-fill"></i></a>
+                        <a href="https://linkedin.com/in/ahmed-sakil" target="_blank" class="social-icon"><i class="ri-linkedin-fill"></i></a>
+                        <a href="https://facebook.com/theSakil.09" target="_blank" class="social-icon"><i class="ri-facebook-circle-fill"></i></a>
+                        <a href="https://x.com/thesakil_09" target="_blank" class="social-icon"><i class="ri-twitter-x-line"></i></a>
+                    </div>
+
+                    <div class="hero__data">
+                        <h1 class="hero__title">Hello, I'm <br> <span class="highlight">Sakil Ahmed</span></h1>
+                        <h3 class="hero__subtitle">Software Engineer & Web Developer</h3>
+
+                        <p class="hero__description">
+                            A highly skilled developer converting ideas into efficient code.
+                            Expertise in JavaScript, Node.js, and Competitive Programming.
+                            Available 24/7 to bring your digital vision to life.
+                        </p>
+
+                        <div class="hero__buttons">
+                            <a href="#contact" class="btn btn-primary">Say Hello!</a>
+                            <a href="#projects" class="btn btn-outline">View Projects</a>
                         </div>
-                        <div id="message22">
-                            <label for="subject">Subject*</label>
-                            <input type="text" name="subject" id="subject" required>
+
+                        <div class="hero__stats">
+                            <div class="stat-item">
+                                <h2>1 Y.</h2>
+                                <p>Experience</p>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <h2>10+</h2>
+                                <p>Projects</p>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <h2>24/7</h2>
+                                <p>Support</p>
+                            </div>
                         </div>
                     </div>
-                    <label for="customer_message">Message*</label>
-                    <input type="text" name="customer_message" id="customer_message" required>
-                    <button id="submit" type="submit">Submit</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <footer id="footer">
-        <div id="footer_container">
-            <div id="footer_logo">
-                <div id="footer_logo_image">
-                    <!-- <img src="img/logo.png" alt="S" width="75" height="75"> -->
                 </div>
-                <div id="footer_logo_name">Sakil</div>
+
+                <div class="hero__image-wrapper">
+                    <img src="img/sakil.png" alt="Sakil Ahmed" class="hero__img">
+                    <div class="hero__glow"></div>
+                </div>
             </div>
-            <div id="footer_list">
-                <ul>
-                    <li><a href="#hero">Home</a></li>
-                    <li><a href="#hero">About</a></li>
-                    <li><a href="#project">Project</a></li>
-                    <li><a href="#about_me">About me</a></li>
-                    <li><a href="#services">Contact</a></li>
-                </ul>
+        </section>
+
+        <section class="skills section glass-panel" id="skills">
+            <h2 class="section__title">My Tech Stack</h2>
+            <span class="section__subtitle">Technologies I use</span>
+
+            <div class="skills__container container grid">
+                <div class="skills__box">
+                    <i class="fa-brands fa-html5 skills__icon" style="color: #e34c26;"></i>
+                    <span class="skills__name">HTML5</span>
+                </div>
+                <div class="skills__box">
+                    <i class="fa-brands fa-css3-alt skills__icon" style="color: #264de4;"></i>
+                    <span class="skills__name">CSS3</span>
+                </div>
+                <div class="skills__box">
+                    <i class="fa-brands fa-js skills__icon" style="color: #f7df1e;"></i>
+                    <span class="skills__name">JavaScript</span>
+                </div>
+                <div class="skills__box">
+                    <i class="fa-brands fa-react skills__icon" style="color: #61dbfb;"></i>
+                    <span class="skills__name">React</span>
+                </div>
+                <div class="skills__box">
+                    <i class="fa-brands fa-node skills__icon" style="color: #3c873a;"></i>
+                    <span class="skills__name">Node.js</span>
+                </div>
+                <div class="skills__box">
+                    <i class="fa-brands fa-git-alt skills__icon" style="color: #f1502f;"></i>
+                    <span class="skills__name">Git</span>
+                </div>
             </div>
-            <div id="copyright">Copyright &copy; 2025.</div>
+        </section>
+
+        <section class="projects section glass-panel" id="projects">
+            <h2 class="section__title">Featured Projects</h2>
+            <span class="section__subtitle">My recent work</span>
+
+            <div class="projects__container container grid" id="project_container"></div>
+        </section>
+
+        <section class="contact section glass-panel" id="contact">
+            <h2 class="section__title">Get in Touch</h2>
+            <span class="section__subtitle">Contact Me</span>
+
+            <div class="contact__container container grid">
+                <div class="contact__content">
+                    <h3 class="contact__title">Talk to me</h3>
+
+                    <div class="contact__info">
+                        <div class="contact__card">
+                            <i class="ri-mail-send-line contact__card-icon"></i>
+                            <h3 class="contact__card-title">Email</h3>
+                            <span class="contact__card-data">thesakil.09@gmail.com</span>
+                            <a href="mailto:thesakil.09@gmail.com" class="contact__button">
+                                Write me <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </div>
+
+                        <div class="contact__card">
+                            <i class="ri-whatsapp-line contact__card-icon"></i>
+                            <h3 class="contact__card-title">Whatsapp</h3>
+                            <span class="contact__card-data">+880 1705966679</span>
+                            <a href="https://api.whatsapp.com/send?phone=8801705966679" target="_blank" class="contact__button">
+                                Write me <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact__content">
+                    <h3 class="contact__title">Write me your project</h3>
+
+                    <form action="" class="contact__form">
+                        <div class="contact__form-div">
+                            <label class="contact__form-tag">Name</label>
+                            <input type="text" placeholder="Insert your name" class="contact__form-input">
+                        </div>
+
+                        <div class="contact__form-div">
+                            <label class="contact__form-tag">Email</label>
+                            <input type="email" placeholder="Insert your email" class="contact__form-input">
+                        </div>
+
+                        <div class="contact__form-div contact__form-area">
+                            <label class="contact__form-tag">Project</label>
+                            <textarea cols="30" rows="10" placeholder="Write your project" class="contact__form-input"></textarea>
+                        </div>
+
+                        <button class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__container container">
+            <h1 class="footer__title">Sakil</h1>
+
+            <ul class="footer__list">
+                <li><a href="#about" class="footer__link">About</a></li>
+                <li><a href="#projects" class="footer__link">Projects</a></li>
+                <li><a href="#contact" class="footer__link">Contact</a></li>
+            </ul>
+
+            <div class="footer__social">
+                <a href="https://www.facebook.com/theSakil.09" target="_blank" class="footer__social-link"><i class="ri-facebook-circle-fill"></i></a>
+                <a href="https://www.instagram.com/_._sakil/" target="_blank" class="footer__social-link"><i class="ri-instagram-fill"></i></a>
+                <a href="https://x.com/thesakil_09" target="_blank" class="footer__social-link"><i class="ri-twitter-x-line"></i></a>
+                <a href="https://github.com/ahmed-sakil" target="_blank" class="footer__social-link"><i class="ri-github-fill"></i></a>
+            </div>
+
+            <span class="footer__copy">&#169; Sakil Ahmed. All rights reserved.</span>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
-
 </html>
