@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id                  Int       @id @default(autoincrement())
+  full_name           String?
+  role                String?   // Role displayed below name (e.g. "Full Stack Developer")
+  title               String?   // For compatibility
+  bio                 String?
+  journey_text        String?
+  years_of_experience Int?      // Custom years of experience
+  career_start_date   DateTime?
+  email               String?
+  phone               String?
+  location            String?
+  resume_url          String?
+  resume_drive_link   String?   // Direct Google Drive or cloud resume URL
+  profile_image_url   String?   // Legacy
+  hero_image_url      String?   // Hero Section main photo
+  icon_image_url      String?   // Navbar brand icon / small avatar
+  journey_image_url   String?   // Journey section custom artwork/photo
+  favicon_url         String?   // Custom website browser tab favicon
+  connect_message     String?   // One line tagline in Let's Connect section
+  github_username     String?
+  leetcode_username   String?
+  codeforces_username String?
+}
+
+enum SkillCategory {
+  PROGRAMMING_LANGUAGE
+  MARKUP_STYLING
+  DATABASE
+  LIBRARY
+  TOOL
+  PLATFORM
+  TECHNOLOGY
+  OTHER
+}
+
+model Skill {
+  id          Int           @id @default(autoincrement())
+  name        String
+  category    SkillCategory
+  percentage  Int
+  icon_name   String?
+}
+
+model Experience {
+  id              Int       @id @default(autoincrement())
+  type            String    // 'EXPERIENCE' or 'EDUCATION'
+  title           String
+  company         String    // Used for both company and institution
+  institution_url String?
+  start_date      DateTime
+  end_date        DateTime?
+  is_current      Boolean   @default(false)
+  description     String?
+  result          String?   // For education
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  image_url   String?
+  live_link   String?
+  github_link String?
+  tech_stack  String[] // Array of strings for PostgreSQL
+  is_featured Boolean  @default(true)
+  priority    Int      @default(0)
+}
+
+model Blog {
+  id              Int      @id @default(autoincrement())
+  title           String
+  slug            String   @unique
+  content         String
+  cover_image_url String?
+  published_at    DateTime @default(now())
+  is_featured     Boolean  @default(true)
+  priority        Int      @default(0)
+}
+
+model SocialLink {
+  id             Int      @id @default(autoincrement())
+  platform       String   // Social media name (e.g. "GitHub", "LinkedIn", "Twitter/X", "Facebook")
+  url            String   // Profile URL
+  icon_name      String?  // SimpleIcon or Lucide icon name (e.g. "github", "linkedin")
+  order          Int      @default(0)
+  show_in_hero   Boolean  @default(true)
+  show_in_footer Boolean  @default(true)
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String   // e.g. "Full Stack Web Development"
+  description String?  // Details of what is provided
+  icon_name   String?  // Icon identifier (e.g. "Code2", "Layers", "Database")
+  order       Int      @default(0)
+  created_at  DateTime @default(now())
+}
+
+model Theme {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique // e.g. "Emerald Dark", "Cyberpunk", "Ocean Breeze"
+  accent       String   // Accent color hex, e.g. "#00e5a0"
+  bg_base      String   // Base background color, e.g. "#0a0f1e"
+  bg_surface   String   // Surface card color, e.g. "rgba(15, 23, 42, 0.65)"
+  text_primary String   // Primary text color, e.g. "#f8fafc"
+  is_active    Boolean  @default(false)
+  created_at   DateTime @default(now())
+}
+
+model ContactMessage {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String
+  subject    String
+  message    String
+  reason     String?  // Inquiry category from "What brings you here?"
+  company    String?  // Optional Company / Organization name
+  created_at DateTime @default(now())
+  is_read    Boolean  @default(false)
+}
+
+model AdminUser {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String?
+  password  String   // Hashed with bcrypt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,318 @@
+/* =============================================
+   THEME SYSTEM — CSS Custom Properties
+   Dark theme is default. Light theme is fully supported
+   via [data-theme="light"].
+   ============================================= */
+
+:root, [data-theme="dark"] {
+  /* Color Palette - Dark */
+  --bg-base:              #0a0f1e;
+  --bg-surface:           rgba(15, 23, 42, 0.65);
+  --bg-surface-hover:     rgba(30, 41, 59, 0.75);
+  --bg-card:              rgba(15, 23, 42, 0.7);
+  --bg-card-header:       rgba(30, 41, 59, 0.5);
+  --bg-sidebar:           rgba(10, 15, 30, 0.85);
+  --bg-navbar:            rgba(10, 15, 30, 0.75);
+  --bg-input:             rgba(15, 23, 42, 0.65);
+  --bg-modal:             rgba(15, 23, 42, 0.95);
+  --bg-badge:             rgba(0, 229, 160, 0.12);
+
+  --border-subtle:        rgba(255, 255, 255, 0.08);
+  --border-card:          rgba(255, 255, 255, 0.09);
+  --border-hover:         rgba(0, 229, 160, 0.4);
+  --border-focus:         #00e5a0;
+
+  --text-primary:         #f8fafc;
+  --text-secondary:       #94a3b8;
+  --text-muted:           #64748b;
+  --text-inverted:        #0a0f1e;
+
+  --accent:               #00e5a0;
+  --accent-hover:         #00c987;
+  --accent-dim:           rgba(0, 229, 160, 0.15);
+  --accent-glow:          0 0 20px rgba(0, 229, 160, 0.25);
+
+  --danger:               #f87171;
+  --danger-bg:            rgba(239, 68, 68, 0.12);
+  --danger-hover:         #ef4444;
+
+  --success:              #4ade80;
+  --success-bg:           rgba(34, 197, 94, 0.12);
+
+  --shadow-card:          0 20px 50px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --shadow-elevated:      0 25px 60px -10px rgba(0, 0, 0, 0.65);
+}
+
+[data-theme="light"] {
+  /* Color Palette - Light / Bright Theme */
+  --bg-base:              #f1f5f9;
+  --bg-surface:           rgba(255, 255, 255, 0.85);
+  --bg-surface-hover:     rgba(241, 245, 249, 0.95);
+  --bg-card:              rgba(255, 255, 255, 0.9);
+  --bg-card-header:       rgba(248, 250, 252, 0.9);
+  --bg-sidebar:           rgba(255, 255, 255, 0.95);
+  --bg-navbar:            rgba(255, 255, 255, 0.85);
+  --bg-input:             rgba(255, 255, 255, 0.95);
+  --bg-modal:             rgba(255, 255, 255, 0.98);
+  --bg-badge:             rgba(13, 148, 136, 0.12);
+
+  --border-subtle:        rgba(0, 0, 0, 0.08);
+  --border-card:          rgba(0, 0, 0, 0.08);
+  --border-hover:         rgba(13, 148, 136, 0.4);
+  --border-focus:         #0d9488;
+
+  --text-primary:         #0f172a;
+  --text-secondary:       #475569;
+  --text-muted:           #94a3b8;
+  --text-inverted:        #ffffff;
+
+  --accent:               #0d9488;
+  --accent-hover:         #0f766e;
+  --accent-dim:           rgba(13, 148, 136, 0.12);
+  --accent-glow:          0 0 16px rgba(13, 148, 136, 0.2);
+
+  --danger:               #ef4444;
+  --danger-bg:            rgba(239, 68, 68, 0.1);
+  --danger-hover:         #dc2626;
+
+  --success:              #16a34a;
+  --success-bg:           rgba(22, 163, 74, 0.1);
+
+  --shadow-card:          0 12px 36px 0 rgba(0, 0, 0, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+  --shadow-elevated:      0 16px 45px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* =============================================
+   GLOBAL RESETS & SMOOTH THEME TRANSITION
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Set to auto so JavaScript inertial smooth-scroll operates synchronously without browser queue lag */
+  scroll-behavior: auto;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* =============================================
+   GLASS MORPHISM & GLOW UTILITIES
+   ============================================= */
+.glass,
+.glass-section,
+.glass-panel {
+  background: var(--bg-surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.glass:hover,
+.glass-section:hover,
+.glass-panel:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 35px rgba(0, 229, 160, 0.16), var(--shadow-elevated);
+}
+
+.hero-card {
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+}
+
+.hero-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 25px rgba(0, 229, 160, 0.28);
+  transform: translateY(-2px);
+}
+
+.glass-elevated {
+  background: var(--bg-surface-hover);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-hover);
+  box-shadow: var(--shadow-elevated);
+}
+
+.glass-navbar {
+  background: var(--bg-navbar);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.glass-sidebar {
+  background: var(--bg-sidebar);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border-subtle);
+}
+
+/* =============================================
+   ADMIN PANEL THEME REUSABLE CLASSES
+   ============================================= */
+.admin-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-card:hover {
+  border-color: var(--border-hover);
+}
+
+.admin-card-header {
+  background: var(--bg-card-header);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.admin-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--accent-dim);
+}
+
+.admin-input::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.375rem;
+}
+
+.admin-btn-primary {
+  background: var(--accent);
+  color: var(--text-inverted);
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--accent-glow);
+}
+
+.admin-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.admin-btn-secondary {
+  background: var(--bg-surface-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.admin-btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.admin-btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.admin-btn-danger:hover {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.admin-btn-icon {
+  background: var(--bg-surface-hover);
+  color: var(--accent);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.admin-btn-icon:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--accent-glow);
+}
+
+.admin-badge {
+  background: var(--bg-badge);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-hover);
+}
+
+/* =============================================
+   CUSTOM SCROLLBAR
+   ============================================= */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
