@@ -30,10 +30,13 @@ const DEFAULT_PORTFOLIO = {
   socialLinks: []
 };
 
+let cachedPortfolioData = null;
+let cachedStats = null;
+
 const Portfolio = () => {
-  const [data, setData] = useState(null);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(cachedPortfolioData);
+  const [stats, setStats] = useState(cachedStats);
+  const [loading, setLoading] = useState(!cachedPortfolioData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +47,7 @@ const Portfolio = () => {
         });
 
         if (portfolioRes.data?.activeTheme) {
-          useThemeStore.getState().setCustomTheme(portfolioRes.data.activeTheme);
+          useThemeStore.getState().hydrateServerTheme(portfolioRes.data.activeTheme);
         }
         if (portfolioRes.data?.themes) {
           useThemeStore.getState().setAvailableThemes(portfolioRes.data.themes, portfolioRes.data.activeTheme?.id);
@@ -64,17 +67,70 @@ const Portfolio = () => {
           .get(`/stats?github_username=${gh}&leetcode_username=${lc}&codeforces_username=${cf}`)
           .catch(() => ({ data: null }));
 
-        setData(portfolioRes.data || DEFAULT_PORTFOLIO);
+        const portfolioData = portfolioRes.data || DEFAULT_PORTFOLIO;
+        cachedPortfolioData = portfolioData;
+        cachedStats = statsRes.data;
+
+        setData(portfolioData);
         setStats(statsRes.data);
       } catch (err) {
         console.error('Error in fetchData:', err);
-        setData(DEFAULT_PORTFOLIO);
+        if (!data) setData(DEFAULT_PORTFOLIO);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  // Save scroll position when scrolling on the main page
+  useEffect(() => {
+    let scrollTimer = null;
+    const handleScroll = () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        if (window.scrollY > 50) {
+          sessionStorage.setItem('portfolio_last_scroll_y', String(window.scrollY));
+        }
+      }, 100);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimer) clearTimeout(scrollTimer);
+      if (window.scrollY > 50) {
+        sessionStorage.setItem('portfolio_last_scroll_y', String(window.scrollY));
+      }
+    };
+  }, []);
+
+  // Restore scroll position or target hash upon rendering
+  useEffect(() => {
+    if (loading) return;
+
+    const restorePosition = () => {
+      const hash = window.location.hash;
+      if (hash && hash.length > 1) {
+        const targetEl = document.querySelector(hash);
+        if (targetEl) {
+          const navOffset = 90;
+          const targetY = targetEl.getBoundingClientRect().top + window.scrollY - navOffset;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+          return;
+        }
+      }
+
+      // If returning without a specific hash, return to where the user left off
+      const savedY = sessionStorage.getItem('portfolio_last_scroll_y');
+      if (savedY && Number(savedY) > 80) {
+        window.scrollTo({ top: Number(savedY), behavior: 'smooth' });
+      }
+    };
+
+    const timer = setTimeout(restorePosition, 80);
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   if (loading) {
     return (

@@ -51,7 +51,7 @@ const AllBlogs = () => {
       <header className="sticky top-3 sm:top-4 z-50 w-[94%] sm:w-[90%] max-w-7xl mx-auto mb-6 sm:mb-10">
         <nav className="glass-panel rounded-2xl px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between border border-white/10 shadow-xl">
           <Link
-            to="/"
+            to="/#blogs"
             className="inline-flex items-center text-xs sm:text-sm font-semibold transition-colors hover:opacity-80"
             style={{ color: 'var(--accent)' }}
           >

@@ -151,16 +151,38 @@ const SmoothScroll = () => {
       currentY = window.scrollY;
     };
 
+    const handleHash = () => {
+      if (window.location.hash && window.location.hash.length > 1) {
+        setTimeout(() => {
+          const targetEl = document.querySelector(window.location.hash);
+          if (targetEl) {
+            const navOffset = 90;
+            const elementPosition = targetEl.getBoundingClientRect().top + window.scrollY;
+            const maxScroll = getMaxScroll();
+            targetY = clamp(elementPosition - navOffset, 0, maxScroll);
+            currentY = window.scrollY;
+            if (!isRunning) {
+              isRunning = true;
+              rafId = requestAnimationFrame(updateScroll);
+            }
+          }
+        }, 120);
+      }
+    };
+
     window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('hashchange', handleHash);
     document.addEventListener('click', onAnchorClick);
+    handleHash();
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('hashchange', handleHash);
       document.removeEventListener('click', onAnchorClick);
     };
   }, []);

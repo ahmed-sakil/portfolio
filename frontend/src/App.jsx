@@ -37,7 +37,7 @@ function App() {
       try {
         const res = await api.get('/portfolio');
         if (res.data?.activeTheme) {
-          setCustomTheme(res.data.activeTheme);
+          useThemeStore.getState().hydrateServerTheme(res.data.activeTheme);
         }
         if (res.data?.themes) {
           useThemeStore.getState().setAvailableThemes(res.data.themes, res.data.activeTheme?.id);
