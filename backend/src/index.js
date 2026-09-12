@@ -146,10 +146,16 @@ async function autoMigrate() {
         "github_link" TEXT,
         "tech_stack" TEXT[] DEFAULT ARRAY[]::TEXT[],
         "is_featured" BOOLEAN NOT NULL DEFAULT true,
-        "priority" INTEGER NOT NULL DEFAULT 0
+        "priority" INTEGER NOT NULL DEFAULT 0,
+        "level" TEXT DEFAULT 'Intermediate',
+        "project_type" TEXT DEFAULT 'PERSONAL',
+        "team_members" JSONB
     )`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "is_featured" BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "priority" INTEGER NOT NULL DEFAULT 0`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "level" TEXT DEFAULT 'Intermediate'`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "project_type" TEXT DEFAULT 'PERSONAL'`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "team_members" JSONB`,
 
     // Blog table
     `CREATE TABLE IF NOT EXISTS "Blog" (

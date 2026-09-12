@@ -7,14 +7,14 @@
 :root, [data-theme="dark"] {
   /* Color Palette - Dark */
   --bg-base:              #0a0f1e;
-  --bg-surface:           rgba(15, 23, 42, 0.65);
-  --bg-surface-hover:     rgba(30, 41, 59, 0.75);
-  --bg-card:              rgba(15, 23, 42, 0.7);
-  --bg-card-header:       rgba(30, 41, 59, 0.5);
-  --bg-sidebar:           rgba(10, 15, 30, 0.85);
-  --bg-navbar:            rgba(10, 15, 30, 0.75);
-  --bg-input:             rgba(15, 23, 42, 0.65);
-  --bg-modal:             rgba(15, 23, 42, 0.95);
+  --bg-surface:           rgba(13, 19, 36, 0.88);
+  --bg-surface-hover:     rgba(22, 32, 54, 0.92);
+  --bg-card:              rgba(15, 23, 42, 0.85);
+  --bg-card-header:       rgba(24, 34, 58, 0.7);
+  --bg-sidebar:           rgba(10, 15, 30, 0.92);
+  --bg-navbar:            rgba(10, 15, 30, 0.88);
+  --bg-input:             rgba(15, 23, 42, 0.85);
+  --bg-modal:             rgba(13, 19, 36, 0.98);
   --bg-badge:             rgba(0, 229, 160, 0.12);
 
   --border-subtle:        rgba(255, 255, 255, 0.08);
@@ -111,8 +111,8 @@ body {
 .glass-section,
 .glass-panel {
   background: var(--bg-surface);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border-card);
   box-shadow: var(--shadow-card);
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
@@ -125,10 +125,23 @@ body {
   box-shadow: 0 0 35px rgba(0, 229, 160, 0.16), var(--shadow-elevated);
 }
 
+.inner-glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+}
+
+.inner-glass:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 25px rgba(0, 229, 160, 0.18);
+}
+
 .hero-card {
   border: 1px solid var(--border-subtle);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
 }
 

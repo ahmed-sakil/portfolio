@@ -161,34 +161,78 @@ export const createProject = async (req, res) => {
   try {
     const data = { ...req.body };
     if (req.file) data.image_url = req.file.path;
-    if (typeof data.tech_stack === 'string') data.tech_stack = JSON.parse(data.tech_stack);
+    if (typeof data.tech_stack === 'string') {
+      try {
+        data.tech_stack = JSON.parse(data.tech_stack);
+      } catch {
+        data.tech_stack = data.tech_stack.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    }
+    if (typeof data.team_members === 'string') {
+      try {
+        data.team_members = JSON.parse(data.team_members);
+      } catch {
+        data.team_members = [];
+      }
+    }
     if (data.is_featured !== undefined) {
       data.is_featured = data.is_featured === 'true' || data.is_featured === true;
     }
     if (data.priority !== undefined) {
       data.priority = parseInt(data.priority, 10) || 0;
     }
+    if (data.level !== undefined) {
+      data.level = data.level?.trim() || 'Intermediate';
+    }
+    if (data.project_type !== undefined) {
+      data.project_type = data.project_type?.trim() || 'PERSONAL';
+    }
     
     const project = await prisma.project.create({ data });
     res.json(project);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) { 
+    console.error('createProject error:', error);
+    res.status(500).json({ error: error.message }); 
+  }
 };
 export const updateProject = async (req, res) => {
   try {
     const data = { ...req.body };
     delete data.id;
     if (req.file) data.image_url = req.file.path;
-    if (typeof data.tech_stack === 'string') data.tech_stack = JSON.parse(data.tech_stack);
+    if (typeof data.tech_stack === 'string') {
+      try {
+        data.tech_stack = JSON.parse(data.tech_stack);
+      } catch {
+        data.tech_stack = data.tech_stack.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    }
+    if (typeof data.team_members === 'string') {
+      try {
+        data.team_members = JSON.parse(data.team_members);
+      } catch {
+        data.team_members = [];
+      }
+    }
     if (data.is_featured !== undefined) {
       data.is_featured = data.is_featured === 'true' || data.is_featured === true;
     }
     if (data.priority !== undefined) {
       data.priority = parseInt(data.priority, 10) || 0;
     }
+    if (data.level !== undefined) {
+      data.level = data.level?.trim() || 'Intermediate';
+    }
+    if (data.project_type !== undefined) {
+      data.project_type = data.project_type?.trim() || 'PERSONAL';
+    }
     
     const project = await prisma.project.update({ where: { id: parseInt(req.params.id) }, data });
     res.json(project);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) { 
+    console.error('updateProject error:', error);
+    res.status(500).json({ error: error.message }); 
+  }
 };
 export const deleteProject = async (req, res) => {
   try {

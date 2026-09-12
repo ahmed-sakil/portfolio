@@ -186,3 +186,20 @@ export const getBlogBySlug = async (req, res) => {
     res.status(500).json({ message: 'Server error fetching blog', error: error.message });
   }
 };
+
+export const getProjectById = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid project ID' });
+    }
+    const project = await prisma.project.findUnique({ where: { id } });
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+    res.json(project);
+  } catch (error) {
+    console.error('getProjectById error:', error);
+    res.status(500).json({ message: 'Server error fetching project', error: error.message });
+  }
+};

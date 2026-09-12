@@ -73,8 +73,7 @@ const SkillsSection = ({ skills }) => {
             return (
               <div
                 key={category}
-                className="rounded-2xl p-4 sm:p-6 border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300"
-                style={{ background: 'rgba(255, 255, 255, 0.03)' }}
+                className="rounded-2xl p-4 sm:p-6 border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300 inner-glass"
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-white/10">
                   <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shrink-0">

@@ -68,15 +68,18 @@ model Experience {
 }
 
 model Project {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  image_url   String?
-  live_link   String?
-  github_link String?
-  tech_stack  String[] // Array of strings for PostgreSQL
-  is_featured Boolean  @default(true)
-  priority    Int      @default(0)
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?
+  image_url    String?
+  live_link    String?
+  github_link  String?
+  tech_stack   String[] // Array of strings for PostgreSQL
+  is_featured  Boolean  @default(true)
+  priority     Int      @default(0)
+  level        String?  @default("Intermediate") // 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert'
+  project_type String?  @default("PERSONAL")     // 'PERSONAL' | 'TEAM'
+  team_members Json?                             // [{ name: string, role?: string, portfolio_url: string }]
 }
 
 model Blog {

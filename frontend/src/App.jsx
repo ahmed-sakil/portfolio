@@ -19,6 +19,7 @@ import Portfolio from './pages/public/Portfolio';
 import BlogPost from './pages/public/BlogPost';
 import AllProjects from './pages/public/AllProjects';
 import AllBlogs from './pages/public/AllBlogs';
+import ProjectDetails from './pages/public/ProjectDetails';
 
 import ConstellationBackground from './components/ConstellationBackground';
 import MouseCursor from './components/MouseCursor';
@@ -32,6 +33,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<Portfolio />} />
         <Route path="/projects" element={<AllProjects />} />
+        <Route path="/project/:id" element={<ProjectDetails />} />
         <Route path="/blogs" element={<AllBlogs />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
 

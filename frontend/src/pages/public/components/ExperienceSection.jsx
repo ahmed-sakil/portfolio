@@ -31,12 +31,43 @@ const ExperienceSection = ({ experiences }) => {
                   </div>
 
                   <div className="pb-8 flex-1">
-                    <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex items-start justify-between gap-3 mb-2.5">
                       <span className="inline-block px-2.5 py-0.5 text-xs font-mono rounded bg-white/5 border border-white/10 text-purple-300">
                         {new Date(exp.start_date).getFullYear()} – {exp.is_current ? 'Present' : exp.end_date ? new Date(exp.end_date).getFullYear() : ''}
                       </span>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-lg font-bold text-white mb-1 group-hover:text-purple-300 transition">
+                          {exp.title}
+                        </h4>
+
+                        <div className="mb-1.5">
+                          {exp.institution_url ? (
+                            <a
+                              href={exp.institution_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm font-semibold text-gray-300 hover:text-purple-300 transition inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+                            >
+                              <span>{exp.company}</span>
+                              <ExternalLink className="w-3 h-3 text-purple-400 opacity-80" />
+                            </a>
+                          ) : (
+                            <p className="text-sm font-medium text-gray-400">{exp.company}</p>
+                          )}
+                        </div>
+
+                        {exp.result && (
+                          <p className="text-xs text-teal-400 font-semibold mb-2">
+                            {exp.result}
+                          </p>
+                        )}
+                      </div>
+
                       {exp.image_url && (
-                        <div className="w-9 h-9 rounded-xl overflow-hidden bg-white/5 border border-white/10 p-1 shrink-0">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-white/5 border border-white/10 p-2 shrink-0 group-hover:border-purple-400/50 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] group-hover:scale-105 transition-all duration-300 flex items-center justify-center">
                           <img
                             src={exp.image_url}
                             alt={exp.company}
@@ -47,34 +78,8 @@ const ExperienceSection = ({ experiences }) => {
                       )}
                     </div>
 
-                    <h4 className="text-lg font-bold text-white mb-1 group-hover:text-purple-300 transition">
-                      {exp.title}
-                    </h4>
-
-                    <div className="mb-1.5">
-                      {exp.institution_url ? (
-                        <a
-                          href={exp.institution_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-semibold text-gray-300 hover:text-purple-300 transition inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
-                        >
-                          <span>{exp.company}</span>
-                          <ExternalLink className="w-3 h-3 text-purple-400 opacity-80" />
-                        </a>
-                      ) : (
-                        <p className="text-sm font-medium text-gray-400">{exp.company}</p>
-                      )}
-                    </div>
-
-                    {exp.result && (
-                      <p className="text-xs text-teal-400 font-semibold mb-2">
-                        {exp.result}
-                      </p>
-                    )}
-
                     {exp.description && (
-                      <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      <p className="text-sm leading-relaxed mt-2" style={{ color: 'var(--text-secondary)' }}>
                         {exp.description}
                       </p>
                     )}
@@ -100,12 +105,43 @@ const ExperienceSection = ({ experiences }) => {
                   </div>
 
                   <div className="pb-8 flex-1">
-                    <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex items-start justify-between gap-3 mb-2.5">
                       <span className="inline-block px-2.5 py-0.5 text-xs font-mono rounded bg-white/5 border border-white/10 text-teal-300">
                         {new Date(exp.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} – {exp.is_current ? 'Present' : exp.end_date ? new Date(exp.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}
                       </span>
+                    </div>
+
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-lg font-bold text-white mb-1 group-hover:text-teal-300 transition">
+                          {exp.title}
+                        </h4>
+
+                        <div className="mb-1.5">
+                          {exp.institution_url ? (
+                            <a
+                              href={exp.institution_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm font-semibold text-gray-300 hover:text-teal-300 transition inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+                            >
+                              <span>{exp.company}</span>
+                              <ExternalLink className="w-3 h-3 text-teal-400 opacity-80" />
+                            </a>
+                          ) : (
+                            <p className="text-sm font-medium text-gray-400">{exp.company}</p>
+                          )}
+                        </div>
+
+                        {exp.result && (
+                          <p className="text-xs text-teal-400 font-semibold mb-2">
+                            {exp.result}
+                          </p>
+                        )}
+                      </div>
+
                       {exp.image_url && (
-                        <div className="w-9 h-9 rounded-xl overflow-hidden bg-white/5 border border-white/10 p-1 shrink-0">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-white/5 border border-white/10 p-2 shrink-0 group-hover:border-teal-400/50 group-hover:shadow-[0_0_20px_rgba(0,229,160,0.25)] group-hover:scale-105 transition-all duration-300 flex items-center justify-center">
                           <img
                             src={exp.image_url}
                             alt={exp.company}
@@ -116,33 +152,8 @@ const ExperienceSection = ({ experiences }) => {
                       )}
                     </div>
 
-                    <h4 className="text-lg font-bold text-white mb-1 group-hover:text-teal-300 transition">
-                      {exp.title}
-                    </h4>
-
-                    <div className="mb-2">
-                      {exp.institution_url ? (
-                        <a
-                          href={exp.institution_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-semibold text-gray-300 hover:text-teal-300 transition inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
-                        >
-                          <span>{exp.company}</span>
-                          <ExternalLink className="w-3 h-3 text-teal-400 opacity-80" />
-                        </a>
-                      ) : (
-                        <p className="text-sm font-medium text-gray-400">{exp.company}</p>
-                      )}
-                      {exp.result && (
-                        <span className="text-xs text-teal-400 font-semibold ml-2">
-                          • {exp.result}
-                        </span>
-                      )}
-                    </div>
-
                     {exp.description && (
-                      <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      <p className="text-sm leading-relaxed mt-2" style={{ color: 'var(--text-secondary)' }}>
                         {exp.description}
                       </p>
                     )}

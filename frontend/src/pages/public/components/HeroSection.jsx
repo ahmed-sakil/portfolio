@@ -57,17 +57,15 @@ const HeroSection = ({ profile, projects, skills, stats, socialLinks, blogs }) =
               View Works
             </a>
 
-            {profile?.resume_url && (
-              <a
-                href={profile.resume_url}
-                target="_blank"
-                rel="noreferrer"
-                className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-white/10 font-bold text-xs sm:text-sm tracking-wide hover:border-teal-400/40 text-gray-300 hover:text-white transition-all transform hover:-translate-y-0.5 active:scale-95 text-center backdrop-blur-sm"
-                style={{ background: 'rgba(255, 255, 255, 0.05)' }}
-              >
-                Resume
-              </a>
-            )}
+            <a
+              href={profile?.resume_drive_link || profile?.resume_url || '#contact'}
+              target={(profile?.resume_drive_link || profile?.resume_url) ? '_blank' : undefined}
+              rel={(profile?.resume_drive_link || profile?.resume_url) ? 'noreferrer' : undefined}
+              className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-white/10 font-bold text-xs sm:text-sm tracking-wide hover:border-teal-400/40 text-gray-300 hover:text-white transition-all transform hover:-translate-y-0.5 active:scale-95 text-center backdrop-blur-sm shadow-md"
+              style={{ background: 'rgba(255, 255, 255, 0.05)' }}
+            >
+              Download CV
+            </a>
 
             {/* Social links */}
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
@@ -93,50 +91,66 @@ const HeroSection = ({ profile, projects, skills, stats, socialLinks, blogs }) =
             </div>
           </div>
 
-          {/* 4 Key Stats Cards with Top Default Icon */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 max-w-2xl">
+          {/* 4 Key Stats Cards with Rectangular Landscape Layout */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5 max-w-3xl">
             {/* Card 1: Projects Count */}
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
-              <div className="w-8 h-8 rounded-xl bg-teal-400/10 border border-teal-400/25 flex items-center justify-center text-teal-400 mb-2 group-hover:scale-110 group-hover:border-teal-400/50 transition">
-                <Briefcase className="w-4 h-4" />
+            <div className="p-3 sm:p-3.5 rounded-2xl hero-card flex items-center gap-3 sm:gap-3.5 group transition duration-300">
+              <div className="w-10 h-10 rounded-xl bg-teal-400/10 border border-teal-400/25 flex items-center justify-center text-teal-400 shrink-0 group-hover:scale-105 group-hover:border-teal-400/50 transition">
+                <Briefcase className="w-5 h-5" />
               </div>
-              <p className="text-2xl sm:text-3xl font-extrabold text-white mb-0.5 sm:mb-1">
-                {projectsCount}+
-              </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Projects</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-extrabold text-white leading-tight mb-0.5">
+                  {projectsCount}+
+                </p>
+                <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold truncate" style={{ color: 'var(--text-muted)' }}>
+                  Projects
+                </p>
+              </div>
             </div>
 
             {/* Card 2: Total Skills Count */}
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
-              <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 mb-2 group-hover:scale-110 group-hover:border-cyan-400/50 transition">
-                <Layers className="w-4 h-4" />
+            <div className="p-3 sm:p-3.5 rounded-2xl hero-card flex items-center gap-3 sm:gap-3.5 group transition duration-300">
+              <div className="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 group-hover:border-cyan-400/50 transition">
+                <Layers className="w-5 h-5" />
               </div>
-              <p className="text-2xl sm:text-3xl font-extrabold text-white mb-0.5 sm:mb-1">
-                {skillsCount}+
-              </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Total Skills</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-extrabold text-white leading-tight mb-0.5">
+                  {skillsCount}+
+                </p>
+                <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold truncate" style={{ color: 'var(--text-muted)' }}>
+                  Total Skills
+                </p>
+              </div>
             </div>
 
             {/* Card 3: Programming Languages Count */}
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
-              <div className="w-8 h-8 rounded-xl bg-teal-400/10 border border-teal-400/25 flex items-center justify-center text-teal-400 mb-2 group-hover:scale-110 group-hover:border-teal-400/50 transition">
-                <Code2 className="w-4 h-4" />
+            <div className="p-3 sm:p-3.5 rounded-2xl hero-card flex items-center gap-3 sm:gap-3.5 group transition duration-300">
+              <div className="w-10 h-10 rounded-xl bg-teal-400/10 border border-teal-400/25 flex items-center justify-center text-teal-400 shrink-0 group-hover:scale-105 group-hover:border-teal-400/50 transition">
+                <Code2 className="w-5 h-5" />
               </div>
-              <p className="text-2xl sm:text-3xl font-extrabold text-teal-400 mb-0.5 sm:mb-1">
-                {programmingLanguagesCount}+
-              </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Languages</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-extrabold text-teal-400 leading-tight mb-0.5">
+                  {programmingLanguagesCount}+
+                </p>
+                <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold truncate" style={{ color: 'var(--text-muted)' }}>
+                  Languages
+                </p>
+              </div>
             </div>
 
             {/* Card 4: Published Blogs Count */}
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
-              <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 mb-2 group-hover:scale-110 group-hover:border-cyan-400/50 transition">
-                <FileText className="w-4 h-4" />
+            <div className="p-3 sm:p-3.5 rounded-2xl hero-card flex items-center gap-3 sm:gap-3.5 group transition duration-300">
+              <div className="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 group-hover:border-cyan-400/50 transition">
+                <FileText className="w-5 h-5" />
               </div>
-              <p className="text-2xl sm:text-3xl font-extrabold text-teal-400 mb-0.5 sm:mb-1">
-                {publishedBlogsCount}+
-              </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Published Blogs</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-extrabold text-teal-400 leading-tight mb-0.5">
+                  {publishedBlogsCount}+
+                </p>
+                <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold truncate" style={{ color: 'var(--text-muted)' }}>
+                  Blogs
+                </p>
+              </div>
             </div>
           </div>
         </div>

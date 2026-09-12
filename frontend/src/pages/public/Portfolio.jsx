@@ -125,7 +125,7 @@ const Portfolio = () => {
 
       {/* Projects Section */}
       <ScrollReveal>
-        <ProjectsSection projects={projects} allProjects={allProjects} />
+        <ProjectsSection projects={projects} allProjects={allProjects} skills={skills} />
       </ScrollReveal>
 
       {/* Career Timeline: Education & Experience */}
