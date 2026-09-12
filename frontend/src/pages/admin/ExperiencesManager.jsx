@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { useAuthStore } from '../../store/authStore';
-import { Edit2, Trash2, Plus, X, GraduationCap, Briefcase, Calendar, ExternalLink } from 'lucide-react';
+import { Edit2, Trash2, Plus, X, GraduationCap, Briefcase, Calendar, ExternalLink, Image as ImageIcon, Upload } from 'lucide-react';
 
 const ExperiencesManager = () => {
   const token = useAuthStore((state) => state.token);
@@ -17,7 +17,9 @@ const ExperiencesManager = () => {
     description: '',
     result: '',
     institution_url: '',
+    image_url: '',
   });
+  const [imageFile, setImageFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
 
   const fetchExperiences = async () => {
@@ -45,27 +47,36 @@ const ExperiencesManager = () => {
       description: '',
       result: '',
       institution_url: '',
+      image_url: '',
     });
+    setImageFile(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...formData,
-        end_date: formData.is_current ? null : (formData.end_date || null),
-      };
+      const submitData = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (key === 'end_date' && formData.is_current) {
+          submitData.append('end_date', '');
+        } else if (formData[key] !== null && formData[key] !== undefined) {
+          submitData.append(key, formData[key]);
+        }
+      });
+      if (imageFile) {
+        submitData.append('image', imageFile);
+      }
 
       if (editingId) {
-        await api.put(`/admin/experiences/${editingId}`, payload);
+        await api.put(`/admin/experiences/${editingId}`, submitData);
       } else {
-        await api.post('/admin/experiences', payload);
+        await api.post('/admin/experiences', submitData);
       }
       resetForm();
       fetchExperiences();
     } catch (err) {
       console.error(err);
-      alert('Error saving experience entry.');
+      alert(err.response?.data?.message || 'Error saving experience entry.');
     }
   };
 
@@ -81,7 +92,9 @@ const ExperiencesManager = () => {
       description: exp.description || '',
       result: exp.result || '',
       institution_url: exp.institution_url || '',
+      image_url: exp.image_url || '',
     });
+    setImageFile(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -227,15 +240,71 @@ const ExperiencesManager = () => {
 
             <div>
               <label className="admin-label">
-                {formData.type === 'EXPERIENCE' ? 'Employment Type (Optional)' : 'GPA / Result / Honours (Optional)'}
+                {formData.type === 'EXPERIENCE' ? 'Employment Type (Optional)' : 'Result / Grade / GPA (Optional)'}
               </label>
               <input
                 type="text"
-                placeholder={formData.type === 'EXPERIENCE' ? 'e.g. Full-time, Remote' : 'e.g. CGPA 3.92 / 4.00, Dean’s List'}
+                placeholder={formData.type === 'EXPERIENCE' ? 'e.g. Full-time, Remote' : 'e.g. CGPA 3.92 / 4.00, Grade A, First Class'}
                 className="admin-input"
                 value={formData.result}
                 onChange={(e) => setFormData({ ...formData, result: e.target.value })}
               />
+              <span className="text-[10px] text-gray-400 mt-1 block">
+                Type whatever text you want displayed (e.g. &quot;CGPA: 3.85&quot; or &quot;Grade: A+&quot;)
+              </span>
+            </div>
+
+            {/* Institute / Company Logo / Profile Image */}
+            <div className="md:col-span-2">
+              <label className="admin-label flex items-center gap-1.5">
+                <ImageIcon className="w-3.5 h-3.5 text-teal-400" />
+                <span>Institute / Company Profile Image (Logo)</span>
+              </label>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                {(imageFile || formData.image_url) && (
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-black/40 border border-teal-400/40 shrink-0 p-1">
+                    <img
+                      src={imageFile ? URL.createObjectURL(imageFile) : formData.image_url}
+                      alt="Logo preview"
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => { setImageFile(null); setFormData({ ...formData, image_url: '' }); }}
+                      className="absolute top-0 right-0 bg-red-500/80 hover:bg-red-500 text-white rounded-bl p-0.5"
+                      title="Remove image"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+                <div className="flex-1 space-y-2 w-full">
+                  <div className="flex items-center gap-3">
+                    <label className="admin-btn-secondary cursor-pointer inline-flex items-center gap-2 text-xs">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{imageFile ? 'Change Image File' : 'Upload Logo / Image'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setImageFile(e.target.files[0]);
+                          }
+                        }}
+                      />
+                    </label>
+                    <span className="text-xs text-gray-400">or enter direct image URL below</span>
+                  </div>
+                  <input
+                    type="url"
+                    placeholder="https://.../logo.png"
+                    className="admin-input text-xs"
+                    value={formData.image_url || ''}
+                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="md:col-span-2">
@@ -309,14 +378,27 @@ const ExperiencesManager = () => {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-base mb-1" style={{ color: 'var(--text-primary)' }}>
-                    {exp.title}
-                  </h3>
-
-                  <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>
-                    {exp.company}
-                    {exp.result && <span className="ml-2 font-normal text-teal-400 font-mono">• {exp.result}</span>}
-                  </p>
+                  <div className="flex items-start gap-3 mb-2">
+                    {exp.image_url && (
+                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-white/5 border border-white/10 p-1 shrink-0">
+                        <img
+                          src={exp.image_url}
+                          alt={exp.company}
+                          className="w-full h-full object-contain"
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-base mb-1" style={{ color: 'var(--text-primary)' }}>
+                        {exp.title}
+                      </h3>
+                      <p className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                        {exp.company}
+                        {exp.result && <span className="ml-2 font-normal text-teal-400 font-mono">• {exp.result}</span>}
+                      </p>
+                    </div>
+                  </div>
 
                   {exp.description && (
                     <p className="text-xs leading-relaxed line-clamp-3" style={{ color: 'var(--text-secondary)' }}>

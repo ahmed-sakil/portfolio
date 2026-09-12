@@ -1,3 +1,5 @@
+import { ExternalLink } from 'lucide-react';
+
 const ExperienceSection = ({ experiences }) => {
   return (
     <section id="experience" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
@@ -29,14 +31,48 @@ const ExperienceSection = ({ experiences }) => {
                   </div>
 
                   <div className="pb-8 flex-1">
-                    <span className="inline-block px-2.5 py-0.5 text-xs font-mono rounded bg-white/5 border border-white/10 text-purple-300 mb-2">
-                      {new Date(exp.start_date).getFullYear()} – {exp.is_current ? 'Present' : exp.end_date ? new Date(exp.end_date).getFullYear() : ''}
-                    </span>
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <span className="inline-block px-2.5 py-0.5 text-xs font-mono rounded bg-white/5 border border-white/10 text-purple-300">
+                        {new Date(exp.start_date).getFullYear()} – {exp.is_current ? 'Present' : exp.end_date ? new Date(exp.end_date).getFullYear() : ''}
+                      </span>
+                      {exp.image_url && (
+                        <div className="w-9 h-9 rounded-xl overflow-hidden bg-white/5 border border-white/10 p-1 shrink-0">
+                          <img
+                            src={exp.image_url}
+                            alt={exp.company}
+                            className="w-full h-full object-contain"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        </div>
+                      )}
+                    </div>
+
                     <h4 className="text-lg font-bold text-white mb-1 group-hover:text-purple-300 transition">
                       {exp.title}
                     </h4>
-                    <p className="text-sm font-medium text-gray-400 mb-1">{exp.company}</p>
-                    {exp.result && <p className="text-xs text-teal-400 font-semibold mb-2">GPA / Result: {exp.result}</p>}
+
+                    <div className="mb-1.5">
+                      {exp.institution_url ? (
+                        <a
+                          href={exp.institution_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-semibold text-gray-300 hover:text-purple-300 transition inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+                        >
+                          <span>{exp.company}</span>
+                          <ExternalLink className="w-3 h-3 text-purple-400 opacity-80" />
+                        </a>
+                      ) : (
+                        <p className="text-sm font-medium text-gray-400">{exp.company}</p>
+                      )}
+                    </div>
+
+                    {exp.result && (
+                      <p className="text-xs text-teal-400 font-semibold mb-2">
+                        {exp.result}
+                      </p>
+                    )}
+
                     {exp.description && (
                       <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                         {exp.description}
@@ -64,13 +100,47 @@ const ExperienceSection = ({ experiences }) => {
                   </div>
 
                   <div className="pb-8 flex-1">
-                    <span className="inline-block px-2.5 py-0.5 text-xs font-mono rounded bg-white/5 border border-white/10 text-teal-300 mb-2">
-                      {new Date(exp.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} – {exp.is_current ? 'Present' : exp.end_date ? new Date(exp.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}
-                    </span>
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <span className="inline-block px-2.5 py-0.5 text-xs font-mono rounded bg-white/5 border border-white/10 text-teal-300">
+                        {new Date(exp.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} – {exp.is_current ? 'Present' : exp.end_date ? new Date(exp.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}
+                      </span>
+                      {exp.image_url && (
+                        <div className="w-9 h-9 rounded-xl overflow-hidden bg-white/5 border border-white/10 p-1 shrink-0">
+                          <img
+                            src={exp.image_url}
+                            alt={exp.company}
+                            className="w-full h-full object-contain"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        </div>
+                      )}
+                    </div>
+
                     <h4 className="text-lg font-bold text-white mb-1 group-hover:text-teal-300 transition">
                       {exp.title}
                     </h4>
-                    <p className="text-sm font-medium text-gray-400 mb-2">{exp.company}</p>
+
+                    <div className="mb-2">
+                      {exp.institution_url ? (
+                        <a
+                          href={exp.institution_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-semibold text-gray-300 hover:text-teal-300 transition inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+                        >
+                          <span>{exp.company}</span>
+                          <ExternalLink className="w-3 h-3 text-teal-400 opacity-80" />
+                        </a>
+                      ) : (
+                        <p className="text-sm font-medium text-gray-400">{exp.company}</p>
+                      )}
+                      {exp.result && (
+                        <span className="text-xs text-teal-400 font-semibold ml-2">
+                          • {exp.result}
+                        </span>
+                      )}
+                    </div>
+
                     {exp.description && (
                       <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                         {exp.description}

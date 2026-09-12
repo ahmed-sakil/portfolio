@@ -52,7 +52,7 @@ const BlogsSection = ({ blogs = [] }) => {
                     {blog.title}
                   </h3>
                   <p className="text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
-                    {blog.content?.replace(/[#*`_>]/g, '')}
+                    {blog.excerpt || blog.content?.replace(/[#*`_>]/g, '')}
                   </p>
                 </div>
 

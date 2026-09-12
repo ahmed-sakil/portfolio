@@ -94,23 +94,43 @@ export const updateProfile = async (req, res) => {
 // SKILLS
 export const createSkill = async (req, res) => {
   try {
-    const skill = await prisma.skill.create({ data: { ...req.body, percentage: parseInt(req.body.percentage) } });
+    const data = {
+      name: req.body.name,
+      category: req.body.category,
+      percentage: parseInt(req.body.percentage, 10) || 0,
+      icon_name: req.body.icon_name ? req.body.icon_name.trim() : null
+    };
+    const skill = await prisma.skill.create({ data });
     res.json(skill);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Create skill error:', error);
+    res.status(500).json({ message: error.message || 'Error creating skill' });
+  }
 };
 export const updateSkill = async (req, res) => {
   try {
-    const data = { ...req.body };
-    if (data.percentage) data.percentage = parseInt(data.percentage);
+    const data = {};
+    if (req.body.name !== undefined) data.name = req.body.name;
+    if (req.body.category !== undefined) data.category = req.body.category;
+    if (req.body.percentage !== undefined) data.percentage = parseInt(req.body.percentage, 10) || 0;
+    if (req.body.icon_name !== undefined) {
+      data.icon_name = req.body.icon_name ? req.body.icon_name.trim() : null;
+    }
     const skill = await prisma.skill.update({ where: { id: parseInt(req.params.id) }, data });
     res.json(skill);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Update skill error:', error);
+    res.status(500).json({ message: error.message || 'Error updating skill' });
+  }
 };
 export const deleteSkill = async (req, res) => {
   try {
     await prisma.skill.delete({ where: { id: parseInt(req.params.id) } });
     res.json({ message: 'Deleted' });
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Delete skill error:', error);
+    res.status(500).json({ message: error.message || 'Error deleting skill' });
+  }
 };
 
 // PROJECTS
@@ -172,52 +192,77 @@ export const deleteProject = async (req, res) => {
 // EXPERIENCES
 export const createExperience = async (req, res) => {
   try {
-    const data = { ...req.body };
-    data.start_date = new Date(data.start_date);
-    if (data.end_date) data.end_date = new Date(data.end_date);
-    data.is_current = data.is_current === 'true' || data.is_current === true;
+    const raw = { ...req.body };
+    delete raw.id;
+
+    const data = {
+      type: raw.type || 'EXPERIENCE',
+      title: raw.title || 'Untitled',
+      company: raw.company || '',
+      institution_url: raw.institution_url?.trim() || null,
+      image_url: req.file ? req.file.path : (raw.image_url?.trim() || null),
+      description: raw.description?.trim() || null,
+      result: raw.result?.trim() || null,
+      start_date: raw.start_date ? new Date(raw.start_date) : new Date(),
+      is_current: raw.is_current === 'true' || raw.is_current === true,
+      end_date: (raw.is_current === 'true' || raw.is_current === true || !raw.end_date || raw.end_date === 'null')
+        ? null
+        : new Date(raw.end_date)
+    };
 
     const experience = await prisma.experience.create({ data });
     res.json(experience);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Create experience error:', error);
+    res.status(500).json({ message: error.message || 'Failed to create experience entry' });
+  }
 };
+
 export const updateExperience = async (req, res) => {
   try {
-    const data = { ...req.body };
-    delete data.id;
+    const raw = { ...req.body };
+    delete raw.id;
 
-    // Convert boolean string from FormData
-    data.is_current = data.is_current === 'true' || data.is_current === true;
+    const isCurrent = raw.is_current === 'true' || raw.is_current === true;
 
-    // Parse dates, but null out empty strings
-    data.start_date = data.start_date ? new Date(data.start_date) : undefined;
-    // If currently working there, end_date must be null not an empty string
-    if (!data.end_date || data.end_date === '' || data.end_date === 'null') {
+    const data = {
+      is_current: isCurrent,
+    };
+
+    if (raw.type !== undefined) data.type = raw.type;
+    if (raw.title !== undefined) data.title = raw.title;
+    if (raw.company !== undefined) data.company = raw.company;
+    if (raw.institution_url !== undefined) data.institution_url = raw.institution_url ? raw.institution_url.trim() : null;
+    if (req.file) {
+      data.image_url = req.file.path;
+    } else if (raw.image_url !== undefined) {
+      data.image_url = raw.image_url ? raw.image_url.trim() : null;
+    }
+    if (raw.description !== undefined) data.description = raw.description ? raw.description.trim() : null;
+    if (raw.result !== undefined) data.result = raw.result ? raw.result.trim() : null;
+    if (raw.start_date) data.start_date = new Date(raw.start_date);
+    if (isCurrent || !raw.end_date || raw.end_date === 'null' || raw.end_date === '') {
       data.end_date = null;
     } else {
-      data.end_date = new Date(data.end_date);
+      data.end_date = new Date(raw.end_date);
     }
 
-    // Clean up other null strings
-    for (const key in data) {
-      if (data[key] === 'null' || data[key] === '') {
-        data[key] = null;
-      }
-    }
-
-    console.log('Updating experience with data:', data);
     const experience = await prisma.experience.update({ where: { id: parseInt(req.params.id) }, data });
     res.json(experience);
   } catch (error) {
     console.error('Update experience error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message || 'Failed to update experience entry' });
   }
 };
+
 export const deleteExperience = async (req, res) => {
   try {
     await prisma.experience.delete({ where: { id: parseInt(req.params.id) } });
     res.json({ message: 'Deleted' });
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Delete experience error:', error);
+    res.status(500).json({ message: error.message || 'Error deleting experience' });
+  }
 };
 
 // BLOGS
@@ -232,44 +277,97 @@ export const getAdminBlogs = async (req, res) => {
     const sorted = sortItemsBySlot(blogs);
     res.json(sorted);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message || 'Failed to load blogs' });
   }
 };
 
 export const createBlog = async (req, res) => {
   try {
-    const data = { ...req.body };
-    if (req.file) data.cover_image_url = req.file.path;
-    if (data.is_featured !== undefined) {
-      data.is_featured = data.is_featured === 'true' || data.is_featured === true;
+    const raw = { ...req.body };
+    delete raw.id;
+
+    // Clean or generate slug
+    let slug = (raw.slug || raw.title || 'post')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    if (!slug) slug = `post-${Date.now()}`;
+
+    // Prevent duplicate slug constraint crash
+    const existing = await prisma.blog.findUnique({ where: { slug } });
+    if (existing) {
+      slug = `${slug}-${Date.now().toString().slice(-4)}`;
     }
-    if (data.priority !== undefined) {
-      data.priority = parseInt(data.priority, 10) || 0;
-    }
+
+    const data = {
+      title: raw.title || 'Untitled Post',
+      slug,
+      content: raw.content || '',
+      excerpt: raw.excerpt ? raw.excerpt.trim() : null,
+      cover_image_url: req.file ? req.file.path : (raw.cover_image_url || null),
+      published_at: raw.published_at ? new Date(raw.published_at) : new Date(),
+      is_published: raw.is_published === undefined ? true : (raw.is_published === 'true' || raw.is_published === true),
+      is_featured: raw.is_featured === undefined ? true : (raw.is_featured === 'true' || raw.is_featured === true),
+      priority: parseInt(raw.priority, 10) || 0,
+    };
+
     const blog = await prisma.blog.create({ data });
     res.json(blog);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Create blog error:', error);
+    res.status(500).json({ message: error.message || 'Failed to create blog post' });
+  }
 };
+
 export const updateBlog = async (req, res) => {
   try {
-    const data = { ...req.body };
-    delete data.id;
-    if (req.file) data.cover_image_url = req.file.path;
-    if (data.is_featured !== undefined) {
-      data.is_featured = data.is_featured === 'true' || data.is_featured === true;
+    const raw = { ...req.body };
+    delete raw.id;
+
+    const data = {};
+    if (raw.title !== undefined) data.title = raw.title;
+    if (raw.slug !== undefined) {
+      data.slug = raw.slug
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
     }
-    if (data.priority !== undefined) {
-      data.priority = parseInt(data.priority, 10) || 0;
+    if (raw.content !== undefined) data.content = raw.content;
+    if (raw.excerpt !== undefined) data.excerpt = raw.excerpt ? raw.excerpt.trim() : null;
+    if (req.file) {
+      data.cover_image_url = req.file.path;
+    } else if (raw.cover_image_url !== undefined) {
+      data.cover_image_url = raw.cover_image_url || null;
     }
+    if (raw.is_published !== undefined) {
+      data.is_published = raw.is_published === 'true' || raw.is_published === true;
+    }
+    if (raw.is_featured !== undefined) {
+      data.is_featured = raw.is_featured === 'true' || raw.is_featured === true;
+    }
+    if (raw.priority !== undefined) {
+      data.priority = parseInt(raw.priority, 10) || 0;
+    }
+
     const blog = await prisma.blog.update({ where: { id: parseInt(req.params.id) }, data });
     res.json(blog);
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Update blog error:', error);
+    res.status(500).json({ message: error.message || 'Failed to update blog post' });
+  }
 };
+
 export const deleteBlog = async (req, res) => {
   try {
     await prisma.blog.delete({ where: { id: parseInt(req.params.id) } });
     res.json({ message: 'Deleted' });
-  } catch (error) { res.status(500).json({ error }); }
+  } catch (error) {
+    console.error('Delete blog error:', error);
+    res.status(500).json({ message: error.message || 'Failed to delete blog post' });
+  }
 };
 
 // MESSAGES

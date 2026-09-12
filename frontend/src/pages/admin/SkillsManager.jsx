@@ -113,7 +113,7 @@ const SkillsManager = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             <div>
               <label className="admin-label">Skill Name *</label>
               <input
@@ -140,7 +140,7 @@ const SkillsManager = () => {
             </div>
 
             <div>
-              <label className="admin-label">Proficiency Percentage (0 - 100) *</label>
+              <label className="admin-label">Proficiency % (0 - 100) *</label>
               <input
                 type="number"
                 min="0"
@@ -151,6 +151,33 @@ const SkillsManager = () => {
                 onChange={(e) => setFormData({ ...formData, percentage: parseInt(e.target.value) || 0 })}
                 required
               />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="admin-label mb-0">Icon Name</label>
+                {formData.icon_name && (
+                  <span className="inline-flex items-center gap-1 text-[11px] text-teal-400">
+                    <img
+                      src={`https://cdn.simpleicons.org/${formData.icon_name}`}
+                      alt="icon"
+                      className="w-3.5 h-3.5 object-contain"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                    Preview
+                  </span>
+                )}
+              </div>
+              <input
+                type="text"
+                placeholder="e.g. react, typescript, python"
+                className="admin-input"
+                value={formData.icon_name}
+                onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
+              />
+              <span className="text-[10px] text-gray-400 mt-1 block">
+                SimpleIcon slug (e.g. nodedotjs, postgresql)
+              </span>
             </div>
           </div>
 
@@ -209,10 +236,24 @@ const SkillsManager = () => {
                     >
                       <div className="mb-3">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
-                            {skill.name}
-                          </span>
-                          <span className="text-xs font-mono font-bold" style={{ color: 'var(--accent)' }}>
+                          <div className="flex items-center gap-2 min-w-0">
+                            {skill.icon_name ? (
+                              <img
+                                src={`https://cdn.simpleicons.org/${skill.icon_name}`}
+                                alt={skill.name}
+                                className="w-4 h-4 object-contain shrink-0"
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                            ) : (
+                              <div className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] text-teal-400 font-bold shrink-0">
+                                {skill.name.charAt(0)}
+                              </div>
+                            )}
+                            <span className="font-bold text-sm truncate" style={{ color: 'var(--text-primary)' }}>
+                              {skill.name}
+                            </span>
+                          </div>
+                          <span className="text-xs font-mono font-bold shrink-0 ml-2" style={{ color: 'var(--accent)' }}>
                             {skill.percentage}%
                           </span>
                         </div>

@@ -51,8 +51,8 @@ router.put('/admin/projects/:id', upload.single('image'), updateProject);
 router.delete('/admin/projects/:id', deleteProject);
 
 // Experiences & Education
-router.post('/admin/experiences', createExperience);
-router.put('/admin/experiences/:id', updateExperience);
+router.post('/admin/experiences', upload.single('image'), createExperience);
+router.put('/admin/experiences/:id', upload.single('image'), updateExperience);
 router.delete('/admin/experiences/:id', deleteExperience);
 
 // Blogs

@@ -64,7 +64,7 @@ const BlogsManager = () => {
       fetchBlogs();
     } catch (err) {
       console.error(err);
-      alert('Error saving blog post.');
+      alert(err.response?.data?.message || 'Error saving blog post.');
     }
   };
 

@@ -114,6 +114,7 @@ async function autoMigrate() {
         "percentage" INTEGER NOT NULL DEFAULT 50,
         "icon_name" TEXT
     )`,
+    `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_name" TEXT`,
 
     // Experience table
     `CREATE TABLE IF NOT EXISTS "Experience" (
@@ -122,12 +123,16 @@ async function autoMigrate() {
         "title" TEXT NOT NULL,
         "company" TEXT NOT NULL,
         "institution_url" TEXT,
+        "image_url" TEXT,
         "start_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "end_date" TIMESTAMP(3),
         "is_current" BOOLEAN NOT NULL DEFAULT false,
         "description" TEXT,
         "result" TEXT
     )`,
+    `ALTER TABLE "Experience" ADD COLUMN IF NOT EXISTS "institution_url" TEXT`,
+    `ALTER TABLE "Experience" ADD COLUMN IF NOT EXISTS "image_url" TEXT`,
+    `ALTER TABLE "Experience" ADD COLUMN IF NOT EXISTS "result" TEXT`,
 
     // Project table
     `CREATE TABLE IF NOT EXISTS "Project" (
@@ -149,13 +154,17 @@ async function autoMigrate() {
         "id" SERIAL PRIMARY KEY,
         "title" TEXT NOT NULL,
         "slug" TEXT NOT NULL,
+        "excerpt" TEXT,
         "content" TEXT NOT NULL DEFAULT '',
         "cover_image_url" TEXT,
         "published_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "is_published" BOOLEAN NOT NULL DEFAULT true,
         "is_featured" BOOLEAN NOT NULL DEFAULT true,
         "priority" INTEGER NOT NULL DEFAULT 0
     )`,
     `CREATE UNIQUE INDEX IF NOT EXISTS "Blog_slug_key" ON "Blog"("slug")`,
+    `ALTER TABLE "Blog" ADD COLUMN IF NOT EXISTS "excerpt" TEXT`,
+    `ALTER TABLE "Blog" ADD COLUMN IF NOT EXISTS "is_published" BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE "Blog" ADD COLUMN IF NOT EXISTS "is_featured" BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE "Blog" ADD COLUMN IF NOT EXISTS "priority" INTEGER NOT NULL DEFAULT 0`,
 
