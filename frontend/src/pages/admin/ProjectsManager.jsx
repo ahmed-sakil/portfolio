@@ -14,17 +14,35 @@ import {
   Check, 
   Layers,
   Sparkles,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Upload,
+  UserCheck
 } from 'lucide-react';
 import GithubIcon from '../../components/icons/GithubIcon';
 import AppIcon from '../../components/icons/AppIcon';
 
 const LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+const CATEGORY_OPTIONS = [
+  { value: 'Personal', label: 'Personal Project' },
+  { value: 'Group', label: 'Group / Team Project' }
+];
+
+const SUGGESTED_TYPES = [
+  'Full Stack Web App',
+  'Frontend Application',
+  'Backend API / System',
+  'Mobile Application',
+  'AI / Machine Learning',
+  'DevOps / Cloud Architecture',
+  'Open Source Tool',
+  'CLI Utility'
+];
 
 const ProjectsManager = () => {
   const token = useAuthStore((state) => state.token);
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [adminProfile, setAdminProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
@@ -35,17 +53,25 @@ const ProjectsManager = () => {
     is_featured: true,
     priority: 1,
     level: 'Intermediate',
-    project_type: 'PERSONAL'
+    category: 'Personal',
+    type: 'Full Stack Web App',
+    icon_url: ''
   });
 
   const [techStack, setTechStack] = useState([]);
   const [customTech, setCustomTech] = useState('');
 
+  // Team members state
   const [teamMembers, setTeamMembers] = useState([]);
-  const [newMember, setNewMember] = useState({ name: '', role: '', portfolio_url: '' });
+  const [newMember, setNewMember] = useState({ name: '', role: '', portfolio_url: '', avatar_url: '' });
+  const [avatarUploading, setAvatarUploading] = useState(false);
 
+  // Cover image and Project Icon files
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [iconFile, setIconFile] = useState(null);
+  const [iconPreview, setIconPreview] = useState(null);
+
   const [editingId, setEditingId] = useState(null);
 
   const fetchData = async () => {
@@ -53,10 +79,11 @@ const ProjectsManager = () => {
       setLoading(true);
       const [projRes, portRes] = await Promise.all([
         api.get('/admin/projects').catch(() => api.get('/portfolio')),
-        api.get('/portfolio').catch(() => ({ data: { skills: [] } }))
+        api.get('/portfolio').catch(() => ({ data: { skills: [], profile: null } }))
       ]);
       setProjects(projRes.data.projects || projRes.data || []);
       setSkills(portRes.data?.skills || []);
+      setAdminProfile(portRes.data?.profile || null);
     } catch (err) {
       console.error('Fetch projects/skills error:', err);
     } finally {
@@ -78,14 +105,18 @@ const ProjectsManager = () => {
       is_featured: true,
       priority: projects.length + 1,
       level: 'Intermediate',
-      project_type: 'PERSONAL'
+      category: 'Personal',
+      type: 'Full Stack Web App',
+      icon_url: ''
     });
     setTechStack([]);
     setCustomTech('');
     setTeamMembers([]);
-    setNewMember({ name: '', role: '', portfolio_url: '' });
+    setNewMember({ name: '', role: '', portfolio_url: '', avatar_url: '' });
     setImage(null);
     setImagePreview(null);
+    setIconFile(null);
+    setIconPreview(null);
   };
 
   // Helper to match skill metadata for an icon
@@ -115,6 +146,38 @@ const ProjectsManager = () => {
     setTechStack(techStack.filter((t) => t !== techToRemove));
   };
 
+  // Upload avatar for a team member
+  const handleMemberAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setAvatarUploading(true);
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await api.post('/admin/upload-image', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setNewMember((prev) => ({ ...prev, avatar_url: res.data.url }));
+    } catch (err) {
+      console.error('Member avatar upload error:', err);
+      alert('Failed to upload member avatar image.');
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
+  // Fill newMember with current Admin / Creator info
+  const handleFillMyInfo = () => {
+    if (!adminProfile) return;
+    setNewMember({
+      name: adminProfile.full_name || 'Sakil Ahmed',
+      role: adminProfile.role || adminProfile.title || 'Creator & Lead Developer',
+      portfolio_url: window.location.origin,
+      avatar_url: adminProfile.profile_image_url || ''
+    });
+  };
+
   const handleAddTeamMember = (e) => {
     e?.preventDefault();
     if (!newMember.name.trim()) return;
@@ -123,10 +186,11 @@ const ProjectsManager = () => {
       {
         name: newMember.name.trim(),
         role: newMember.role.trim() || 'Contributor',
-        portfolio_url: newMember.portfolio_url.trim()
+        portfolio_url: newMember.portfolio_url.trim(),
+        avatar_url: newMember.avatar_url.trim()
       }
     ]);
-    setNewMember({ name: '', role: '', portfolio_url: '' });
+    setNewMember({ name: '', role: '', portfolio_url: '', avatar_url: '' });
   };
 
   const handleRemoveTeamMember = (indexToRemove) => {
@@ -148,6 +212,10 @@ const ProjectsManager = () => {
       data.append('image', image);
     }
 
+    if (iconFile) {
+      data.append('icon', iconFile);
+    }
+
     try {
       if (editingId) {
         await api.put(`/admin/projects/${editingId}`, data);
@@ -164,6 +232,7 @@ const ProjectsManager = () => {
 
   const handleEdit = (project) => {
     setEditingId(project.id);
+    const categoryVal = project.category || (project.project_type === 'TEAM' ? 'Group' : 'Personal');
     setFormData({
       title: project.title,
       description: project.description || '',
@@ -172,7 +241,9 @@ const ProjectsManager = () => {
       is_featured: project.is_featured !== false,
       priority: project.priority ?? 1,
       level: project.level || 'Intermediate',
-      project_type: project.project_type || 'PERSONAL'
+      category: categoryVal,
+      type: project.type || 'Full Stack Web App',
+      icon_url: project.icon_url || ''
     });
 
     // Parse tech stack
@@ -205,6 +276,8 @@ const ProjectsManager = () => {
 
     setImage(null);
     setImagePreview(project.image_url || null);
+    setIconFile(null);
+    setIconPreview(project.icon_url || null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -263,8 +336,21 @@ const ProjectsManager = () => {
               />
             </div>
 
-            {/* Level & Project Type in 2-col mini grid */}
+            {/* Category (Personal / Group) & Level */}
             <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="admin-label">Category</label>
+                <select
+                  className="admin-input"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  {CATEGORY_OPTIONS.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label className="admin-label">Project Level</label>
                 <select
@@ -277,17 +363,75 @@ const ProjectsManager = () => {
                   ))}
                 </select>
               </div>
+            </div>
 
-              <div>
-                <label className="admin-label">Project Scope</label>
-                <select
-                  className="admin-input"
-                  value={formData.project_type}
-                  onChange={(e) => setFormData({ ...formData, project_type: e.target.value })}
-                >
-                  <option value="PERSONAL">Personal Project</option>
-                  <option value="TEAM">Team / Collaborative</option>
-                </select>
+            {/* Custom Type String */}
+            <div>
+              <label className="admin-label">Project Type (Architecture / Role) *</label>
+              <input
+                type="text"
+                placeholder="e.g. Full Stack Web App, Mobile Application, AI Tool"
+                className="admin-input"
+                value={formData.type}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                required
+              />
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                <span className="text-[10px] text-gray-400 self-center">Suggestions:</span>
+                {SUGGESTED_TYPES.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, type: t })}
+                    className="text-[10px] px-2 py-0.5 rounded bg-white/5 hover:bg-teal-400/20 hover:text-teal-300 text-gray-400 transition"
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Project Square Icon */}
+            <div>
+              <label className="admin-label">Project Icon (Square Logo)</label>
+              <div className="flex items-center gap-3">
+                <label className="cursor-pointer border border-dashed rounded-xl px-4 py-2.5 flex items-center gap-2 hover:border-teal-400/50 transition bg-black/20" style={{ borderColor: 'var(--border-subtle)' }}>
+                  <Upload className="w-4 h-4 text-teal-400" />
+                  <span className="text-xs font-semibold text-teal-400">Upload Square Icon</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setIconFile(file);
+                        setIconPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                </label>
+
+                {iconPreview ? (
+                  <div className="w-11 h-11 rounded-xl overflow-hidden border-2 border-teal-400/50 bg-slate-900 p-1 shrink-0 aspect-square shadow">
+                    <img src={iconPreview} alt="Project Icon" className="w-full h-full object-cover rounded-lg" />
+                  </div>
+                ) : (
+                  <div className="w-11 h-11 rounded-xl border border-dashed border-white/20 bg-white/5 flex items-center justify-center text-gray-500 text-[10px] aspect-square shrink-0">
+                    Square
+                  </div>
+                )}
+
+                <input
+                  type="url"
+                  placeholder="Or paste icon image URL"
+                  className="admin-input text-xs flex-1"
+                  value={formData.icon_url}
+                  onChange={(e) => {
+                    setFormData({ ...formData, icon_url: e.target.value });
+                    if (!iconFile) setIconPreview(e.target.value);
+                  }}
+                />
               </div>
             </div>
 
@@ -324,7 +468,7 @@ const ProjectsManager = () => {
                 </span>
               </div>
               <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-                Select technologies from your skills library to automatically display their brand icons, or type custom tags.
+                Select technologies from your skills library to automatically display brand icons, or type custom tags.
               </p>
 
               {/* Selected Pills */}
@@ -412,74 +556,120 @@ const ProjectsManager = () => {
               </div>
             </div>
 
-            {/* Team Members Manager (visible if project_type === 'TEAM') */}
-            {formData.project_type === 'TEAM' && (
-              <div className="md:col-span-2 p-5 rounded-2xl border border-teal-400/30 bg-slate-900/60 space-y-4 animate-fadeIn">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-teal-400" />
-                    <span className="text-sm font-bold text-white">Team Members & Collaborators</span>
-                  </div>
-                  <span className="text-xs font-mono text-gray-400">
-                    {teamMembers.length} {teamMembers.length === 1 ? 'member' : 'members'}
+            {/* Team Members / Contributor Info (Available for both Personal & Group projects) */}
+            <div className="md:col-span-2 p-5 rounded-2xl border border-teal-400/30 bg-slate-900/60 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 gap-2">
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-teal-400" />
+                  <span className="text-sm font-bold text-white">
+                    {formData.category === 'Group' ? 'Team Members & Collaborators' : 'Author & Contributor Info'}
+                  </span>
+                  <span className="text-xs font-mono text-gray-400 ml-2">
+                    ({teamMembers.length} {teamMembers.length === 1 ? 'member' : 'members'})
                   </span>
                 </div>
 
-                {/* Member Input Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-xs font-medium text-gray-400 block mb-1">Member Name *</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Alex Johnson"
-                      className="admin-input text-xs"
-                      value={newMember.name}
-                      onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-gray-400 block mb-1">Role / Contribution</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. UI/UX Designer or Backend Dev"
-                      className="admin-input text-xs"
-                      value={newMember.role}
-                      onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-gray-400 block mb-1">Portfolio / Profile Link</label>
-                    <div className="flex gap-2">
+                {adminProfile && (
+                  <button
+                    type="button"
+                    onClick={handleFillMyInfo}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-400/10 border border-teal-400/30 text-teal-300 hover:bg-teal-400 hover:text-black transition"
+                  >
+                    <UserCheck className="w-3.5 h-3.5" />
+                    <span>Auto-fill My Profile Info</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Member Input Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+                <div>
+                  <label className="text-xs font-medium text-gray-400 block mb-1">Member Name *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Sakil Ahmed"
+                    className="admin-input text-xs"
+                    value={newMember.name}
+                    onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-400 block mb-1">Role / Responsibility</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Lead Full Stack Developer"
+                    className="admin-input text-xs"
+                    value={newMember.role}
+                    onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-400 block mb-1">Portfolio / Profile Link</label>
+                  <input
+                    type="url"
+                    placeholder="https://..."
+                    className="admin-input text-xs"
+                    value={newMember.portfolio_url}
+                    onChange={(e) => setNewMember({ ...newMember, portfolio_url: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-400 block mb-1">Avatar / Photo</label>
+                  <div className="flex items-center gap-2">
+                    <label className="cursor-pointer px-3 py-2 rounded-xl text-xs font-semibold border border-white/15 bg-white/5 hover:bg-white/10 text-gray-300 transition shrink-0 flex items-center gap-1">
+                      <Upload className="w-3.5 h-3.5 text-teal-400" />
+                      <span>{avatarUploading ? 'Uploading...' : 'Upload'}</span>
                       <input
-                        type="url"
-                        placeholder="https://..."
-                        className="admin-input text-xs"
-                        value={newMember.portfolio_url}
-                        onChange={(e) => setNewMember({ ...newMember, portfolio_url: e.target.value })}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={avatarUploading}
+                        onChange={handleMemberAvatarUpload}
                       />
-                      <button
-                        type="button"
-                        onClick={handleAddTeamMember}
-                        className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-950 font-bold hover:from-teal-300 hover:to-cyan-300 transition shrink-0"
-                      >
-                        + Add
-                      </button>
-                    </div>
+                    </label>
+                    {newMember.avatar_url ? (
+                      <div className="w-8 h-8 rounded-full overflow-hidden border border-teal-400/50 shrink-0">
+                        <img src={newMember.avatar_url} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 shrink-0">
+                        <User className="w-4 h-4" />
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleAddTeamMember}
+                      className="px-3 py-2 rounded-xl text-xs font-bold bg-teal-400 text-black hover:bg-teal-300 transition shrink-0 ml-auto"
+                    >
+                      + Add
+                    </button>
                   </div>
                 </div>
+              </div>
 
-                {/* Team Members List */}
-                {teamMembers.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
-                    {teamMembers.map((member, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3 rounded-xl border border-white/10 bg-slate-800/60 flex items-center justify-between gap-2"
-                      >
+              {/* Team Members List */}
+              {teamMembers.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
+                  {teamMembers.map((member, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-xl border border-white/10 bg-slate-800/60 flex items-center justify-between gap-3"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {member.avatar_url ? (
+                          <img
+                            src={member.avatar_url}
+                            alt={member.name}
+                            className="w-9 h-9 rounded-full object-cover border border-teal-400/40 shrink-0"
+                          />
+                        ) : (
+                          <div className="w-9 h-9 rounded-full bg-teal-400/10 border border-teal-400/30 flex items-center justify-center text-teal-400 shrink-0">
+                            <User className="w-4 h-4" />
+                          </div>
+                        )}
                         <div className="min-w-0">
-                          <div className="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                            <User className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                            <span>{member.name}</span>
+                          <div className="text-xs font-bold text-white truncate">
+                            {member.name}
                           </div>
                           <div className="text-[11px] text-gray-400 truncate">{member.role}</div>
                           {member.portfolio_url && (
@@ -493,20 +683,20 @@ const ProjectsManager = () => {
                             </a>
                           )}
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveTeamMember(idx)}
-                          className="p-1 text-gray-400 hover:text-red-400 transition shrink-0"
-                          title="Remove Member"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTeamMember(idx)}
+                        className="p-1 text-gray-400 hover:text-red-400 transition shrink-0"
+                        title="Remove Member"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Description */}
             <div className="md:col-span-2">
@@ -629,6 +819,8 @@ const ProjectsManager = () => {
                 ? (Array.isArray(project.team_members) ? project.team_members : JSON.parse(project.team_members || '[]'))
                 : [];
 
+              const category = project.category || (project.project_type === 'TEAM' ? 'Group' : 'Personal');
+
               return (
                 <div
                   key={project.id}
@@ -645,10 +837,10 @@ const ProjectsManager = () => {
                           {project.level || 'Intermediate'}
                         </span>
                         <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-white/10 bg-white/5 text-gray-300 flex items-center gap-1">
-                          {project.project_type === 'TEAM' ? (
+                          {category === 'Group' ? (
                             <>
                               <Users className="w-2.5 h-2.5 text-cyan-400" />
-                              Team ({members.length})
+                              Group ({members.length})
                             </>
                           ) : (
                             <>
@@ -671,15 +863,34 @@ const ProjectsManager = () => {
                       )}
                     </div>
 
-                    {project.image_url && (
+                    {/* Cover Screenshot with square Project Icon overlay */}
+                    {project.image_url ? (
                       <div className="relative mb-3 h-36 rounded-xl overflow-hidden border border-white/10">
                         <img
                           src={project.image_url}
                           alt={project.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
+                        {project.icon_url && (
+                          <div className="absolute top-2 right-2 w-8 h-8 rounded-lg overflow-hidden border border-white/30 bg-slate-950/80 p-0.5 shadow">
+                            <img src={project.icon_url} alt="" className="w-full h-full object-cover rounded" />
+                          </div>
+                        )}
                       </div>
+                    ) : (
+                      project.icon_url && (
+                        <div className="mb-3 flex items-center gap-2">
+                          <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/20 bg-slate-900 p-1">
+                            <img src={project.icon_url} alt="" className="w-full h-full object-cover rounded-lg" />
+                          </div>
+                          <span className="text-xs text-gray-400">{project.type || 'Web Application'}</span>
+                        </div>
+                      )
                     )}
+
+                    <div className="text-[11px] font-medium text-teal-400 mb-0.5 uppercase tracking-wider">
+                      {project.type || 'Web Application'}
+                    </div>
 
                     <h3 className="font-bold text-base mb-1" style={{ color: 'var(--text-primary)' }}>
                       {project.title}

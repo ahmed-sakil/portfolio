@@ -72,14 +72,17 @@ model Project {
   title        String
   description  String?
   image_url    String?
+  icon_url     String?
   live_link    String?
   github_link  String?
   tech_stack   String[] // Array of strings for PostgreSQL
   is_featured  Boolean  @default(true)
   priority     Int      @default(0)
   level        String?  @default("Intermediate") // 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert'
-  project_type String?  @default("PERSONAL")     // 'PERSONAL' | 'TEAM'
-  team_members Json?                             // [{ name: string, role?: string, portfolio_url: string }]
+  category     String?  @default("Personal")     // 'Personal' | 'Group'
+  project_type String?  @default("Personal")     // Backwards compat
+  type         String?  @default("Web Application") // Custom string e.g. "Full Stack Web App"
+  team_members Json?                             // [{ name: string, role?: string, portfolio_url?: string, avatar_url?: string }]
 }
 
 model Blog {

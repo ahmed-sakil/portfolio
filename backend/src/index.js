@@ -148,13 +148,19 @@ async function autoMigrate() {
         "is_featured" BOOLEAN NOT NULL DEFAULT true,
         "priority" INTEGER NOT NULL DEFAULT 0,
         "level" TEXT DEFAULT 'Intermediate',
-        "project_type" TEXT DEFAULT 'PERSONAL',
+        "category" TEXT DEFAULT 'Personal',
+        "project_type" TEXT DEFAULT 'Personal',
+        "type" TEXT DEFAULT 'Web Application',
+        "icon_url" TEXT,
         "team_members" JSONB
     )`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "is_featured" BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "priority" INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "level" TEXT DEFAULT 'Intermediate'`,
-    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "project_type" TEXT DEFAULT 'PERSONAL'`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "category" TEXT DEFAULT 'Personal'`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "project_type" TEXT DEFAULT 'Personal'`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "type" TEXT DEFAULT 'Web Application'`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "icon_url" TEXT`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "team_members" JSONB`,
 
     // Blog table

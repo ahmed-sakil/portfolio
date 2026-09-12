@@ -12,7 +12,8 @@ import {
   getServices, createService, updateService, deleteService,
   getSocialLinks, createSocialLink, updateSocialLink, deleteSocialLink,
   getThemes, createTheme, updateTheme, deleteTheme, activateTheme,
-  getCustomIcons, createCustomIcon, deleteCustomIcon
+  getCustomIcons, createCustomIcon, deleteCustomIcon,
+  uploadGenericImage
 } from '../controllers/admin.controller.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { upload } from '../utils/cloudinary.js';
@@ -48,9 +49,18 @@ router.delete('/admin/skills/:id', deleteSkill);
 
 // Projects
 router.get('/admin/projects', getAdminProjects);
-router.post('/admin/projects', upload.single('image'), createProject);
-router.put('/admin/projects/:id', upload.single('image'), updateProject);
+router.post('/admin/projects', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'icon', maxCount: 1 }
+]), createProject);
+router.put('/admin/projects/:id', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'icon', maxCount: 1 }
+]), updateProject);
 router.delete('/admin/projects/:id', deleteProject);
+
+// Generic Image Upload (e.g. for team member avatars or inline assets)
+router.post('/admin/upload-image', upload.single('image'), uploadGenericImage);
 
 // Experiences & Education
 router.post('/admin/experiences', upload.single('image'), createExperience);

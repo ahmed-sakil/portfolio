@@ -160,7 +160,11 @@ export const getAdminProjects = async (req, res) => {
 export const createProject = async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.image_url = req.file.path;
+    if (req.files?.image?.[0]) data.image_url = req.files.image[0].path;
+    else if (req.file) data.image_url = req.file.path;
+
+    if (req.files?.icon?.[0]) data.icon_url = req.files.icon[0].path;
+
     if (typeof data.tech_stack === 'string') {
       try {
         data.tech_stack = JSON.parse(data.tech_stack);
@@ -184,8 +188,17 @@ export const createProject = async (req, res) => {
     if (data.level !== undefined) {
       data.level = data.level?.trim() || 'Intermediate';
     }
-    if (data.project_type !== undefined) {
-      data.project_type = data.project_type?.trim() || 'PERSONAL';
+    if (data.category !== undefined) {
+      data.category = data.category?.trim() || 'Personal';
+      data.project_type = data.category;
+    } else if (data.project_type !== undefined) {
+      data.category = data.project_type?.trim() || 'Personal';
+    }
+    if (data.type !== undefined) {
+      data.type = data.type?.trim() || 'Web Application';
+    }
+    if (data.icon_url !== undefined && !data.icon_url) {
+      delete data.icon_url;
     }
     
     const project = await prisma.project.create({ data });
@@ -199,7 +212,11 @@ export const updateProject = async (req, res) => {
   try {
     const data = { ...req.body };
     delete data.id;
-    if (req.file) data.image_url = req.file.path;
+    if (req.files?.image?.[0]) data.image_url = req.files.image[0].path;
+    else if (req.file) data.image_url = req.file.path;
+
+    if (req.files?.icon?.[0]) data.icon_url = req.files.icon[0].path;
+
     if (typeof data.tech_stack === 'string') {
       try {
         data.tech_stack = JSON.parse(data.tech_stack);
@@ -223,8 +240,14 @@ export const updateProject = async (req, res) => {
     if (data.level !== undefined) {
       data.level = data.level?.trim() || 'Intermediate';
     }
-    if (data.project_type !== undefined) {
-      data.project_type = data.project_type?.trim() || 'PERSONAL';
+    if (data.category !== undefined) {
+      data.category = data.category?.trim() || 'Personal';
+      data.project_type = data.category;
+    } else if (data.project_type !== undefined) {
+      data.category = data.project_type?.trim() || 'Personal';
+    }
+    if (data.type !== undefined) {
+      data.type = data.type?.trim() || 'Web Application';
     }
     
     const project = await prisma.project.update({ where: { id: parseInt(req.params.id) }, data });
@@ -232,6 +255,18 @@ export const updateProject = async (req, res) => {
   } catch (error) { 
     console.error('updateProject error:', error);
     res.status(500).json({ error: error.message }); 
+  }
+};
+
+export const uploadGenericImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file uploaded' });
+    }
+    res.json({ url: req.file.path });
+  } catch (error) {
+    console.error('uploadGenericImage error:', error);
+    res.status(500).json({ error: error.message });
   }
 };
 export const deleteProject = async (req, res) => {
