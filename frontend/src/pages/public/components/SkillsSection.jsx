@@ -12,14 +12,14 @@ import {
 import AppIcon from '../../../components/icons/AppIcon';
 
 const CATEGORY_CONFIG = {
-  PROGRAMMING_LANGUAGE: { label: 'Programming Languages', icon: Code2, color: 'text-blue-400' },
-  MARKUP_STYLING: { label: 'Markup/Styling', icon: Layout, color: 'text-pink-400' },
-  DATABASE: { label: 'Databases', icon: Database, color: 'text-purple-400' },
-  LIBRARY: { label: 'Libraries/Frameworks', icon: Layers, color: 'text-teal-400' },
-  TOOL: { label: 'Tools', icon: Wrench, color: 'text-orange-400' },
-  PLATFORM: { label: 'Platforms', icon: Terminal, color: 'text-green-400' },
-  TECHNOLOGY: { label: 'Technologies', icon: Sparkles, color: 'text-yellow-400' },
-  OTHER: { label: 'Others', icon: PenTool, color: 'text-gray-400' },
+  PROGRAMMING_LANGUAGE: { label: 'Programming Languages', icon: Code2 },
+  MARKUP_STYLING: { label: 'Markup/Styling', icon: Layout },
+  DATABASE: { label: 'Databases', icon: Database },
+  LIBRARY: { label: 'Libraries/Frameworks', icon: Layers },
+  TOOL: { label: 'Tools', icon: Wrench },
+  PLATFORM: { label: 'Platforms', icon: Terminal },
+  TECHNOLOGY: { label: 'Technologies', icon: Sparkles },
+  OTHER: { label: 'Others', icon: PenTool },
 };
 
 const groupSkillsByCategory = (skillsList) => {
@@ -58,7 +58,7 @@ const SkillsSection = ({ skills }) => {
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
             Skills & <span style={{ color: 'var(--accent)' }}>Expertise</span>
           </h2>
           <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -73,13 +73,24 @@ const SkillsSection = ({ skills }) => {
             return (
               <div
                 key={category}
-                className="rounded-2xl p-4 sm:p-6 border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300 inner-glass"
+                className="rounded-2xl p-4 sm:p-6 border transition-all duration-300 inner-glass"
+                style={{
+                  borderColor: 'var(--border-subtle)',
+                }}
               >
-                <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-white/10">
-                  <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shrink-0">
-                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${config.color}`} />
+                <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+                  <div
+                    className="p-2 sm:p-2.5 rounded-xl border shrink-0 text-accent"
+                    style={{
+                      background: 'var(--bg-surface-hover)',
+                      borderColor: 'var(--border-subtle)',
+                    }}
+                  >
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white truncate">{config.label}</h3>
+                  <h3 className="text-base sm:text-lg font-bold truncate" style={{ color: 'var(--text-primary)' }}>
+                    {config.label}
+                  </h3>
                 </div>
 
                 <ul className="space-y-4">
@@ -95,19 +106,23 @@ const SkillsSection = ({ skills }) => {
                             alt={skill.name}
                             fallbackChar={skill.name?.charAt(0)}
                           />
-                          <span className="text-sm font-medium text-gray-300 group-hover:text-white transition">
+                          <span className="text-sm font-medium transition" style={{ color: 'var(--text-primary)' }}>
                             {skill.name}
                           </span>
                         </div>
-                        <span className="text-xs font-mono font-medium text-teal-400">
+                        <span className="text-xs font-mono font-medium text-accent">
                           {skill.percentage}%
                         </span>
                       </div>
                       {/* Progress bar */}
-                      <div className="w-full h-1.5 rounded-full bg-white/5 overflow-hidden">
+                      <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border-subtle)' }}>
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(0,229,160,0.4)]"
-                          style={{ width: animated ? `${skill.percentage}%` : '0%' }}
+                          className="h-full rounded-full transition-all duration-1000 ease-out"
+                          style={{
+                            width: animated ? `${skill.percentage}%` : '0%',
+                            backgroundColor: 'var(--accent)',
+                            boxShadow: 'var(--accent-glow)'
+                          }}
                         />
                       </div>
                     </li>

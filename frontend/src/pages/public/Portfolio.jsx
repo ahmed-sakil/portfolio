@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
+import { useThemeStore } from '../../store/themeStore';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import JourneySection from './components/JourneySection';
@@ -42,6 +43,13 @@ const Portfolio = () => {
           return { data: DEFAULT_PORTFOLIO };
         });
 
+        if (portfolioRes.data?.activeTheme) {
+          useThemeStore.getState().setCustomTheme(portfolioRes.data.activeTheme);
+        }
+        if (portfolioRes.data?.themes) {
+          useThemeStore.getState().setAvailableThemes(portfolioRes.data.themes, portfolioRes.data.activeTheme?.id);
+        }
+
         const currentProfile = portfolioRes.data?.profile || DEFAULT_PORTFOLIO.profile;
         updatePageMeta({
           title: `${currentProfile.full_name || 'Sakil Ahmed'} — ${currentProfile.role || currentProfile.title || 'Full Stack Developer'}`,
@@ -71,8 +79,8 @@ const Portfolio = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-teal-400/20 border-t-teal-400 rounded-full animate-spin mb-4" />
-        <span className="text-xl font-medium tracking-wide text-teal-400">Loading Portfolio...</span>
+        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin mb-4" />
+        <span className="text-xl font-medium tracking-wide text-accent">Loading Portfolio...</span>
       </div>
     );
   }

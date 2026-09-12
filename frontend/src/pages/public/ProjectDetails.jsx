@@ -68,8 +68,11 @@ const ProjectDetails = () => {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ color: 'var(--text-primary)' }}>
         <div className="text-center space-y-3">
-          <div className="w-8 h-8 rounded-full border-2 border-teal-400 border-t-transparent animate-spin mx-auto" />
-          <p className="text-xs tracking-wider uppercase text-gray-400">Loading project details...</p>
+          <div
+            className="w-8 h-8 rounded-full border-2 animate-spin mx-auto"
+            style={{ borderColor: 'var(--accent-dim)', borderTopColor: 'var(--accent)' }}
+          />
+          <p className="text-xs tracking-wider uppercase" style={{ color: 'var(--text-muted)' }}>Loading project details...</p>
         </div>
       </div>
     );
@@ -78,12 +81,16 @@ const ProjectDetails = () => {
   if (error || !project) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ color: 'var(--text-primary)' }}>
-        <div className="glass-panel p-8 rounded-3xl max-w-md w-full text-center space-y-4 border border-white/10">
-          <h2 className="text-xl font-bold text-white">Project Not Found</h2>
-          <p className="text-xs text-gray-400">{error || 'Unable to display project information.'}</p>
+        <div
+          className="glass-panel p-8 rounded-3xl max-w-md w-full text-center space-y-4 border border-white/10"
+          style={{ backgroundColor: 'var(--bg-surface)' }}
+        >
+          <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Project Not Found</h2>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{error || 'Unable to display project information.'}</p>
           <Link
             to="/#projects"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-white transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 transition"
+            style={{ color: 'var(--text-primary)' }}
           >
             <ArrowLeft className="w-4 h-4" /> Return to Projects
           </Link>
@@ -113,7 +120,8 @@ const ProjectDetails = () => {
         <div className="flex items-center justify-between">
           <Link
             to="/#projects"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-slate-900/60 hover:bg-slate-800/80 hover:border-teal-400/40 text-xs font-semibold text-gray-300 hover:text-white transition-all backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 hover:border-accent text-xs font-semibold transition-all backdrop-blur-md"
+            style={{ backgroundColor: 'var(--bg-surface)', color: 'var(--text-secondary)' }}
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Projects
           </Link>
@@ -124,7 +132,8 @@ const ProjectDetails = () => {
                 href={project.live_link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-teal-400 text-slate-950 hover:bg-teal-300 shadow-md shadow-teal-500/20 transition"
+                style={{ backgroundColor: 'var(--accent)', color: 'var(--text-inverted)' }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold hover:opacity-90 shadow-md transition"
               >
                 <span>Live Demo</span>
                 <ExternalLink className="w-3 h-3" />
@@ -135,7 +144,8 @@ const ProjectDetails = () => {
                 href={project.github_link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border border-white/10 bg-white/5 hover:bg-white/10 text-white transition"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border border-white/10 bg-white/5 hover:bg-white/10 transition"
+                style={{ color: 'var(--text-primary)' }}
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>Source</span>
@@ -150,26 +160,39 @@ const ProjectDetails = () => {
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {project.type && (
-                <span className="text-[11px] font-bold px-3 py-1 rounded-full border border-teal-400/30 bg-teal-400/10 text-teal-300 tracking-wide uppercase">
+                <span
+                  className="text-[11px] font-bold px-3 py-1 rounded-full border tracking-wide uppercase"
+                  style={{
+                    borderColor: 'var(--accent-dim)',
+                    backgroundColor: 'var(--accent-dim)',
+                    color: 'var(--accent)'
+                  }}
+                >
                   {project.type}
                 </span>
               )}
 
               {project.level && (
-                <span className="text-[11px] font-semibold px-3 py-1 rounded-full border border-white/10 bg-white/5 text-gray-300">
+                <span
+                  className="text-[11px] font-semibold px-3 py-1 rounded-full border border-white/10 bg-white/5"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
                   {project.level} Level
                 </span>
               )}
 
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-full border border-white/10 bg-white/5 text-gray-300 inline-flex items-center gap-1.5">
+              <span
+                className="text-[11px] font-semibold px-3 py-1 rounded-full border border-white/10 bg-white/5 inline-flex items-center gap-1.5"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 {(project.category || (isTeam ? 'Group' : 'Personal')) === 'Group' ? (
                   <>
-                    <Users className="w-3 h-3 text-cyan-400" />
+                    <Users className="w-3 h-3 text-accent" />
                     Group Project ({teamMembers.length} {teamMembers.length === 1 ? 'member' : 'members'})
                   </>
                 ) : (
                   <>
-                    <User className="w-3 h-3 text-gray-400" />
+                    <User className="w-3 h-3 opacity-70" />
                     Personal Project
                   </>
                 )}
@@ -178,11 +201,17 @@ const ProjectDetails = () => {
 
             <div className="flex items-center gap-3.5 sm:gap-5">
               {project.icon_url && (
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-white/20 bg-slate-900/80 p-1 shrink-0 shadow-lg aspect-square">
+                <div
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-white/20 p-1 shrink-0 shadow-lg aspect-square"
+                  style={{ backgroundColor: 'var(--bg-surface)' }}
+                >
                   <img src={project.icon_url} alt="" className="w-full h-full object-cover rounded-xl" />
                 </div>
               )}
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              <h1
+                className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight"
+                style={{ color: 'var(--text-primary)' }}
+              >
                 {project.title}
               </h1>
             </div>
@@ -190,7 +219,10 @@ const ProjectDetails = () => {
 
           {/* Project Cover Image */}
           {project.image_url ? (
-            <div className="rounded-2xl overflow-hidden border border-white/10 bg-slate-950/60 aspect-video shadow-xl relative">
+            <div
+              className="rounded-2xl overflow-hidden border border-white/10 aspect-video shadow-xl relative"
+              style={{ backgroundColor: 'var(--bg-base)' }}
+            >
               <img
                 src={project.image_url}
                 alt={project.title}
@@ -198,17 +230,26 @@ const ProjectDetails = () => {
               />
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-white/10 bg-slate-900/40 p-12 text-center text-gray-500 text-xs">
+            <div
+              className="rounded-2xl border border-dashed border-white/10 p-12 text-center text-xs"
+              style={{ backgroundColor: 'var(--bg-surface)', color: 'var(--text-muted)' }}
+            >
               No preview screenshot attached
             </div>
           )}
 
           {/* Project Overview */}
           <div className="space-y-3">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 pb-2 border-b border-white/10">
+            <h2
+              className="text-sm font-bold uppercase tracking-wider pb-2 border-b border-white/10"
+              style={{ color: 'var(--text-muted)' }}
+            >
               Project Overview
             </h2>
-            <p className="text-sm sm:text-base leading-relaxed text-gray-300 whitespace-pre-line font-normal">
+            <p
+              className="text-sm sm:text-base leading-relaxed whitespace-pre-line font-normal"
+              style={{ color: 'var(--text-secondary)' }}
+            >
               {project.description}
             </p>
           </div>
@@ -216,7 +257,10 @@ const ProjectDetails = () => {
           {/* Tech Stack Badges */}
           {techStack.length > 0 && (
             <div className="space-y-3">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 pb-2 border-b border-white/10">
+              <h2
+                className="text-sm font-bold uppercase tracking-wider pb-2 border-b border-white/10"
+                style={{ color: 'var(--text-muted)' }}
+              >
                 Technologies & Architecture
               </h2>
               <div className="flex flex-wrap gap-2.5 pt-1">
@@ -225,7 +269,8 @@ const ProjectDetails = () => {
                   return (
                     <span
                       key={idx}
-                      className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-white/10 bg-slate-800/70 text-gray-200 hover:border-teal-400/40 transition"
+                      className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-white/10 hover:border-accent transition"
+                      style={{ backgroundColor: 'var(--bg-surface)', color: 'var(--text-primary)' }}
                     >
                       <AppIcon
                         iconUrl={meta?.icon_url}
@@ -245,8 +290,11 @@ const ProjectDetails = () => {
           {/* Team / Contributor Info Section */}
           {teamMembers.length > 0 && (
             <div className="space-y-4">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 pb-2 border-b border-white/10 flex items-center gap-2">
-                <Users className="w-4 h-4 text-teal-400" />
+              <h2
+                className="text-sm font-bold uppercase tracking-wider pb-2 border-b border-white/10 flex items-center gap-2"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                <Users className="w-4 h-4 text-accent" />
                 {(project.category || (isTeam ? 'Group' : 'Personal')) === 'Group' ? 'Team & Collaborators' : 'Author & Contributors'}
               </h2>
 
@@ -254,25 +302,29 @@ const ProjectDetails = () => {
                 {teamMembers.map((member, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-2xl border border-white/10 bg-slate-800/40 hover:border-white/20 transition flex items-center justify-between gap-3"
+                    className="p-3.5 rounded-2xl border border-white/10 hover:border-accent transition flex items-center justify-between gap-3"
+                    style={{ backgroundColor: 'var(--bg-surface)' }}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {member.avatar_url ? (
                         <img
                           src={member.avatar_url}
                           alt={member.name}
-                          className="w-10 h-10 rounded-full object-cover border border-teal-400/40 shrink-0"
+                          className="w-10 h-10 rounded-full object-cover border border-accent shrink-0"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-teal-400/10 border border-teal-400/30 flex items-center justify-center text-teal-400 shrink-0">
+                        <div
+                          className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0"
+                          style={{ borderColor: 'var(--accent-dim)', backgroundColor: 'var(--accent-dim)', color: 'var(--accent)' }}
+                        >
                           <User className="w-4 h-4" />
                         </div>
                       )}
                       <div className="min-w-0">
-                        <div className="text-xs font-bold text-white truncate">
+                        <div className="text-xs font-bold truncate" style={{ color: 'var(--text-primary)' }}>
                           {member.name}
                         </div>
-                        <div className="text-[11px] text-gray-400 truncate mt-0.5">
+                        <div className="text-[11px] truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
                           {member.role || 'Contributor'}
                         </div>
                       </div>
@@ -283,7 +335,8 @@ const ProjectDetails = () => {
                         href={member.portfolio_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="p-2 rounded-xl bg-white/5 hover:bg-teal-400/20 text-gray-300 hover:text-teal-300 transition shrink-0"
+                        className="p-2 rounded-xl bg-white/5 hover:bg-white/15 transition shrink-0"
+                        style={{ color: 'var(--accent)' }}
                         title={`${member.name}'s Portfolio`}
                       >
                         <LinkIcon className="w-3.5 h-3.5" />
@@ -299,7 +352,8 @@ const ProjectDetails = () => {
           <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
             <Link
               to="/#projects"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-teal-400 transition"
+              className="inline-flex items-center gap-2 text-xs font-semibold hover:underline transition"
+              style={{ color: 'var(--accent)' }}
             >
               <ArrowLeft className="w-3.5 h-3.5" /> View other projects
             </Link>
@@ -310,7 +364,8 @@ const ProjectDetails = () => {
                   href={project.github_link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 hover:bg-white/10 transition"
+                  style={{ color: 'var(--text-secondary)' }}
                 >
                   <GithubIcon className="w-3.5 h-3.5" /> Codebase
                 </a>
@@ -320,7 +375,8 @@ const ProjectDetails = () => {
                   href={project.live_link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold bg-teal-400 text-slate-950 hover:bg-teal-300 shadow-md shadow-teal-500/20 transition"
+                  style={{ backgroundColor: 'var(--accent)', color: 'var(--text-inverted)' }}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold hover:opacity-90 shadow-md transition"
                 >
                   Launch App <ExternalLink className="w-3 h-3" />
                 </a>

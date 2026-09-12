@@ -134,6 +134,8 @@ model Theme {
   bg_base      String   // Base background color, e.g. "#0a0f1e"
   bg_surface   String   // Surface card color, e.g. "rgba(15, 23, 42, 0.65)"
   text_primary String   // Primary text color, e.g. "#f8fafc"
+  bg_type      String?  @default("NEURON") // 'NEURON' | 'FLAT'
+  flat_bg_code String?  // Custom CSS background code (e.g. gradient, solid, mesh)
   is_active    Boolean  @default(false)
   created_at   DateTime @default(now())
 }

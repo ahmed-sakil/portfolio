@@ -14,7 +14,7 @@ const BlogsSection = ({ blogs = [] }) => {
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
             Latest <span style={{ color: 'var(--accent)' }}>Articles</span>
           </h2>
           <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -27,8 +27,8 @@ const BlogsSection = ({ blogs = [] }) => {
           {sortedBlogs.map((blog) => (
             <div
               key={blog.id}
-              className="rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300"
-              style={{ background: 'rgba(255, 255, 255, 0.03)' }}
+              className="inner-glass rounded-2xl overflow-hidden flex flex-col group transition-all duration-300"
+              style={{ borderColor: 'var(--border-subtle)' }}
             >
               {blog.cover_image_url && (
                 <div className="overflow-hidden aspect-video relative">
@@ -41,14 +41,14 @@ const BlogsSection = ({ blogs = [] }) => {
               )}
               <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="text-[11px] sm:text-xs font-mono text-teal-400 mb-1.5 sm:mb-2 block">
+                  <span className="text-[11px] sm:text-xs font-mono text-accent mb-1.5 sm:mb-2 block">
                     {new Date(blog.published_at || blog.createdAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric'
                     })}
                   </span>
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-teal-300 transition">
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 group-hover:text-accent transition line-clamp-2" style={{ color: 'var(--text-primary)' }}>
                     {blog.title}
                   </h3>
                   <p className="text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
@@ -56,10 +56,10 @@ const BlogsSection = ({ blogs = [] }) => {
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/10">
+                <div className="pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
                   <Link
                     to={`/blog/${blog.slug}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-400 hover:text-teal-300 transition"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:opacity-80 transition"
                   >
                     Read Article &rarr;
                   </Link>
@@ -73,7 +73,10 @@ const BlogsSection = ({ blogs = [] }) => {
         <div className="mt-10 flex justify-center">
           <Link
             to="/blogs"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 border border-teal-400/40 bg-teal-400/10 text-teal-300 hover:bg-teal-400 hover:text-black hover:shadow-[0_0_20px_rgba(0,229,160,0.4)]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-black cursor-pointer"
+            style={{
+              boxShadow: 'var(--accent-glow)'
+            }}
           >
             <span>View All</span>
             <ArrowRight className="w-3.5 h-3.5" />

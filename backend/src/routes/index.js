@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { login, changeCredentials, getAdminCredentials } from '../controllers/auth.controller.js';
-import { getPortfolio, submitContact, getBlogBySlug, getAllProjects, getAllBlogs, getProjectById } from '../controllers/public.controller.js';
+import { getPortfolio, submitContact, getBlogBySlug, getAllProjects, getAllBlogs, getProjectById, getPublicThemes } from '../controllers/public.controller.js';
 import { getStats, getAdminStats, fetchPlatformStats, saveAdminStats } from '../controllers/stats.controller.js';
 import { 
   updateProfile, 
@@ -23,6 +23,7 @@ const router = Router();
 // --- PUBLIC ROUTES ---
 router.post('/auth/login', login);
 router.get('/portfolio', getPortfolio);
+router.get('/themes', getPublicThemes);
 router.get('/projects', getAllProjects);
 router.get('/projects/:id', getProjectById);
 router.get('/blogs', getAllBlogs);

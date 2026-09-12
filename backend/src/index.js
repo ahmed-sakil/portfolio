@@ -236,6 +236,8 @@ async function autoMigrate() {
     `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "bg_base" TEXT NOT NULL DEFAULT '#0a0f1e'`,
     `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "bg_surface" TEXT NOT NULL DEFAULT 'rgba(15, 23, 42, 0.65)'`,
     `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "text_primary" TEXT NOT NULL DEFAULT '#f8fafc'`,
+    `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "bg_type" TEXT DEFAULT 'NEURON'`,
+    `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "flat_bg_code" TEXT`,
     `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "is_active" BOOLEAN NOT NULL DEFAULT false`,
     `ALTER TABLE "Theme" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP`,
 
@@ -299,10 +301,15 @@ async function autoMigrate() {
      SELECT 1, 'Developer', 'Full Stack Developer', 'Let us build something amazing together.'
      WHERE NOT EXISTS (SELECT 1 FROM "Profile")`,
 
-    // Ensure at least 1 default active theme exists
-    `INSERT INTO "Theme" ("name", "accent", "bg_base", "bg_surface", "text_primary", "is_active")
-     SELECT 'Emerald Cyber', '#00e5a0', '#0a0f1e', 'rgba(15, 23, 42, 0.65)', '#f8fafc', true
-     WHERE NOT EXISTS (SELECT 1 FROM "Theme")`
+    // Seed Dark (Default) theme if not exists
+    `INSERT INTO "Theme" ("name", "accent", "bg_base", "bg_surface", "text_primary", "bg_type", "flat_bg_code", "is_active")
+     SELECT 'Dark (Default)', '#00e5a0', '#0a0f1e', 'rgba(15, 23, 42, 0.88)', '#f8fafc', 'NEURON', '', true
+     WHERE NOT EXISTS (SELECT 1 FROM "Theme" WHERE "name" = 'Dark (Default)')`,
+
+    // Seed Light (Default) theme if not exists
+    `INSERT INTO "Theme" ("name", "accent", "bg_base", "bg_surface", "text_primary", "bg_type", "flat_bg_code", "is_active")
+     SELECT 'Light (Default)', '#0d9488', '#f8fafc', 'rgba(255, 255, 255, 0.90)', '#0f172a', 'NEURON', '', false
+     WHERE NOT EXISTS (SELECT 1 FROM "Theme" WHERE "name" = 'Light (Default)')`
   ];
 
   for (const stmt of statements) {

@@ -27,13 +27,11 @@ const generateYearCalendar = (seedYear, username = 'sakil') => {
   for (let w = 0; w < 52; w++) {
     const days = [];
     for (let d = 0; d < 7; d++) {
-      // Deterministic pseudorandom algorithm based on year, week, day, and username
       const pseudo = Math.sin(seedYear * 93 + w * 17 + d * 31 + charSum) * 10000;
       const rand = pseudo - Math.floor(pseudo);
       
       let level = 0;
       let count = 0;
-      // Realistic distribution matching reference: ~70% empty, 30% active
       if (rand > 0.88) {
         level = 4;
         count = Math.floor(rand * 8) + 6;
@@ -48,7 +46,6 @@ const generateYearCalendar = (seedYear, username = 'sakil') => {
         count = 1;
       }
 
-      // Calculate approximate date for tooltip
       const monthIdx = Math.min(11, Math.floor((w / 52) * 12));
       const monthName = MONTH_CONFIG[monthIdx]?.label || 'Oct';
       const dayNum = ((w * 7 + d) % 28) + 1;
@@ -92,20 +89,19 @@ const GithubContributionSection = ({ profile, stats }) => {
     return generateYearCalendar(selectedYear, ghUser);
   }, [selectedYear, ghUser]);
 
-  // Contribution level color map (matching screenshot: empty is light off-white, active is emerald/green)
   const getCellColor = (level) => {
     switch (level) {
       case 4:
-        return 'bg-[#15803d] hover:ring-1 hover:ring-emerald-300'; // dark green
+        return 'bg-[#15803d] hover:ring-1 hover:ring-emerald-300';
       case 3:
-        return 'bg-[#22c55e] hover:ring-1 hover:ring-emerald-200'; // medium green
+        return 'bg-[#22c55e] hover:ring-1 hover:ring-emerald-200';
       case 2:
-        return 'bg-[#4ade80] hover:ring-1 hover:ring-emerald-100'; // bright green
+        return 'bg-[#4ade80] hover:ring-1 hover:ring-emerald-100';
       case 1:
-        return 'bg-[#86efac] hover:ring-1 hover:ring-emerald-50';  // light green
+        return 'bg-[#86efac] hover:ring-1 hover:ring-emerald-50';
       case 0:
       default:
-        return 'bg-[#e2e8f0] opacity-95 hover:opacity-100'; // off-white / light slate empty square
+        return 'bg-[#cbd5e1]/40 hover:opacity-100';
     }
   };
 
@@ -115,7 +111,7 @@ const GithubContributionSection = ({ profile, stats }) => {
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
             GitHub <span style={{ color: 'var(--accent)' }}>Contributions</span>
           </h2>
           <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -123,15 +119,16 @@ const GithubContributionSection = ({ profile, stats }) => {
           </p>
         </div>
 
-        {/* Top Header Row: github.com/username and View Profile link */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6 pb-2 border-b border-white/10">
+        {/* Top Header Row */}
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6 pb-2 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
           <a
             href={`https://github.com/${ghUser}`}
             target="_blank"
             rel="noreferrer"
-            className="text-xs sm:text-sm font-mono text-gray-400 hover:text-teal-400 flex items-center gap-2 transition truncate"
+            className="text-xs sm:text-sm font-mono flex items-center gap-2 transition truncate hover:text-accent"
+            style={{ color: 'var(--text-secondary)' }}
           >
-            <GithubIcon className="w-4 h-4 text-gray-400 shrink-0" />
+            <GithubIcon className="w-4 h-4 shrink-0" />
             <span className="truncate">github.com/{ghUser}</span>
           </a>
 
@@ -139,7 +136,8 @@ const GithubContributionSection = ({ profile, stats }) => {
             href={`https://github.com/${ghUser}`}
             target="_blank"
             rel="noreferrer"
-            className="text-xs sm:text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1.5 transition ml-auto"
+            className="text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition ml-auto hover:opacity-80"
+            style={{ color: 'var(--accent)' }}
           >
             <span>View Profile</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -148,64 +146,32 @@ const GithubContributionSection = ({ profile, stats }) => {
 
         {/* 6 Top Metric Cards Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 sm:mb-8">
-          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
-              FOLLOWERS
-            </span>
-            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
-              {followers}
-            </span>
-          </div>
-
-          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
-              FOLLOWING
-            </span>
-            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
-              {following}
-            </span>
-          </div>
-
-          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
-              PUBLIC REPOS
-            </span>
-            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
-              {publicRepos}
-            </span>
-          </div>
-
-          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
-              STARRED REPOS
-            </span>
-            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
-              {starredRepos}
-            </span>
-          </div>
-
-          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
-              COMMITS
-            </span>
-            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
-              {commits}
-            </span>
-          </div>
-
-          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
-              PRS + ISSUES
-            </span>
-            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
-              {prsIssues}
-            </span>
-          </div>
+          {[
+            { label: 'FOLLOWERS', value: followers },
+            { label: 'FOLLOWING', value: following },
+            { label: 'PUBLIC REPOS', value: publicRepos },
+            { label: 'STARRED REPOS', value: starredRepos },
+            { label: 'COMMITS', value: commits },
+            { label: 'PRS + ISSUES', value: prsIssues },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="p-3 sm:p-4 rounded-xl border flex flex-col justify-between"
+              style={{ background: 'var(--bg-surface-hover)', borderColor: 'var(--border-subtle)' }}
+            >
+              <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                {item.label}
+              </span>
+              <span className="text-lg sm:text-2xl font-black mt-1.5 sm:mt-2" style={{ color: 'var(--text-primary)' }}>
+                {item.value}
+              </span>
+            </div>
+          ))}
         </div>
 
-        {/* Subtitle & Year Selector (Stacked as in reference screenshot) */}
+        {/* Subtitle & Year Selector */}
         <div className="space-y-3 mb-8">
-          <p className="text-xs sm:text-sm text-gray-400 font-medium">
+          <p className="text-xs sm:text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
             Showing metrics for last 365 days
           </p>
 
@@ -216,11 +182,12 @@ const GithubContributionSection = ({ profile, stats }) => {
                 key={year}
                 type="button"
                 onClick={() => setSelectedYear(year)}
-                className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                  selectedYear === year
-                    ? 'bg-white/20 text-white border border-white/40 shadow-sm'
-                    : 'bg-white/5 text-gray-400 border border-white/5 hover:border-white/20 hover:text-white'
-                }`}
+                className="px-3.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer border"
+                style={{
+                  backgroundColor: selectedYear === year ? 'var(--accent)' : 'var(--bg-surface-hover)',
+                  color: selectedYear === year ? 'var(--text-inverted)' : 'var(--text-secondary)',
+                  borderColor: selectedYear === year ? 'var(--accent)' : 'var(--border-subtle)',
+                }}
               >
                 {year}
               </button>
@@ -229,33 +196,32 @@ const GithubContributionSection = ({ profile, stats }) => {
         </div>
 
         {/* Mobile Swipe Hint */}
-        <div className="sm:hidden flex items-center justify-between text-[11px] text-gray-400 font-mono mb-2 px-1">
+        <div className="sm:hidden flex items-center justify-between text-[11px] font-mono mb-2 px-1" style={{ color: 'var(--text-secondary)' }}>
           <span>Heatmap</span>
-          <span className="text-teal-400/80">Swipe horizontally &rarr;</span>
+          <span className="text-accent">Swipe horizontally &rarr;</span>
         </div>
 
         {/* GitHub Contribution Heatmap Grid */}
         <div className="overflow-x-auto pb-4 pt-1 scrollbar-thin -mx-2 px-2 sm:mx-0 sm:px-0">
           <div className="w-fit min-w-[720px] sm:min-w-[760px] mx-auto sm:mx-0">
             
-            {/* Top Month Labels Row (precisely aligned with day column spacer) */}
+            {/* Top Month Labels Row */}
             <div className="flex items-start gap-4 mb-2">
-              {/* Spacer matching Day Column width */}
               <div className="w-10 sm:w-12 shrink-0" />
 
-              {/* 52-column Month Header Grid */}
               <div
-                className="grid text-xs sm:text-sm font-medium text-gray-300 select-none"
+                className="grid text-xs sm:text-sm font-medium select-none"
                 style={{
                   gridTemplateColumns: 'repeat(52, 14px)',
                   gap: '3.5px',
+                  color: 'var(--text-secondary)'
                 }}
               >
                 {MONTH_CONFIG.map((m, idx) => (
                   <span
                     key={idx}
                     style={{ gridColumnStart: m.week }}
-                    className="text-left font-medium text-gray-300"
+                    className="text-left font-medium"
                   >
                     {m.label}
                   </span>
@@ -263,21 +229,19 @@ const GithubContributionSection = ({ profile, stats }) => {
               </div>
             </div>
 
-            {/* Grid Body: Day Labels on Left + 52 Week Columns */}
+            {/* Grid Body */}
             <div className="flex items-start gap-4">
-              
-              {/* Day Labels Column (7 slots with exact 14px height & 3.5px gap matching squares) */}
               <div
-                className="flex flex-col text-xs sm:text-sm font-medium text-gray-400 select-none w-10 sm:w-12 text-right shrink-0 pr-1"
-                style={{ gap: '3.5px' }}
+                className="flex flex-col text-xs sm:text-sm font-medium select-none w-10 sm:w-12 text-right shrink-0 pr-1"
+                style={{ gap: '3.5px', color: 'var(--text-secondary)' }}
               >
-                <div className="h-[14px] leading-[14px]" /> {/* Sun */}
+                <div className="h-[14px] leading-[14px]" />
                 <div className="h-[14px] leading-[14px] flex items-center justify-end">Mon</div>
-                <div className="h-[14px] leading-[14px]" /> {/* Tue */}
+                <div className="h-[14px] leading-[14px]" />
                 <div className="h-[14px] leading-[14px] flex items-center justify-end">Wed</div>
-                <div className="h-[14px] leading-[14px]" /> {/* Thu */}
+                <div className="h-[14px] leading-[14px]" />
                 <div className="h-[14px] leading-[14px] flex items-center justify-end">Fri</div>
-                <div className="h-[14px] leading-[14px]" /> {/* Sat */}
+                <div className="h-[14px] leading-[14px]" />
               </div>
 
               {/* 52 Columns of 7 Squares */}
@@ -308,22 +272,22 @@ const GithubContributionSection = ({ profile, stats }) => {
             </div>
 
             {/* Tooltip Bar */}
-            <div className="mt-4 text-right text-xs font-mono text-gray-400 min-h-[20px] pr-2">
+            <div className="mt-4 text-right text-xs font-mono min-h-[20px] pr-2" style={{ color: 'var(--text-secondary)' }}>
               {hoveredDay ? (
                 <span>
-                  <strong className="text-white font-semibold">{hoveredDay.count}</strong> contributions on {hoveredDay.date}
+                  <strong className="font-semibold text-accent">{hoveredDay.count}</strong> contributions on {hoveredDay.date}
                 </span>
               ) : (
-                <span className="opacity-40">Hover over or tap a square to view details</span>
+                <span className="opacity-60">Hover over or tap a square to view details</span>
               )}
             </div>
 
           </div>
         </div>
 
-        {/* TOP REPOSITORIES BY CONTRIBUTIONS */}
-        <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-white/5">
-          <h3 className="text-[11px] sm:text-xs uppercase tracking-wider font-bold text-gray-400 mb-3 sm:mb-4">
+        {/* TOP REPOSITORIES */}
+        <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+          <h3 className="text-[11px] sm:text-xs uppercase tracking-wider font-bold mb-3 sm:mb-4" style={{ color: 'var(--text-secondary)' }}>
             TOP REPOSITORIES BY CONTRIBUTIONS
           </h3>
 
@@ -334,16 +298,20 @@ const GithubContributionSection = ({ profile, stats }) => {
                 href={repo.url || `https://github.com/${repo.full_name || repo.name}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/70 hover:bg-[#161f33] hover:border-teal-400/40 transition flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 group"
+                className="p-3 sm:p-4 rounded-xl border transition flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 group hover:border-accent/40"
+                style={{
+                  background: 'var(--bg-surface-hover)',
+                  borderColor: 'var(--border-subtle)'
+                }}
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                  <GithubIcon className="w-4 h-4 text-gray-400 group-hover:text-teal-400 transition shrink-0" />
-                  <span className="text-xs sm:text-sm font-mono font-semibold text-gray-200 group-hover:text-white transition truncate">
+                  <GithubIcon className="w-4 h-4 transition shrink-0 group-hover:text-accent" style={{ color: 'var(--text-secondary)' }} />
+                  <span className="text-xs sm:text-sm font-mono font-semibold transition truncate group-hover:text-accent" style={{ color: 'var(--text-primary)' }}>
                     {repo.full_name || `${ghUser}/${repo.name}`}
                   </span>
                 </div>
 
-                <div className="text-[11px] sm:text-xs font-medium text-gray-400 group-hover:text-gray-300 transition shrink-0">
+                <div className="text-[11px] sm:text-xs font-medium transition shrink-0" style={{ color: 'var(--text-secondary)' }}>
                   <span>{repo.contributions || (60 - idx * 6)} contributions</span>
                   <span className="mx-1.5 opacity-40">•</span>
                   <span>{repo.stars || 0} stars</span>

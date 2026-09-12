@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { isColorLight } from '../utils/themeEngine';
 
 const ConstellationBackground = () => {
   const canvasRef = useRef(null);
@@ -12,8 +13,35 @@ const ConstellationBackground = () => {
     let allDots = [];
     let mouse = { x: -9999, y: -9999, active: false };
 
-    const GAP = 44;             // Equal distance between dots (forming squares)
-    const CIRCLE_RADIUS = 95;   // Empty circle radius around mouse (no node or path inside)
+    // Dynamic Theme Colors
+    let currentBgBase = '#0a0f1e';
+    let lineStroke = 'rgba(255, 255, 255, 0.065)';
+    let dotFill = 'rgba(255, 255, 255, 0.28)';
+
+    const updateColorsFromTheme = () => {
+      const computed = getComputedStyle(document.documentElement);
+      const bg = computed.getPropertyValue('--bg-base').trim() || '#0a0f1e';
+      currentBgBase = bg;
+
+      const isLight = isColorLight(bg);
+      if (isLight) {
+        lineStroke = 'rgba(15, 23, 42, 0.065)';
+        dotFill = 'rgba(15, 23, 42, 0.25)';
+      } else {
+        lineStroke = 'rgba(255, 255, 255, 0.065)';
+        dotFill = 'rgba(255, 255, 255, 0.28)';
+      }
+    };
+
+    updateColorsFromTheme();
+
+    const onThemeChange = () => {
+      updateColorsFromTheme();
+    };
+    window.addEventListener('portfolio-theme-change', onThemeChange);
+
+    const GAP = 44;             // Equal distance between dots
+    const CIRCLE_RADIUS = 95;   // Empty circle radius around mouse
     const SPRING = 0.075;        // Recovery spring force
     const DAMPING = 0.80;       // Damping for smooth recovery
     const DOT_RADIUS = 1.4;     // Uniform dot radius
@@ -64,7 +92,6 @@ const ConstellationBackground = () => {
       mouse.y = -9999;
     };
 
-    // Calculate perpendicular distance from point (px, py) to line segment (x1, y1)-(x2, y2)
     const distToSegment = (px, py, x1, y1, x2, y2) => {
       const dx = x2 - x1;
       const dy = y2 - y1;
@@ -79,16 +106,19 @@ const ConstellationBackground = () => {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Deep dark background
-      ctx.fillStyle = '#0a0f1e';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Fill canvas background if NOT a custom flat background
+      const isCustomFlat = document.body.classList.contains('custom-flat-bg');
+      if (!isCustomFlat) {
+        ctx.fillStyle = currentBgBase;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
 
-      // Update dot physics (push strictly outside circle, recover with spring)
+      // Update dot physics
       const numDots = allDots.length;
       for (let i = 0; i < numDots; i++) {
         const d = allDots[i];
 
-        // 1. Spring force returning to anchor (recovery)
+        // 1. Spring force returning to anchor
         const ax = (d.ox - d.x) * SPRING;
         const ay = (d.oy - d.y) * SPRING;
         d.vx = (d.vx + ax) * DAMPING;
@@ -97,14 +127,13 @@ const ConstellationBackground = () => {
         d.x += d.vx;
         d.y += d.vy;
 
-        // 2. Strict exclusion circle around mouse — no node inside
+        // 2. Strict exclusion circle around mouse
         if (mouse.active) {
           const dx = d.x - mouse.x;
           const dy = d.y - mouse.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < CIRCLE_RADIUS) {
-            // Push dot immediately to the circle perimeter
             const pushDirX = dist > 0.001 ? dx / dist : 1;
             const pushDirY = dist > 0.001 ? dy / dist : 0;
             d.x = mouse.x + pushDirX * CIRCLE_RADIUS;
@@ -118,9 +147,9 @@ const ConstellationBackground = () => {
       const rows = grid.length;
       const cols = rows > 0 ? grid[0].length : 0;
 
-      // Draw grid lines (clean, uniform, no glowing)
+      // Draw grid lines
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.065)';
+      ctx.strokeStyle = lineStroke;
       ctx.lineWidth = 0.6;
 
       for (let r = 0; r < rows; r++) {
@@ -130,7 +159,6 @@ const ConstellationBackground = () => {
           // Horizontal connection to right neighbor
           if (c + 1 < cols) {
             const b = grid[r][c + 1];
-            // Ensure no path intersects the mouse circle
             const passesThroughCircle =
               mouse.active && distToSegment(mouse.x, mouse.y, a.x, a.y, b.x, b.y) < CIRCLE_RADIUS - 1;
 
@@ -143,7 +171,6 @@ const ConstellationBackground = () => {
           // Vertical connection to bottom neighbor
           if (r + 1 < rows) {
             const b = grid[r + 1][c];
-            // Ensure no path intersects the mouse circle
             const passesThroughCircle =
               mouse.active && distToSegment(mouse.x, mouse.y, a.x, a.y, b.x, b.y) < CIRCLE_RADIUS - 1;
 
@@ -156,13 +183,12 @@ const ConstellationBackground = () => {
       }
       ctx.stroke();
 
-      // Draw dots at intersections (clean, uniform, no glowing)
+      // Draw dots at intersections
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+      ctx.fillStyle = dotFill;
 
       for (let i = 0; i < numDots; i++) {
         const d = allDots[i];
-        // Ensure dot is not drawn inside the mouse circle
         if (!mouse.active || Math.hypot(d.x - mouse.x, d.y - mouse.y) >= CIRCLE_RADIUS - 1) {
           ctx.moveTo(d.x + DOT_RADIUS, d.y);
           ctx.arc(d.x, d.y, DOT_RADIUS, 0, Math.PI * 2);
@@ -182,6 +208,7 @@ const ConstellationBackground = () => {
 
     return () => {
       cancelAnimationFrame(animationId);
+      window.removeEventListener('portfolio-theme-change', onThemeChange);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('resize', buildGrid);

@@ -15,7 +15,7 @@ const ProjectsSection = ({ projects = [] }) => {
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
             Featured <span style={{ color: 'var(--accent)' }}>Projects</span>
           </h2>
           <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -28,13 +28,20 @@ const ProjectsSection = ({ projects = [] }) => {
           {sortedProjects.map((project) => (
             <div
               key={project.id}
-              className="inner-glass rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-teal-400/50 hover:shadow-[0_0_25px_rgba(0,229,160,0.15)] transition-all duration-300"
+              className="inner-glass rounded-2xl overflow-hidden flex flex-col group transition-all duration-300"
+              style={{
+                borderColor: 'var(--border-subtle)'
+              }}
             >
               {/* Screenshot with padding and rounded border radius */}
               <div className="p-3 sm:p-4 pb-0">
                 <Link
                   to={`/project/${project.id}`}
-                  className="block relative overflow-hidden rounded-xl aspect-video bg-slate-900/60 border border-white/10 group/img"
+                  className="block relative overflow-hidden rounded-xl aspect-video border group/img"
+                  style={{
+                    background: 'var(--bg-surface-hover)',
+                    borderColor: 'var(--border-subtle)',
+                  }}
                 >
                   {project.image_url ? (
                     <img
@@ -43,7 +50,7 @@ const ProjectsSection = ({ projects = [] }) => {
                       className="w-full h-full object-cover group-hover/img:scale-105 transition duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs sm:text-sm">
+                    <div className="w-full h-full flex items-center justify-center text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
                       No Preview Available
                     </div>
                   )}
@@ -53,12 +60,12 @@ const ProjectsSection = ({ projects = [] }) => {
               {/* Body: Type, Title, Short Description */}
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-teal-400 mb-1">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-accent mb-1">
                     {project.type || 'Web Application'}
                   </div>
 
                   <Link to={`/project/${project.id}`}>
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition line-clamp-1">
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 group-hover:text-accent transition line-clamp-1" style={{ color: 'var(--text-primary)' }}>
                       {project.title}
                     </h3>
                   </Link>
@@ -68,10 +75,10 @@ const ProjectsSection = ({ projects = [] }) => {
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-2 mt-4">
+                <div className="pt-4 border-t flex items-center justify-between gap-2 mt-4" style={{ borderColor: 'var(--border-subtle)' }}>
                   <Link
                     to={`/project/${project.id}`}
-                    className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-teal-400 hover:text-teal-300 transition"
+                    className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-accent hover:opacity-80 transition"
                   >
                     <span>View Details</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -84,7 +91,8 @@ const ProjectsSection = ({ projects = [] }) => {
                         target="_blank"
                         rel="noreferrer"
                         title="Live Demo"
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-teal-400 hover:bg-white/5 transition"
+                        className="p-1.5 rounded-lg hover:text-accent transition"
+                        style={{ color: 'var(--text-secondary)' }}
                       >
                         <ExternalLink className="w-4 h-4" />
                       </a>
@@ -95,7 +103,8 @@ const ProjectsSection = ({ projects = [] }) => {
                         target="_blank"
                         rel="noreferrer"
                         title="Source Code"
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition"
+                        className="p-1.5 rounded-lg hover:text-accent transition"
+                        style={{ color: 'var(--text-secondary)' }}
                       >
                         <GithubIcon className="w-4 h-4" />
                       </a>
@@ -111,7 +120,10 @@ const ProjectsSection = ({ projects = [] }) => {
         <div className="mt-10 flex justify-center">
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 border border-teal-400/40 bg-teal-400/10 text-teal-300 hover:bg-teal-400 hover:text-black hover:shadow-[0_0_20px_rgba(0,229,160,0.4)]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 border border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-black cursor-pointer"
+            style={{
+              boxShadow: 'var(--accent-glow)'
+            }}
           >
             <span>View All</span>
             <ArrowRight className="w-3.5 h-3.5" />

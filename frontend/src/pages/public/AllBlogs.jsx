@@ -68,7 +68,7 @@ const AllBlogs = () => {
         <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 mb-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-6 sm:pb-8 border-b border-white/10">
             <div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
                 All <span style={{ color: 'var(--accent)' }}>Articles</span>
               </h1>
               <p className="text-xs sm:text-base leading-relaxed max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
@@ -78,18 +78,20 @@ const AllBlogs = () => {
 
             {/* Search Input */}
             <div className="relative w-full md:w-72">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 opacity-50 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-8 py-2.5 rounded-xl text-base sm:text-sm bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition"
+                style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}
+                className="w-full pl-10 pr-8 py-2.5 rounded-xl text-base sm:text-sm border border-white/10 placeholder-gray-500 focus:outline-none focus:border-accent transition"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs cursor-pointer"
+                  style={{ color: 'var(--text-muted)' }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-80 text-xs cursor-pointer"
                 >
                   ×
                 </button>
@@ -99,8 +101,11 @@ const AllBlogs = () => {
 
           {loading ? (
             <div className="py-24 text-center">
-              <div className="w-10 h-10 border-4 border-teal-400/20 border-t-teal-400 rounded-full animate-spin mx-auto mb-4" />
-              <span className="text-sm text-teal-400 font-medium">Loading all articles...</span>
+              <div
+                className="w-10 h-10 border-4 rounded-full animate-spin mx-auto mb-4"
+                style={{ borderColor: 'var(--accent-dim)', borderTopColor: 'var(--accent)' }}
+              />
+              <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>Loading all articles...</span>
             </div>
           ) : filteredBlogs.length === 0 ? (
             <div className="py-20 text-center text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -111,11 +116,11 @@ const AllBlogs = () => {
               {filteredBlogs.map((blog) => (
                 <div
                   key={blog.id}
-                  className="rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300"
-                  style={{ background: 'rgba(255, 255, 255, 0.03)' }}
+                  className="rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-accent hover:shadow-[0_0_20px_var(--accent-glow)] transition-all duration-300"
+                  style={{ backgroundColor: 'var(--bg-surface)' }}
                 >
                   {blog.cover_image_url && (
-                    <div className="overflow-hidden aspect-video relative">
+                    <div className="overflow-hidden aspect-video relative" style={{ backgroundColor: 'var(--bg-base)' }}>
                       <img
                         src={blog.cover_image_url}
                         alt={blog.title}
@@ -126,14 +131,17 @@ const AllBlogs = () => {
 
                   <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <span className="text-[11px] sm:text-xs font-mono text-teal-400 mb-1.5 sm:mb-2 block">
+                      <span className="text-[11px] sm:text-xs font-mono mb-1.5 sm:mb-2 block" style={{ color: 'var(--accent)' }}>
                         {new Date(blog.published_at || blog.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
                           year: 'numeric'
                         })}
                       </span>
-                      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-teal-300 transition">
+                      <h2
+                        className="text-lg sm:text-xl font-bold mb-2 group-hover:text-accent transition"
+                        style={{ color: 'var(--text-primary)' }}
+                      >
                         {blog.title}
                       </h2>
                       <p className="text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
@@ -144,7 +152,8 @@ const AllBlogs = () => {
                     <div className="pt-4 border-t border-white/10">
                       <Link
                         to={`/blog/${blog.slug}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-400 hover:text-teal-300 transition"
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold hover:opacity-80 transition"
+                        style={{ color: 'var(--accent)' }}
                       >
                         Read Article &rarr;
                       </Link>

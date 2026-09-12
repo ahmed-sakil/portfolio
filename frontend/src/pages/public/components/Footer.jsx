@@ -14,7 +14,6 @@ const Footer = ({ profile, socialLinks = [] }) => {
   const phone = profile?.phone || '+880 1700-000000';
   const location = profile?.location || 'Dhaka, Bangladesh';
 
-  // Prepare social links: read the database field `platform` (or fall back to `name`)
   let displaySocials = [];
   if (socialLinks && socialLinks.length > 0) {
     displaySocials = socialLinks.map((s) => ({
@@ -54,16 +53,17 @@ const Footer = ({ profile, socialLinks = [] }) => {
     <footer className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-12 sm:mb-16 scroll-mt-28">
       {/* Uniform Glass Panel Container */}
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-10 md:p-14 relative overflow-hidden">
-        {/* Ambient subtle glow elements */}
-        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-20 -left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 pb-8 sm:pb-12 border-b border-white/10">
-          {/* Column 1: Brand & Direct Contact Info (Col 6) */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 pb-8 sm:pb-12 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+          {/* Column 1: Brand & Direct Contact Info */}
           <div className="lg:col-span-6 space-y-6">
-            {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-teal-400/50 shadow-[0_0_15px_rgba(0,229,160,0.4)]">
+              <div
+                className="w-10 h-10 rounded-full overflow-hidden border-2 shadow-md transition-all"
+                style={{
+                  borderColor: 'var(--accent)',
+                  boxShadow: 'var(--accent-glow)'
+                }}
+              >
                 {profile?.icon_image_url || profile?.profile_image_url ? (
                   <img
                     src={profile.icon_image_url || profile.profile_image_url}
@@ -71,12 +71,12 @@ const Footer = ({ profile, socialLinks = [] }) => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-teal-400/20 flex items-center justify-center text-sm font-bold text-teal-400">
+                  <div className="w-full h-full flex items-center justify-center text-sm font-bold" style={{ background: 'var(--accent-dim)', color: 'var(--accent)' }}>
                     S
                   </div>
                 )}
               </div>
-              <span className="text-2xl font-black tracking-tight text-white">
+              <span className="text-2xl font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>
                 sakil<span style={{ color: 'var(--accent)' }}>.me</span>
               </span>
             </div>
@@ -90,15 +90,21 @@ const Footer = ({ profile, socialLinks = [] }) => {
                 'Building scalable, modern, and performant web applications with clean architecture and delightful user experiences.'}
             </p>
 
-            {/* Direct Contact List (Email, Phone, Location) */}
+            {/* Direct Contact List */}
             <div className="space-y-3 pt-2">
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-3 text-sm font-medium hover:text-teal-400 transition group"
+                className="flex items-center gap-3 text-sm font-medium transition group hover:text-accent"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-teal-400/40 group-hover:bg-teal-400/10 transition">
-                  <Mail className="w-4 h-4 text-teal-400" />
+                <div
+                  className="p-2.5 rounded-xl border transition"
+                  style={{
+                    background: 'var(--bg-surface-hover)',
+                    borderColor: 'var(--border-subtle)',
+                  }}
+                >
+                  <Mail className="w-4 h-4 text-accent" />
                 </div>
                 <span>{email}</span>
               </a>
@@ -106,11 +112,17 @@ const Footer = ({ profile, socialLinks = [] }) => {
               {phone && (
                 <a
                   href={`tel:${phone}`}
-                  className="flex items-center gap-3 text-sm font-medium hover:text-teal-400 transition group"
+                  className="flex items-center gap-3 text-sm font-medium transition group hover:text-accent"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-teal-400/40 group-hover:bg-teal-400/10 transition">
-                    <Phone className="w-4 h-4 text-teal-400" />
+                  <div
+                    className="p-2.5 rounded-xl border transition"
+                    style={{
+                      background: 'var(--bg-surface-hover)',
+                      borderColor: 'var(--border-subtle)',
+                    }}
+                  >
+                    <Phone className="w-4 h-4 text-accent" />
                   </div>
                   <span>{phone}</span>
                 </a>
@@ -121,8 +133,14 @@ const Footer = ({ profile, socialLinks = [] }) => {
                   className="flex items-center gap-3 text-sm font-medium"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                    <MapPin className="w-4 h-4 text-gray-400" />
+                  <div
+                    className="p-2.5 rounded-xl border"
+                    style={{
+                      background: 'var(--bg-surface-hover)',
+                      borderColor: 'var(--border-subtle)',
+                    }}
+                  >
+                    <MapPin className="w-4 h-4 text-accent" />
                   </div>
                   <span>{location}</span>
                 </div>
@@ -130,11 +148,11 @@ const Footer = ({ profile, socialLinks = [] }) => {
             </div>
           </div>
 
-          {/* Column 2: Social Media Links with Names & Icons from Database (Col 6) */}
+          {/* Column 2: Social Media Links */}
           <div className="lg:col-span-6 flex flex-col justify-between">
             <div>
-              <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+              <h4 className="text-sm font-bold tracking-wider uppercase mb-2 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
                 Connect & Social
               </h4>
               <p className="text-xs mb-6" style={{ color: 'var(--text-muted)' }}>
@@ -148,10 +166,20 @@ const Footer = ({ profile, socialLinks = [] }) => {
                     href={item.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-between p-3.5 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-teal-400/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300 group"
+                    className="flex items-center justify-between p-3.5 rounded-2xl border transition-all duration-300 group hover:border-accent/50"
+                    style={{
+                      background: 'var(--bg-surface-hover)',
+                      borderColor: 'var(--border-subtle)',
+                    }}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-teal-400 group-hover:bg-teal-400/20 group-hover:border-teal-400/40 transition shrink-0">
+                      <div
+                        className="w-8 h-8 rounded-xl border flex items-center justify-center text-accent transition shrink-0"
+                        style={{
+                          background: 'var(--bg-surface)',
+                          borderColor: 'var(--border-subtle)',
+                        }}
+                      >
                         <SocialIcon
                           platform={item.name}
                           iconName={item.icon_name}
@@ -160,11 +188,11 @@ const Footer = ({ profile, socialLinks = [] }) => {
                           className="w-4 h-4"
                         />
                       </div>
-                      <span className="text-sm font-bold text-gray-200 group-hover:text-white transition truncate">
+                      <span className="text-sm font-bold transition truncate group-hover:text-accent" style={{ color: 'var(--text-primary)' }}>
                         {item.name}
                       </span>
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-teal-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
+                    <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
                   </a>
                 ))}
               </div>
@@ -183,10 +211,15 @@ const Footer = ({ profile, socialLinks = [] }) => {
 
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-gray-300 hover:text-white hover:border-teal-400/50 hover:bg-teal-400/10 transition group"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition group cursor-pointer hover:border-accent/40 hover:text-accent"
+            style={{
+              background: 'var(--bg-surface-hover)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-secondary)'
+            }}
           >
             <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-teal-400 group-hover:-translate-y-0.5 transition-transform" />
+            <ArrowUp className="w-3.5 h-3.5 text-accent group-hover:-translate-y-0.5 transition-transform" />
           </button>
         </div>
       </div>

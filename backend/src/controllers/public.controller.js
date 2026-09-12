@@ -65,8 +65,10 @@ export const getPortfolio = async (req, res) => {
     }
 
     let activeTheme = null;
+    let themes = [];
     try {
-      activeTheme = await prisma.theme.findFirst({ where: { is_active: true } });
+      themes = await prisma.theme.findMany({ orderBy: { id: 'asc' } });
+      activeTheme = themes.find(t => t.is_active) || themes[0] || null;
     } catch (err) {
       console.warn('Theme table notice (run prisma db push to apply new table):', err.message);
     }
@@ -96,6 +98,7 @@ export const getPortfolio = async (req, res) => {
       socialLinks: socialLinks || [],
       services: services || [],
       activeTheme,
+      themes: themes || [],
       customIcons: customIcons || []
     });
   } catch (error) {
@@ -201,5 +204,16 @@ export const getProjectById = async (req, res) => {
   } catch (error) {
     console.error('getProjectById error:', error);
     res.status(500).json({ message: 'Server error fetching project', error: error.message });
+  }
+};
+
+export const getPublicThemes = async (req, res) => {
+  try {
+    const themes = await prisma.theme.findMany({ orderBy: { id: 'asc' } });
+    const activeTheme = themes.find(t => t.is_active) || themes[0] || null;
+    res.json({ themes, activeTheme });
+  } catch (error) {
+    console.error('getPublicThemes error:', error);
+    res.status(500).json({ message: 'Error fetching themes', error: error.message });
   }
 };

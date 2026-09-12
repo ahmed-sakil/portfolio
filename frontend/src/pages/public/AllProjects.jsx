@@ -186,9 +186,9 @@ const AllProjects = () => {
       {/* Main Container */}
       <main className="w-[94%] sm:w-[90%] max-w-7xl mx-auto">
         <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 mb-10">
-          <div className="pb-6 sm:pb-8 border-b border-white/10 space-y-6">
+          <div className="pb-6 sm:pb-8 border-b space-y-6" style={{ borderColor: 'var(--border-subtle)' }}>
             <div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
                 All <span style={{ color: 'var(--accent)' }}>Projects</span>
               </h1>
               <p className="text-xs sm:text-base leading-relaxed max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
@@ -200,7 +200,7 @@ const AllProjects = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full max-w-3xl">
               {/* Search input with search button */}
               <div className="relative flex-1 flex items-center">
-                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-secondary)' }} />
                 <input
                   type="text"
                   placeholder="Search projects by title, description, or tech..."
@@ -209,12 +209,21 @@ const AllProjects = () => {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSearch();
                   }}
-                  className="w-full pl-10 pr-24 py-2.5 rounded-xl text-base sm:text-sm bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition"
+                  className="w-full pl-10 pr-24 py-2.5 rounded-xl text-base sm:text-sm border transition focus:outline-none focus:border-accent"
+                  style={{
+                    background: 'var(--bg-surface-hover)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--text-primary)'
+                  }}
                 />
                 <button
                   type="button"
                   onClick={handleSearch}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-400 text-black hover:bg-teal-300 transition cursor-pointer"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer"
+                  style={{
+                    backgroundColor: 'var(--accent)',
+                    color: 'var(--text-inverted)'
+                  }}
                 >
                   Search
                 </button>
@@ -224,12 +233,23 @@ const AllProjects = () => {
               <button
                 type="button"
                 onClick={() => setIsFilterOpen(true)}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-xs sm:text-sm font-semibold text-gray-200 hover:text-white transition shrink-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition shrink-0 cursor-pointer"
+                style={{
+                  background: 'var(--bg-surface-hover)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)'
+                }}
               >
-                <SlidersHorizontal className="w-4 h-4 text-teal-400" />
+                <SlidersHorizontal className="w-4 h-4 text-accent" />
                 <span>Advanced Filter</span>
                 {activeFilterCount > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-teal-400 text-black text-[10px] font-bold flex items-center justify-center">
+                  <span
+                    className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center"
+                    style={{
+                      backgroundColor: 'var(--accent)',
+                      color: 'var(--text-inverted)'
+                    }}
+                  >
                     {activeFilterCount}
                   </span>
                 )}
@@ -237,12 +257,12 @@ const AllProjects = () => {
             </div>
 
             {/* Counter Text: Showing {4} of {19} projects */}
-            <div className="flex items-center justify-between pt-2 text-xs sm:text-sm font-mono text-gray-400">
+            <div className="flex items-center justify-between pt-2 text-xs sm:text-sm font-mono" style={{ color: 'var(--text-secondary)' }}>
               <div>
-                Showing <strong className="text-teal-400 font-bold">{filteredProjects.length}</strong> of{' '}
-                <strong className="text-white font-bold">{projects.length}</strong> projects
+                Showing <strong className="font-bold text-accent">{filteredProjects.length}</strong> of{' '}
+                <strong className="font-bold" style={{ color: 'var(--text-primary)' }}>{projects.length}</strong> projects
                 {activeSearch && (
-                  <span className="text-xs text-gray-400 ml-2">
+                  <span className="text-xs ml-2" style={{ color: 'var(--text-muted)' }}>
                     (matching "{activeSearch}")
                   </span>
                 )}
@@ -256,7 +276,7 @@ const AllProjects = () => {
                     setSearchInput('');
                     setActiveSearch('');
                   }}
-                  className="inline-flex items-center gap-1 text-xs text-teal-400 hover:underline cursor-pointer"
+                  className="inline-flex items-center gap-1 text-xs text-accent hover:underline cursor-pointer"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Reset filters</span>
@@ -268,8 +288,11 @@ const AllProjects = () => {
           {/* Project List */}
           {loading ? (
             <div className="py-24 text-center">
-              <div className="w-10 h-10 border-4 border-teal-400/20 border-t-teal-400 rounded-full animate-spin mx-auto mb-4" />
-              <span className="text-sm text-teal-400 font-medium">Loading all projects...</span>
+              <div
+                className="w-10 h-10 border-4 rounded-full animate-spin mx-auto mb-4"
+                style={{ borderColor: 'var(--accent-dim)', borderTopColor: 'var(--accent)' }}
+              />
+              <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>Loading all projects...</span>
             </div>
           ) : filteredProjects.length === 0 ? (
             <div className="py-20 text-center text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -290,13 +313,15 @@ const AllProjects = () => {
                 return (
                   <div
                     key={project.id}
-                    className="inner-glass rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-teal-400/50 hover:shadow-[0_0_25px_rgba(0,229,160,0.15)] transition-all duration-300"
+                    className="inner-glass rounded-2xl border border-white/10 overflow-hidden flex flex-col group hover:border-accent hover:shadow-[0_0_25px_var(--accent-glow)] transition-all duration-300"
+                    style={{ backgroundColor: 'var(--bg-surface)' }}
                   >
                     {/* Screenshot with padding and border radius */}
                     <div className="p-3 sm:p-4 pb-0">
                       <Link
                         to={`/project/${project.id}`}
-                        className="block relative overflow-hidden rounded-xl aspect-video bg-slate-900/60 border border-white/10 group/img"
+                        className="block relative overflow-hidden rounded-xl aspect-video border border-white/10 group/img"
+                        style={{ backgroundColor: 'var(--bg-base)' }}
                       >
                         {project.image_url ? (
                           <img
@@ -305,14 +330,17 @@ const AllProjects = () => {
                             className="w-full h-full object-cover group-hover/img:scale-105 transition duration-500"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs sm:text-sm">
+                          <div className="w-full h-full flex items-center justify-center text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
                             No Preview Available
                           </div>
                         )}
 
                         {/* Projects icon on the screenshot in the right corner with a border */}
                         {project.icon_url && (
-                          <div className="absolute top-2.5 right-2.5 w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden border-2 border-white/30 bg-slate-950/85 backdrop-blur-md shadow-lg p-0.5">
+                          <div
+                            className="absolute top-2.5 right-2.5 w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden border-2 border-white/30 backdrop-blur-md shadow-lg p-0.5"
+                            style={{ backgroundColor: 'var(--bg-surface)' }}
+                          >
                             <img
                               src={project.icon_url}
                               alt="icon"
@@ -328,17 +356,20 @@ const AllProjects = () => {
                       <div>
                         {/* Type and level in same line in short font, left and right */}
                         <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider uppercase mb-2">
-                          <span className="text-teal-400 truncate mr-2">
+                          <span className="text-accent truncate mr-2">
                             {project.type || 'Web Application'}
                           </span>
-                          <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-gray-300 shrink-0">
+                          <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 shrink-0" style={{ color: 'var(--text-secondary)' }}>
                             {project.level || 'Intermediate'}
                           </span>
                         </div>
 
                         {/* Below: Title */}
                         <Link to={`/project/${project.id}`}>
-                          <h2 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition line-clamp-1">
+                          <h2
+                            className="text-lg sm:text-xl font-bold mb-2 group-hover:text-accent transition line-clamp-1"
+                            style={{ color: 'var(--text-primary)' }}
+                          >
                             {project.title}
                           </h2>
                         </Link>
@@ -350,15 +381,18 @@ const AllProjects = () => {
 
                         {/* Below: Category (Personal / Group) */}
                         <div className="mb-4">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900/80 border border-white/10 text-gray-300">
+                          <span
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border border-white/10"
+                            style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-secondary)' }}
+                          >
                             {category === 'Group' ? (
                               <>
-                                <Users className="w-3.5 h-3.5 text-cyan-400" />
+                                <Users className="w-3.5 h-3.5 text-accent" />
                                 <span>Group Project</span>
                               </>
                             ) : (
                               <>
-                                <User className="w-3.5 h-3.5 text-gray-400" />
+                                <User className="w-3.5 h-3.5 opacity-70" />
                                 <span>Personal Project</span>
                               </>
                             )}
@@ -373,7 +407,8 @@ const AllProjects = () => {
                               return (
                                 <span
                                   key={i}
-                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border border-white/10 bg-white/5 text-gray-300"
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border border-white/10 bg-white/5"
+                                  style={{ color: 'var(--text-secondary)' }}
                                 >
                                   <AppIcon
                                     iconUrl={meta?.icon_url}
@@ -394,7 +429,7 @@ const AllProjects = () => {
                       <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-2 mt-auto">
                         <Link
                           to={`/project/${project.id}`}
-                          className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-teal-400 hover:text-teal-300 transition"
+                          className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-accent hover:opacity-80 transition"
                         >
                           <span>View Details</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -407,7 +442,7 @@ const AllProjects = () => {
                               target="_blank"
                               rel="noreferrer"
                               title="Live Demo"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-teal-400 hover:bg-white/5 transition"
+                              className="p-1.5 rounded-lg text-gray-400 hover:text-accent hover:bg-white/5 transition"
                             >
                               <ExternalLink className="w-4 h-4" />
                             </a>
@@ -418,7 +453,7 @@ const AllProjects = () => {
                               target="_blank"
                               rel="noreferrer"
                               title="Source Code"
-                              className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition"
+                              className="p-1.5 rounded-lg text-gray-400 hover:text-accent hover:bg-white/5 transition"
                             >
                               <GithubIcon className="w-4 h-4" />
                             </a>
@@ -437,17 +472,20 @@ const AllProjects = () => {
       {/* Advanced Filter Modal */}
       {isFilterOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
-          <div className="glass-panel max-w-xl w-full rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-white/15 shadow-2xl max-h-[90vh] flex flex-col">
+          <div
+            className="glass-panel max-w-xl w-full rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-white/15 shadow-2xl max-h-[90vh] flex flex-col"
+            style={{ backgroundColor: 'var(--bg-surface)' }}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="w-5 h-5 text-teal-400" />
-                <h3 className="text-lg font-bold text-white">Advanced Filter</h3>
+                <SlidersHorizontal className="w-5 h-5 text-accent" />
+                <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Advanced Filter</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsFilterOpen(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-accent hover:bg-white/10 transition cursor-pointer"
                 title="Close"
               >
                 <X className="w-5 h-5" />
@@ -458,7 +496,7 @@ const AllProjects = () => {
             <div className="overflow-y-auto space-y-6 py-4 flex-1 pr-1">
               {/* Category (Personal / Group) */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
+                <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: 'var(--text-muted)' }}>
                   Category
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -469,10 +507,17 @@ const AllProjects = () => {
                         key={cat}
                         type="button"
                         onClick={() => setSelectedCategory(cat)}
+                        style={isSelected ? {
+                          backgroundColor: 'var(--accent)',
+                          color: 'var(--text-inverted)',
+                          borderColor: 'var(--accent)'
+                        } : {
+                          color: 'var(--text-secondary)'
+                        }}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
                           isSelected
-                            ? 'bg-teal-400 text-black border-teal-400 shadow-[0_0_15px_rgba(0,229,160,0.3)]'
-                            : 'bg-white/5 text-gray-300 border-white/10 hover:bg-white/10'
+                            ? 'shadow-[0_0_15px_var(--accent-glow)]'
+                            : 'bg-white/5 border-white/10 hover:bg-white/10'
                         }`}
                       >
                         {cat === 'All' ? 'All Categories' : `${cat} Project`}
@@ -484,7 +529,7 @@ const AllProjects = () => {
 
               {/* Project Level */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
+                <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: 'var(--text-muted)' }}>
                   Project Level
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -501,10 +546,17 @@ const AllProjects = () => {
                             setSelectedLevels([...selectedLevels, lvl]);
                           }
                         }}
+                        style={isSelected ? {
+                          backgroundColor: 'var(--accent)',
+                          color: 'var(--text-inverted)',
+                          borderColor: 'var(--accent)'
+                        } : {
+                          color: 'var(--text-secondary)'
+                        }}
                         className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer flex items-center gap-1.5 ${
                           isSelected
-                            ? 'bg-teal-400 text-black border-teal-400 shadow-[0_0_15px_rgba(0,229,160,0.3)]'
-                            : 'bg-white/5 text-gray-300 border-white/10 hover:bg-white/10'
+                            ? 'shadow-[0_0_15px_var(--accent-glow)]'
+                            : 'bg-white/5 border-white/10 hover:bg-white/10'
                         }`}
                       >
                         {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -518,7 +570,7 @@ const AllProjects = () => {
               {/* Project Type List */}
               {availableTypes.length > 0 && (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-2">
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: 'var(--text-muted)' }}>
                     Project Type / Architecture
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -535,10 +587,17 @@ const AllProjects = () => {
                               setSelectedTypes([...selectedTypes, typ]);
                             }
                           }}
+                          style={isSelected ? {
+                            backgroundColor: 'var(--accent)',
+                            color: 'var(--text-inverted)',
+                            borderColor: 'var(--accent)'
+                          } : {
+                            color: 'var(--text-secondary)'
+                          }}
                           className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer flex items-center gap-1.5 ${
                             isSelected
-                              ? 'bg-teal-400 text-black border-teal-400 shadow-[0_0_15px_rgba(0,229,160,0.3)]'
-                              : 'bg-white/5 text-gray-300 border-white/10 hover:bg-white/10'
+                              ? 'shadow-[0_0_15px_var(--accent-glow)]'
+                              : 'bg-white/5 border-white/10 hover:bg-white/10'
                           }`}
                         >
                           {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -553,30 +612,34 @@ const AllProjects = () => {
               {/* Tech Stack Multi-Select */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                     Tech Stack & Skills
                   </label>
                   {selectedTechs.length > 0 && (
-                    <span className="text-xs font-mono text-teal-400">
+                    <span className="text-xs font-mono text-accent">
                       {selectedTechs.length} selected
                     </span>
                   )}
                 </div>
 
                 <div className="relative mb-3">
-                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 opacity-60 pointer-events-none" />
                   <input
                     type="text"
                     placeholder="Filter technologies (e.g. React, Docker, Python)..."
                     value={techSearch}
                     onChange={(e) => setTechSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition"
+                    style={{ color: 'var(--text-primary)', backgroundColor: 'var(--bg-base)' }}
+                    className="w-full pl-9 pr-3 py-1.5 rounded-lg text-xs border border-white/10 placeholder-gray-500 focus:outline-none focus:border-accent transition"
                   />
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 max-h-44 overflow-y-auto p-2 rounded-xl bg-slate-900/50 border border-white/5">
+                <div
+                  className="flex flex-wrap gap-1.5 max-h-44 overflow-y-auto p-2 rounded-xl border border-white/5"
+                  style={{ backgroundColor: 'var(--bg-base)' }}
+                >
                   {filteredAvailableTechs.length === 0 ? (
-                    <span className="text-xs text-gray-500 italic p-1">No matching technology found</span>
+                    <span className="text-xs italic p-1" style={{ color: 'var(--text-muted)' }}>No matching technology found</span>
                   ) : (
                     filteredAvailableTechs.map((tech) => {
                       const isSelected = selectedTechs.includes(tech);
@@ -592,10 +655,17 @@ const AllProjects = () => {
                               setSelectedTechs([...selectedTechs, tech]);
                             }
                           }}
+                          style={isSelected ? {
+                            backgroundColor: 'var(--accent)',
+                            color: 'var(--text-inverted)',
+                            borderColor: 'var(--accent)'
+                          } : {
+                            color: 'var(--text-secondary)'
+                          }}
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition cursor-pointer ${
                             isSelected
-                              ? 'bg-teal-400 text-black border-teal-400 font-semibold'
-                              : 'bg-white/5 text-gray-300 border-white/10 hover:bg-white/10'
+                              ? 'font-semibold'
+                              : 'bg-white/5 border-white/10 hover:bg-white/10'
                           }`}
                         >
                           <AppIcon
@@ -620,7 +690,7 @@ const AllProjects = () => {
               <button
                 type="button"
                 onClick={handleClearFilters}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-accent hover:bg-white/5 transition cursor-pointer"
               >
                 Clear All
               </button>
@@ -629,14 +699,16 @@ const AllProjects = () => {
                 <button
                   type="button"
                   onClick={() => setIsFilterOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/15 text-white transition cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/15 transition cursor-pointer"
+                  style={{ color: 'var(--text-primary)' }}
                 >
                   Close
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsFilterOpen(false)}
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-teal-400 text-black hover:bg-teal-300 transition shadow-[0_0_15px_rgba(0,229,160,0.3)] cursor-pointer"
+                  style={{ backgroundColor: 'var(--accent)', color: 'var(--text-inverted)' }}
+                  className="px-5 py-2 rounded-xl text-xs font-bold hover:opacity-90 transition shadow-[0_0_15px_var(--accent-glow)] cursor-pointer"
                 >
                   Apply Filters
                 </button>

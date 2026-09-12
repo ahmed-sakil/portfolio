@@ -1,8 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #00e5a0;
-  --color-secondary: #38bdf8;
+  --color-primary: var(--accent);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-dim: var(--accent-dim);
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-hover: var(--bg-surface-hover);
+  --color-bg-card: var(--bg-card);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-card: var(--border-card);
+  --color-border-hover: var(--border-hover);
 }
 
 body {
@@ -10,4 +22,12 @@ body {
   color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* When a custom flat background (gradient/solid/mesh) is active */
+body.custom-flat-bg {
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
 }

@@ -1,5 +1,23 @@
 import { useEffect, useRef } from 'react';
 
+const hexToRgb = (hex) => {
+  let clean = (hex || '#00e5a0').trim();
+  if (clean.startsWith('var(')) return { r: 0, g: 229, b: 160 };
+  if (clean.startsWith('#')) {
+    clean = clean.slice(1);
+    if (clean.length === 3) {
+      clean = clean[0] + clean[0] + clean[1] + clean[1] + clean[2] + clean[2];
+    }
+    const num = parseInt(clean, 16);
+    return {
+      r: (num >> 16) & 255,
+      g: (num >> 8) & 255,
+      b: num & 255,
+    };
+  }
+  return { r: 0, g: 229, b: 160 };
+};
+
 const MouseCursor = () => {
   const canvasRef = useRef(null);
   const glowRef = useRef(null);
@@ -18,8 +36,25 @@ const MouseCursor = () => {
     let mouse = { x: -100, y: -100 };
     let rawPoints = [];
 
-    const MAX_TAIL_PX = 55;   // Strict max length of tail in pixels even on fast movements
-    const MAX_AGE_MS = 140;   // Quick fade so the tail is short and responsive
+    // Theme Accent Sync
+    let currentAccent = '#00e5a0';
+    let currentRgb = { r: 0, g: 229, b: 160 };
+
+    const updateAccent = () => {
+      const computed = getComputedStyle(document.documentElement);
+      const acc = computed.getPropertyValue('--accent').trim() || '#00e5a0';
+      currentAccent = acc;
+      currentRgb = hexToRgb(acc);
+      if (glow) {
+        glow.style.background = `radial-gradient(circle, rgba(${currentRgb.r},${currentRgb.g},${currentRgb.b},0.65) 0%, rgba(${currentRgb.r},${currentRgb.g},${currentRgb.b},0.2) 45%, rgba(${currentRgb.r},${currentRgb.g},${currentRgb.b},0) 75%)`;
+      }
+    };
+
+    updateAccent();
+    window.addEventListener('portfolio-theme-change', updateAccent);
+
+    const MAX_TAIL_PX = 55;   // Strict max length of tail in pixels
+    const MAX_AGE_MS = 140;   // Quick fade
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -36,7 +71,6 @@ const MouseCursor = () => {
       const now = Date.now();
       rawPoints.push({ x: e.clientX, y: e.clientY, time: now });
 
-      // Keep buffer manageable
       if (rawPoints.length > 25) {
         rawPoints.shift();
       }
@@ -59,18 +93,15 @@ const MouseCursor = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (isVisible) {
-        // Move the soft glow directly behind the default cursor
         if (glow) {
           glow.style.opacity = '1';
           glow.style.transform = `translate3d(${mouse.x - 12}px, ${mouse.y - 12}px, 0)`;
         }
 
         const now = Date.now();
-        // Discard points older than MAX_AGE_MS
         rawPoints = rawPoints.filter((p) => now - p.time < MAX_AGE_MS);
 
         if (rawPoints.length > 1) {
-          // Constrain trail by MAX_TAIL_PX from the current mouse position backwards
           const head = { x: mouse.x, y: mouse.y, time: now };
           const clampedPoints = [head];
           let accumulatedDist = 0;
@@ -97,7 +128,6 @@ const MouseCursor = () => {
             clampedPoints.push(curr);
           }
 
-          // Draw the short smooth glowing ribbon
           if (clampedPoints.length >= 2) {
             ctx.save();
             ctx.lineCap = 'round';
@@ -107,7 +137,6 @@ const MouseCursor = () => {
               const p0 = clampedPoints[i];
               const p1 = clampedPoints[i + 1];
 
-              // progress: 1 at cursor head, 0 at tail tip
               const progress = 1 - i / clampedPoints.length;
               const alpha = progress * 0.75;
               const width = Math.max(0.5, progress * 4.5);
@@ -115,9 +144,9 @@ const MouseCursor = () => {
               ctx.beginPath();
               ctx.moveTo(p0.x, p0.y);
               ctx.lineTo(p1.x, p1.y);
-              ctx.strokeStyle = `rgba(0, 229, 160, ${alpha})`;
+              ctx.strokeStyle = `rgba(${currentRgb.r}, ${currentRgb.g}, ${currentRgb.b}, ${alpha})`;
               ctx.lineWidth = width;
-              ctx.shadowColor = '#00e5a0';
+              ctx.shadowColor = currentAccent;
               ctx.shadowBlur = progress * 8;
               ctx.stroke();
             }
@@ -135,6 +164,7 @@ const MouseCursor = () => {
     render();
 
     return () => {
+      window.removeEventListener('portfolio-theme-change', updateAccent);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -145,7 +175,6 @@ const MouseCursor = () => {
 
   return (
     <>
-      {/* Short tail ribbon canvas — sits above everything */}
       <canvas
         ref={canvasRef}
         style={{
@@ -159,7 +188,6 @@ const MouseCursor = () => {
         }}
       />
 
-      {/* Subtle soft glow following right under the default cursor */}
       <div
         ref={glowRef}
         style={{
@@ -169,7 +197,6 @@ const MouseCursor = () => {
           width: 24,
           height: 24,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0,229,160,0.65) 0%, rgba(0,229,160,0.2) 45%, rgba(0,229,160,0) 75%)',
           filter: 'blur(2px)',
           zIndex: 99999,
           pointerEvents: 'none',

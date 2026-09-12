@@ -64,6 +64,17 @@ const SmoothScroll = () => {
       // Allow browser shortcuts like Ctrl+wheel zoom
       if (e.ctrlKey || e.metaKey || e.shiftKey) return;
 
+      // Allow scrollable inner containers (e.g. dropdowns, modals, code blocks) to scroll naturally
+      let el = e.target;
+      while (el && el !== document.body && el !== document.documentElement) {
+        const style = window.getComputedStyle(el);
+        const overflowY = style.overflowY;
+        if ((overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight) {
+          return;
+        }
+        el = el.parentElement;
+      }
+
       e.preventDefault();
 
       let delta = e.deltaY;

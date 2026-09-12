@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import api from './utils/api';
+import { useThemeStore } from './store/themeStore';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
 import Login from './pages/admin/Login';
@@ -25,9 +28,32 @@ import ConstellationBackground from './components/ConstellationBackground';
 import MouseCursor from './components/MouseCursor';
 
 function App() {
+  const activeTheme = useThemeStore((state) => state.activeTheme);
+  const setCustomTheme = useThemeStore((state) => state.setCustomTheme);
+
+  useEffect(() => {
+    // Hydrate active database theme on app launch
+    const loadActiveTheme = async () => {
+      try {
+        const res = await api.get('/portfolio');
+        if (res.data?.activeTheme) {
+          setCustomTheme(res.data.activeTheme);
+        }
+        if (res.data?.themes) {
+          useThemeStore.getState().setAvailableThemes(res.data.themes, res.data.activeTheme?.id);
+        }
+      } catch (err) {
+        // Fall back to cached theme
+      }
+    };
+    loadActiveTheme();
+  }, [setCustomTheme]);
+
+  const showNeuronBackground = (activeTheme?.bg_type || 'NEURON') === 'NEURON';
+
   return (
     <Router>
-      <ConstellationBackground />
+      {showNeuronBackground && <ConstellationBackground />}
       <MouseCursor />
       <Routes>
         {/* Public Routes */}
