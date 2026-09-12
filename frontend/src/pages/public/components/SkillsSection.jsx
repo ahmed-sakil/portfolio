@@ -9,6 +9,7 @@ import {
   Layout,
   Sparkles,
 } from 'lucide-react';
+import AppIcon from '../../../components/icons/AppIcon';
 
 const CATEGORY_CONFIG = {
   PROGRAMMING_LANGUAGE: { label: 'Programming Languages', icon: Code2, color: 'text-blue-400' },
@@ -87,17 +88,14 @@ const SkillsSection = ({ skills }) => {
                     <li key={skill.id} className="group">
                       <div className="flex items-center justify-between mb-1.5">
                         <div className="flex items-center gap-2.5">
-                          {skill.icon_name ? (
-                            <img
-                              src={`https://cdn.simpleicons.org/${skill.icon_name}`}
-                              alt={skill.name}
-                              className="w-4 h-4 opacity-80 group-hover:opacity-100 transition"
-                            />
-                          ) : (
-                            <div className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] text-teal-400 font-bold">
-                              {skill.name.charAt(0)}
-                            </div>
-                          )}
+                          <AppIcon
+                            iconUrl={skill.icon_url}
+                            iconName={skill.icon_name}
+                            iconType={skill.icon_type}
+                            className="w-4 h-4 opacity-85 group-hover:opacity-100 transition shrink-0"
+                            alt={skill.name}
+                            fallbackChar={skill.name?.charAt(0)}
+                          />
                           <span className="text-sm font-medium text-gray-300 group-hover:text-white transition">
                             {skill.name}
                           </span>

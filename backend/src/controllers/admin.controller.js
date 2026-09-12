@@ -98,7 +98,9 @@ export const createSkill = async (req, res) => {
       name: req.body.name,
       category: req.body.category,
       percentage: parseInt(req.body.percentage, 10) || 0,
-      icon_name: req.body.icon_name ? req.body.icon_name.trim() : null
+      icon_name: req.body.icon_name ? req.body.icon_name.trim() : null,
+      icon_url: req.body.icon_url ? req.body.icon_url.trim() : null,
+      icon_type: req.body.icon_type || 'light'
     };
     const skill = await prisma.skill.create({ data });
     res.json(skill);
@@ -115,6 +117,12 @@ export const updateSkill = async (req, res) => {
     if (req.body.percentage !== undefined) data.percentage = parseInt(req.body.percentage, 10) || 0;
     if (req.body.icon_name !== undefined) {
       data.icon_name = req.body.icon_name ? req.body.icon_name.trim() : null;
+    }
+    if (req.body.icon_url !== undefined) {
+      data.icon_url = req.body.icon_url ? req.body.icon_url.trim() : null;
+    }
+    if (req.body.icon_type !== undefined) {
+      data.icon_type = req.body.icon_type || 'light';
     }
     const skill = await prisma.skill.update({ where: { id: parseInt(req.params.id) }, data });
     res.json(skill);
@@ -459,12 +467,21 @@ export const createSocialLink = async (req, res) => {
     if (data.order !== undefined) data.order = parseInt(data.order, 10) || 0;
     if (data.show_in_hero !== undefined) data.show_in_hero = data.show_in_hero === 'true' || data.show_in_hero === true;
     if (data.show_in_footer !== undefined) data.show_in_footer = data.show_in_footer === 'true' || data.show_in_footer === true;
+    if (data.icon_name !== undefined) data.icon_name = data.icon_name ? data.icon_name.trim() : null;
+    if (data.icon_url !== undefined) data.icon_url = data.icon_url ? data.icon_url.trim() : null;
+    if (data.icon_type !== undefined) data.icon_type = data.icon_type || 'light';
     try {
       const link = await prisma.socialLink.create({ data });
       return res.json(link);
     } catch (createErr) {
-      console.warn("createSocialLink fallback without 'order':", createErr.message);
-      const fallbackData = { platform: data.platform, url: data.url, icon_name: data.icon_name };
+      console.warn("createSocialLink fallback:", createErr.message);
+      const fallbackData = { 
+        platform: data.platform, 
+        url: data.url, 
+        icon_name: data.icon_name,
+        icon_url: data.icon_url,
+        icon_type: data.icon_type || 'light'
+      };
       const link = await prisma.socialLink.create({ data: fallbackData });
       return res.json(link);
     }
@@ -480,12 +497,21 @@ export const updateSocialLink = async (req, res) => {
     if (data.order !== undefined) data.order = parseInt(data.order, 10) || 0;
     if (data.show_in_hero !== undefined) data.show_in_hero = data.show_in_hero === 'true' || data.show_in_hero === true;
     if (data.show_in_footer !== undefined) data.show_in_footer = data.show_in_footer === 'true' || data.show_in_footer === true;
+    if (data.icon_name !== undefined) data.icon_name = data.icon_name ? data.icon_name.trim() : null;
+    if (data.icon_url !== undefined) data.icon_url = data.icon_url ? data.icon_url.trim() : null;
+    if (data.icon_type !== undefined) data.icon_type = data.icon_type || 'light';
     try {
       const link = await prisma.socialLink.update({ where: { id: parseInt(req.params.id) }, data });
       return res.json(link);
     } catch (updateErr) {
-      console.warn("updateSocialLink fallback without 'order':", updateErr.message);
-      const fallbackData = { platform: data.platform, url: data.url, icon_name: data.icon_name };
+      console.warn("updateSocialLink fallback:", updateErr.message);
+      const fallbackData = { 
+        platform: data.platform, 
+        url: data.url, 
+        icon_name: data.icon_name,
+        icon_url: data.icon_url,
+        icon_type: data.icon_type || 'light'
+      };
       const link = await prisma.socialLink.update({ where: { id: parseInt(req.params.id) }, data: fallbackData });
       return res.json(link);
     }
@@ -566,5 +592,56 @@ export const activateTheme = async (req, res) => {
   } catch (error) {
     console.error('activateTheme error:', error);
     res.status(500).json({ message: 'Error activating theme.', error: error.message });
+  }
+};
+
+// CUSTOM ICONS LIBRARY
+export const getCustomIcons = async (req, res) => {
+  try {
+    let icons = [];
+    try {
+      icons = await prisma.customIcon.findMany({ orderBy: { created_at: 'desc' } });
+    } catch (err) {
+      console.warn('CustomIcon query fallback:', err.message);
+      icons = await prisma.$queryRaw`SELECT * FROM "CustomIcon" ORDER BY created_at DESC`;
+    }
+    res.json(icons || []);
+  } catch (error) {
+    console.error('getCustomIcons error:', error);
+    res.status(500).json({ message: error.message || 'Failed to load custom icons' });
+  }
+};
+
+export const createCustomIcon = async (req, res) => {
+  try {
+    const raw = { ...req.body };
+    const url = req.file ? req.file.path : (raw.url?.trim() || null);
+    if (!url) {
+      return res.status(400).json({ message: 'Icon image file or URL is required' });
+    }
+    const name = raw.name?.trim() || 'Custom Icon';
+    const icon_type = raw.icon_type || 'light';
+
+    const customIcon = await prisma.customIcon.create({
+      data: {
+        name,
+        url,
+        icon_type
+      }
+    });
+    res.json(customIcon);
+  } catch (error) {
+    console.error('createCustomIcon error:', error);
+    res.status(500).json({ message: error.message || 'Failed to create custom icon' });
+  }
+};
+
+export const deleteCustomIcon = async (req, res) => {
+  try {
+    await prisma.customIcon.delete({ where: { id: parseInt(req.params.id) } });
+    res.json({ message: 'Deleted' });
+  } catch (error) {
+    console.error('deleteCustomIcon error:', error);
+    res.status(500).json({ message: error.message || 'Failed to delete custom icon' });
   }
 };

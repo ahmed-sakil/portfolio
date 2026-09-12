@@ -49,6 +49,8 @@ model Skill {
   category    SkillCategory
   percentage  Int
   icon_name   String?
+  icon_url    String?
+  icon_type   String?       @default("light") // 'light' or 'dark'
 }
 
 model Experience {
@@ -95,9 +97,19 @@ model SocialLink {
   platform       String   // Social media name (e.g. "GitHub", "LinkedIn", "Twitter/X", "Facebook")
   url            String   // Profile URL
   icon_name      String?  // SimpleIcon or Lucide icon name (e.g. "github", "linkedin")
+  icon_url       String?
+  icon_type      String?  @default("light") // 'light' or 'dark'
   order          Int      @default(0)
   show_in_hero   Boolean  @default(true)
   show_in_footer Boolean  @default(true)
+}
+
+model CustomIcon {
+  id         Int      @id @default(autoincrement())
+  name       String
+  url        String
+  icon_type  String   @default("light") // 'light' or 'dark'
+  created_at DateTime @default(now())
 }
 
 model Service {

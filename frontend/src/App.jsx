@@ -13,6 +13,7 @@ import ServicesManager from './pages/admin/ServicesManager';
 import SocialLinksManager from './pages/admin/SocialLinksManager';
 import ThemesManager from './pages/admin/ThemesManager';
 import PlatformStatsManager from './pages/admin/PlatformStatsManager';
+import IconsManager from './pages/admin/IconsManager';
 
 import Portfolio from './pages/public/Portfolio';
 import BlogPost from './pages/public/BlogPost';
@@ -45,6 +46,7 @@ function App() {
             <Route path="dashboard" element={<DashboardOverview />} />
             <Route path="profile" element={<ProfileManager />} />
             <Route path="services" element={<ServicesManager />} />
+            <Route path="icons" element={<IconsManager />} />
             <Route path="social-links" element={<SocialLinksManager />} />
             <Route path="skills" element={<SkillsManager />} />
             <Route path="projects" element={<ProjectsManager />} />

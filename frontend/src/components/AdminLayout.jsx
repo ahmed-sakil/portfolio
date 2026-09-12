@@ -20,6 +20,7 @@ import {
   Share2,
   Palette,
   Activity,
+  Shapes,
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -38,6 +39,7 @@ const AdminLayout = () => {
     { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/admin/profile', icon: User, label: 'Profile' },
     { to: '/admin/services', icon: Sparkles, label: 'Services' },
+    { to: '/admin/icons', icon: Shapes, label: 'Icons Library' },
     { to: '/admin/social-links', icon: Share2, label: 'Social Links' },
     { to: '/admin/skills', icon: Code2, label: 'Skills' },
     { to: '/admin/projects', icon: Briefcase, label: 'Projects' },

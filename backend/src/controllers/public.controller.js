@@ -71,6 +71,13 @@ export const getPortfolio = async (req, res) => {
       console.warn('Theme table notice (run prisma db push to apply new table):', err.message);
     }
 
+    let customIcons = [];
+    try {
+      customIcons = await prisma.customIcon.findMany({ orderBy: { created_at: 'desc' } });
+    } catch (err) {
+      console.warn('CustomIcon query notice:', err.message);
+    }
+
     res.json({
       profile: profile || {
         full_name: 'Sakil Ahmed',
@@ -88,7 +95,8 @@ export const getPortfolio = async (req, res) => {
       allBlogs: allBlogs || [],
       socialLinks: socialLinks || [],
       services: services || [],
-      activeTheme
+      activeTheme,
+      customIcons: customIcons || []
     });
   } catch (error) {
     console.error('getPortfolio error:', error);

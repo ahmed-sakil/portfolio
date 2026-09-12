@@ -200,7 +200,13 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                     className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_15px_rgba(0,229,160,0.2)] text-xs font-semibold text-gray-300 hover:text-white transition-all backdrop-blur-sm"
                     style={{ background: 'rgba(255, 255, 255, 0.04)' }}
                   >
-                    <SocialIcon platform={link.platform} iconName={link.icon_name} className="w-3.5 h-3.5" />
+                    <SocialIcon 
+                      platform={link.platform} 
+                      iconName={link.icon_name} 
+                      iconUrl={link.icon_url} 
+                      iconType={link.icon_type} 
+                      className="w-3.5 h-3.5" 
+                    />
                     <span>{link.platform}</span>
                     <ExternalLink className="w-3 h-3 opacity-50 ml-0.5" />
                   </a>

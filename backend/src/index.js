@@ -115,6 +115,8 @@ async function autoMigrate() {
         "icon_name" TEXT
     )`,
     `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_name" TEXT`,
+    `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_url" TEXT`,
+    `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_type" TEXT DEFAULT 'light'`,
 
     // Experience table
     `CREATE TABLE IF NOT EXISTS "Experience" (
@@ -181,6 +183,18 @@ async function autoMigrate() {
     `ALTER TABLE "SocialLink" ADD COLUMN IF NOT EXISTS "order" INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE "SocialLink" ADD COLUMN IF NOT EXISTS "show_in_hero" BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE "SocialLink" ADD COLUMN IF NOT EXISTS "show_in_footer" BOOLEAN NOT NULL DEFAULT true`,
+    `ALTER TABLE "SocialLink" ADD COLUMN IF NOT EXISTS "icon_url" TEXT`,
+    `ALTER TABLE "SocialLink" ADD COLUMN IF NOT EXISTS "icon_type" TEXT DEFAULT 'light'`,
+
+    // CustomIcon table
+    `CREATE TABLE IF NOT EXISTS "CustomIcon" (
+        "id" SERIAL PRIMARY KEY,
+        "name" TEXT NOT NULL,
+        "url" TEXT NOT NULL,
+        "icon_type" TEXT NOT NULL DEFAULT 'light',
+        "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `ALTER TABLE "CustomIcon" ADD COLUMN IF NOT EXISTS "icon_type" TEXT DEFAULT 'light'`,
 
     // Service table
     `CREATE TABLE IF NOT EXISTS "Service" (

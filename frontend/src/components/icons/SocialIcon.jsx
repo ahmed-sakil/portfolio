@@ -58,10 +58,39 @@ const normalizeKey = (name = '') => {
   return String(name).trim().toLowerCase().replace(/[\s\-_.]+/g, '');
 };
 
-const SocialIcon = ({ platform = '', iconName = '', className = 'w-4 h-4' }) => {
+const SocialIcon = ({ 
+  platform = '', 
+  iconName = '', 
+  iconUrl = '', 
+  iconType = 'light', 
+  className = 'w-4 h-4' 
+}) => {
   const [cdnError, setCdnError] = useState(false);
+  const isDark = iconType === 'dark';
 
-  // 1. Check if platform or iconName matches built-in SVGs
+  const wrapPlate = (node) => {
+    if (!isDark) return node;
+    return (
+      <span className="inline-flex items-center justify-center bg-white/95 rounded p-0.5 shadow-sm shrink-0">
+        {node}
+      </span>
+    );
+  };
+
+  // 1. Direct custom icon image URL
+  const resolvedUrl = iconUrl || ((iconName && (iconName.startsWith('http://') || iconName.startsWith('https://') || iconName.startsWith('/'))) ? iconName : null);
+  if (resolvedUrl && !cdnError) {
+    return wrapPlate(
+      <img
+        src={resolvedUrl}
+        alt={platform || 'icon'}
+        className={`${className} object-contain`}
+        onError={() => setCdnError(true)}
+      />
+    );
+  }
+
+  // 2. Check if platform or iconName matches built-in SVGs
   const normPlatform = normalizeKey(platform);
   const normIcon = normalizeKey(iconName);
 
@@ -71,15 +100,17 @@ const SocialIcon = ({ platform = '', iconName = '', className = 'w-4 h-4' }) => 
 
   if (matchedKey && BUILT_IN_ICONS[matchedKey]) {
     const Component = BUILT_IN_ICONS[matchedKey];
-    return <Component className={className} />;
+    const defaultColor = isDark ? 'text-slate-900' : 'text-current';
+    return wrapPlate(<Component className={`${className} ${defaultColor}`} />);
   }
 
-  // 2. SimpleIcons CDN fallback
+  // 3. SimpleIcons CDN fallback
   const cleanSlug = (iconName || platform).toLowerCase().trim().replace(/[^a-z0-9]/g, '');
   if (cleanSlug && !cdnError) {
-    return (
+    const cdnUrl = isDark ? `https://cdn.simpleicons.org/${cleanSlug}` : `https://cdn.simpleicons.org/${cleanSlug}/white`;
+    return wrapPlate(
       <img
-        src={`https://cdn.simpleicons.org/${cleanSlug}/white`}
+        src={cdnUrl}
         alt={platform}
         className={`${className} object-contain`}
         onError={() => setCdnError(true)}
@@ -87,7 +118,7 @@ const SocialIcon = ({ platform = '', iconName = '', className = 'w-4 h-4' }) => 
     );
   }
 
-  // 3. Fallback: Globe icon
+  // 4. Fallback: Globe icon
   return <Globe className={`${className} text-teal-400`} />;
 };
 

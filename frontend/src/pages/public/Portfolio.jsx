@@ -107,6 +107,7 @@ const Portfolio = () => {
         skills={skills}
         stats={stats}
         socialLinks={heroSocialLinks}
+        blogs={allBlogs || blogs}
       />
 
       {/* Extra spacing */}

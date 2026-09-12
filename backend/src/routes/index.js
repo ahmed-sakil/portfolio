@@ -11,7 +11,8 @@ import {
   getMessages, markMessageRead,
   getServices, createService, updateService, deleteService,
   getSocialLinks, createSocialLink, updateSocialLink, deleteSocialLink,
-  getThemes, createTheme, updateTheme, deleteTheme, activateTheme
+  getThemes, createTheme, updateTheme, deleteTheme, activateTheme,
+  getCustomIcons, createCustomIcon, deleteCustomIcon
 } from '../controllers/admin.controller.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { upload } from '../utils/cloudinary.js';
@@ -76,6 +77,11 @@ router.get('/admin/social-links', getSocialLinks);
 router.post('/admin/social-links', createSocialLink);
 router.put('/admin/social-links/:id', updateSocialLink);
 router.delete('/admin/social-links/:id', deleteSocialLink);
+
+// Custom Icons Library
+router.get('/admin/icons', getCustomIcons);
+router.post('/admin/icons', upload.single('icon'), createCustomIcon);
+router.delete('/admin/icons/:id', deleteCustomIcon);
 
 // Themes
 router.get('/admin/themes', getThemes);

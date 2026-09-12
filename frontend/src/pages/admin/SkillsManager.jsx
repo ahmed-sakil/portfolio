@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { useAuthStore } from '../../store/authStore';
-import { Edit2, Trash2, Plus, X, Code2, Layers } from 'lucide-react';
+import { Edit2, Trash2, Plus, X, Code2, Layers, Sun, Moon, Sparkles, Image as ImageIcon } from 'lucide-react';
+import AppIcon from '../../components/icons/AppIcon';
 
 const SkillsManager = () => {
   const token = useAuthStore((state) => state.token);
   const [skills, setSkills] = useState([]);
+  const [customIcons, setCustomIcons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({ name: '', category: 'PROGRAMMING_LANGUAGE', percentage: '', icon_name: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    category: 'PROGRAMMING_LANGUAGE', 
+    percentage: '', 
+    icon_name: '',
+    icon_url: '',
+    icon_type: 'light'
+  });
   const [editingId, setEditingId] = useState(null);
 
   const fetchSkills = async () => {
     try {
-      const res = await api.get('/portfolio');
-      setSkills(res.data.skills || []);
+      const [portfolioRes, iconsRes] = await Promise.all([
+        api.get('/portfolio'),
+        api.get('/admin/icons').catch(() => ({ data: [] }))
+      ]);
+      setSkills(portfolioRes.data.skills || []);
+      setCustomIcons(iconsRes.data || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -25,7 +38,14 @@ const SkillsManager = () => {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', category: 'PROGRAMMING_LANGUAGE', percentage: '', icon_name: '' });
+    setFormData({ 
+      name: '', 
+      category: 'PROGRAMMING_LANGUAGE', 
+      percentage: '', 
+      icon_name: '',
+      icon_url: '',
+      icon_type: 'light'
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -50,7 +70,9 @@ const SkillsManager = () => {
       name: skill.name,
       category: skill.category,
       percentage: skill.percentage,
-      icon_name: skill.icon_name || ''
+      icon_name: skill.icon_name || '',
+      icon_url: skill.icon_url || '',
+      icon_type: skill.icon_type || 'light'
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -155,29 +177,103 @@ const SkillsManager = () => {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="admin-label mb-0">Icon Name</label>
-                {formData.icon_name && (
-                  <span className="inline-flex items-center gap-1 text-[11px] text-teal-400">
-                    <img
-                      src={`https://cdn.simpleicons.org/${formData.icon_name}`}
-                      alt="icon"
-                      className="w-3.5 h-3.5 object-contain"
-                      onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                    Preview
+                <label className="admin-label mb-0">Select from Uploaded Icons</label>
+                {customIcons.length > 0 && (
+                  <span className="text-[10px] text-teal-400 font-medium">
+                    {customIcons.length} in library
                   </span>
                 )}
               </div>
+              <select
+                className="admin-input"
+                value={formData.icon_url || ''}
+                onChange={(e) => {
+                  const selectedUrl = e.target.value;
+                  const found = customIcons.find((c) => c.url === selectedUrl);
+                  setFormData({
+                    ...formData,
+                    icon_url: selectedUrl,
+                    icon_type: found?.icon_type || formData.icon_type
+                  });
+                }}
+              >
+                <option value="">-- Choose custom uploaded icon --</option>
+                {customIcons.map((ci) => (
+                  <option key={ci.id} value={ci.url}>
+                    {ci.name} ({ci.icon_type === 'dark' ? 'Dark' : 'Light'})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-end">
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="admin-label mb-0">Or SimpleIcon Slug / Name</label>
+              </div>
               <input
                 type="text"
-                placeholder="e.g. react, typescript, python"
-                className="admin-input"
+                placeholder="e.g. react, typescript, python, docker"
+                className="admin-input font-mono text-xs"
                 value={formData.icon_name}
                 onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
               />
               <span className="text-[10px] text-gray-400 mt-1 block">
-                SimpleIcon slug (e.g. nodedotjs, postgresql)
+                SimpleIcon slug (e.g. nodedotjs, postgresql, nextdotjs)
               </span>
+            </div>
+
+            <div>
+              <label className="admin-label">Icon Visual Type</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, icon_type: 'light' })}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-semibold transition ${
+                    formData.icon_type === 'light'
+                      ? 'border-teal-400 bg-teal-400/10 text-white'
+                      : 'border-white/10 bg-slate-800/40 text-gray-400 hover:border-white/20'
+                  }`}
+                >
+                  <Sun className="w-3.5 h-3.5 text-amber-400" /> Light / Color
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, icon_type: 'dark' })}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-semibold transition ${
+                    formData.icon_type === 'dark'
+                      ? 'border-teal-400 bg-teal-400/10 text-white'
+                      : 'border-white/10 bg-slate-800/40 text-gray-400 hover:border-white/20'
+                  }`}
+                >
+                  <Moon className="w-3.5 h-3.5 text-cyan-400" /> Dark (Highlighted)
+                </button>
+              </div>
+              <span className="text-[10px] text-gray-400 mt-1 block">
+                Dark icons get a light contrast plate so they pop on dark UI
+              </span>
+            </div>
+
+            <div>
+              <label className="admin-label">Live Icon Preview</label>
+              <div className="p-2.5 rounded-xl border border-white/10 bg-slate-900/90 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <AppIcon
+                    iconUrl={formData.icon_url}
+                    iconName={formData.icon_name}
+                    iconType={formData.icon_type}
+                    className="w-6 h-6 shrink-0"
+                    alt={formData.name || 'skill'}
+                  />
+                  <span className="text-xs font-semibold text-white truncate max-w-[120px]">
+                    {formData.name || 'Skill preview'}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-teal-400">
+                  {formData.icon_type === 'dark' ? 'Dark Plate' : 'Normal'}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -237,18 +333,13 @@ const SkillsManager = () => {
                       <div className="mb-3">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2 min-w-0">
-                            {skill.icon_name ? (
-                              <img
-                                src={`https://cdn.simpleicons.org/${skill.icon_name}`}
-                                alt={skill.name}
-                                className="w-4 h-4 object-contain shrink-0"
-                                onError={(e) => { e.target.style.display = 'none'; }}
-                              />
-                            ) : (
-                              <div className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] text-teal-400 font-bold shrink-0">
-                                {skill.name.charAt(0)}
-                              </div>
-                            )}
+                            <AppIcon
+                              iconUrl={skill.icon_url}
+                              iconName={skill.icon_name}
+                              iconType={skill.icon_type}
+                              className="w-5 h-5 shrink-0"
+                              alt={skill.name}
+                            />
                             <span className="font-bold text-sm truncate" style={{ color: 'var(--text-primary)' }}>
                               {skill.name}
                             </span>

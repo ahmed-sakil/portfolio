@@ -1,8 +1,8 @@
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Briefcase, Layers, Code2, FileText } from 'lucide-react';
 import GithubIcon from '../../../components/icons/GithubIcon';
 import SocialIcon from '../../../components/icons/SocialIcon';
 
-const HeroSection = ({ profile, projects, skills, stats, socialLinks }) => {
+const HeroSection = ({ profile, projects, skills, stats, socialLinks, blogs }) => {
   const calculateExperienceYears = (start) => {
     if (!start) return 0;
     const diff = new Date() - new Date(start);
@@ -10,6 +10,15 @@ const HeroSection = ({ profile, projects, skills, stats, socialLinks }) => {
   };
 
   const fullName = profile?.full_name || 'Sakil Ahmed';
+
+  const projectsCount = projects?.length || 0;
+  const skillsCount = skills?.length || 0;
+  const programmingLanguagesCount = (skills || []).filter(
+    (s) => s.category === 'PROGRAMMING_LANGUAGE'
+  ).length;
+  const publishedBlogsCount = (blogs || []).filter(
+    (b) => b.is_published !== false
+  ).length;
 
   return (
     <section id="home" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto py-10 sm:py-16 md:py-28 scroll-mt-28">
@@ -48,15 +57,15 @@ const HeroSection = ({ profile, projects, skills, stats, socialLinks }) => {
               View Works
             </a>
 
-            {(profile?.resume_drive_link || profile?.resume_url) && (
+            {profile?.resume_url && (
               <a
-                href={profile.resume_drive_link || profile.resume_url}
+                href={profile.resume_url}
                 target="_blank"
                 rel="noreferrer"
-                className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl font-semibold text-xs sm:text-sm tracking-wide border border-white/20 hover:border-teal-400 transition-all text-white backdrop-blur-sm active:scale-95 text-center"
+                className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl border border-white/10 font-bold text-xs sm:text-sm tracking-wide hover:border-teal-400/40 text-gray-300 hover:text-white transition-all transform hover:-translate-y-0.5 active:scale-95 text-center backdrop-blur-sm"
                 style={{ background: 'rgba(255, 255, 255, 0.05)' }}
               >
-                Download CV
+                Resume
               </a>
             )}
 
@@ -72,40 +81,62 @@ const HeroSection = ({ profile, projects, skills, stats, socialLinks }) => {
                   style={{ background: 'rgba(255, 255, 255, 0.05)' }}
                   title={link.platform}
                 >
-                  <SocialIcon platform={link.platform} iconName={link.icon_name} className="w-4 h-4" />
+                  <SocialIcon 
+                    platform={link.platform} 
+                    iconName={link.icon_name} 
+                    iconUrl={link.icon_url} 
+                    iconType={link.icon_type} 
+                    className="w-4 h-4" 
+                  />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* 2x2 Key Stats Grid with Hover Glow */}
+          {/* 4 Key Stats Cards with Top Default Icon */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 max-w-2xl">
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left">
+            {/* Card 1: Projects Count */}
+            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
+              <div className="w-8 h-8 rounded-xl bg-teal-400/10 border border-teal-400/25 flex items-center justify-center text-teal-400 mb-2 group-hover:scale-110 group-hover:border-teal-400/50 transition">
+                <Briefcase className="w-4 h-4" />
+              </div>
               <p className="text-2xl sm:text-3xl font-extrabold text-white mb-0.5 sm:mb-1">
-                {profile?.years_of_experience ?? calculateExperienceYears(profile?.career_start_date)}+
-              </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Years Exp</p>
-            </div>
-
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left">
-              <p className="text-2xl sm:text-3xl font-extrabold text-teal-400 mb-0.5 sm:mb-1">
-                {projects?.length || 0}+
+                {projectsCount}+
               </p>
               <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Projects</p>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left">
+            {/* Card 2: Total Skills Count */}
+            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
+              <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 mb-2 group-hover:scale-110 group-hover:border-cyan-400/50 transition">
+                <Layers className="w-4 h-4" />
+              </div>
               <p className="text-2xl sm:text-3xl font-extrabold text-white mb-0.5 sm:mb-1">
-                {skills?.length || 0}+
+                {skillsCount}+
               </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Skills</p>
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Total Skills</p>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left">
+            {/* Card 3: Programming Languages Count */}
+            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
+              <div className="w-8 h-8 rounded-xl bg-teal-400/10 border border-teal-400/25 flex items-center justify-center text-teal-400 mb-2 group-hover:scale-110 group-hover:border-teal-400/50 transition">
+                <Code2 className="w-4 h-4" />
+              </div>
               <p className="text-2xl sm:text-3xl font-extrabold text-teal-400 mb-0.5 sm:mb-1">
-                {stats?.leetcode?.solvedProblem || stats?.github?.public_repos || 100}+
+                {programmingLanguagesCount}+
               </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Problems</p>
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Languages</p>
+            </div>
+
+            {/* Card 4: Published Blogs Count */}
+            <div className="p-3 sm:p-4 rounded-2xl hero-card text-center sm:text-left flex flex-col items-center sm:items-start group transition duration-300">
+              <div className="w-8 h-8 rounded-xl bg-cyan-400/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 mb-2 group-hover:scale-110 group-hover:border-cyan-400/50 transition">
+                <FileText className="w-4 h-4" />
+              </div>
+              <p className="text-2xl sm:text-3xl font-extrabold text-teal-400 mb-0.5 sm:mb-1">
+                {publishedBlogsCount}+
+              </p>
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Published Blogs</p>
             </div>
           </div>
         </div>

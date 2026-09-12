@@ -21,6 +21,8 @@ const Footer = ({ profile, socialLinks = [] }) => {
       name: s.platform || s.name || s.platform_name || 'Social Link',
       url: s.url || s.link || '#',
       icon_name: s.icon_name || null,
+      icon_url: s.icon_url || null,
+      icon_type: s.icon_type || 'light',
     }));
   } else {
     displaySocials = [
@@ -153,6 +155,8 @@ const Footer = ({ profile, socialLinks = [] }) => {
                         <SocialIcon
                           platform={item.name}
                           iconName={item.icon_name}
+                          iconUrl={item.icon_url}
+                          iconType={item.icon_type}
                           className="w-4 h-4"
                         />
                       </div>
