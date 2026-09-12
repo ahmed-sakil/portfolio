@@ -12,6 +12,7 @@ import MessagesManager from './pages/admin/MessagesManager';
 import ServicesManager from './pages/admin/ServicesManager';
 import SocialLinksManager from './pages/admin/SocialLinksManager';
 import ThemesManager from './pages/admin/ThemesManager';
+import PlatformStatsManager from './pages/admin/PlatformStatsManager';
 
 import Portfolio from './pages/public/Portfolio';
 import BlogPost from './pages/public/BlogPost';
@@ -51,6 +52,7 @@ function App() {
             <Route path="blogs" element={<BlogsManager />} />
             <Route path="messages" element={<MessagesManager />} />
             <Route path="themes" element={<ThemesManager />} />
+            <Route path="stats" element={<PlatformStatsManager />} />
           </Route>
         </Route>
 

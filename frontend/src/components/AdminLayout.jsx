@@ -19,6 +19,7 @@ import {
   Sparkles,
   Share2,
   Palette,
+  Activity,
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -42,6 +43,7 @@ const AdminLayout = () => {
     { to: '/admin/projects', icon: Briefcase, label: 'Projects' },
     { to: '/admin/experiences', icon: GraduationCap, label: 'Experiences & Edu' },
     { to: '/admin/blogs', icon: FileText, label: 'Blogs' },
+    { to: '/admin/stats', icon: Activity, label: 'Platform Stats' },
     { to: '/admin/messages', icon: Mail, label: 'Messages' },
     { to: '/admin/themes', icon: Palette, label: 'Theme Studio' },
   ];

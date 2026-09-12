@@ -137,3 +137,19 @@ model AdminUser {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model PlatformStats {
+  id                  Int       @id @default(autoincrement())
+  github_username     String?
+  github_token        String?
+  github_data         Json?
+  leetcode_username   String?
+  leetcode_data       Json?
+  codeforces_username String?
+  codeforces_data     Json?
+  sync_status         Json?
+  last_synced_at      DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+}
+

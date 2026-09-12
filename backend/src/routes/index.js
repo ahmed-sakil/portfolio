@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { login, changeCredentials, getAdminCredentials } from '../controllers/auth.controller.js';
 import { getPortfolio, submitContact, getBlogBySlug, getAllProjects, getAllBlogs } from '../controllers/public.controller.js';
-import { getStats } from '../controllers/stats.controller.js';
+import { getStats, getAdminStats, fetchPlatformStats, saveAdminStats } from '../controllers/stats.controller.js';
 import { 
   updateProfile, 
   createSkill, updateSkill, deleteSkill, 
@@ -87,5 +87,10 @@ router.patch('/admin/themes/:id/activate', activateTheme);
 // Security & Account Credentials
 router.get('/admin/credentials', getAdminCredentials);
 router.put('/admin/credentials', changeCredentials);
+
+// Platform Stats Management & Sync
+router.get('/admin/stats', getAdminStats);
+router.post('/admin/stats/fetch', fetchPlatformStats);
+router.put('/admin/stats', saveAdminStats);
 
 export default router;

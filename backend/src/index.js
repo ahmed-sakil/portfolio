@@ -2,13 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { execSync } from 'child_process';
-import { PrismaClient } from '@prisma/client';
+import prisma from './utils/prisma.js';
 import routes from './routes/index.js';
 
 dotenv.config();
 
 const app = express();
-export const prisma = new PrismaClient();
+export { prisma };
 
 // Middleware
 app.use(cors());
@@ -231,6 +231,33 @@ async function autoMigrate() {
         "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
     )`,
     `CREATE UNIQUE INDEX IF NOT EXISTS "AdminUser_username_key" ON "AdminUser"("username")`,
+
+    // PlatformStats table
+    `CREATE TABLE IF NOT EXISTS "PlatformStats" (
+        "id" SERIAL PRIMARY KEY,
+        "github_username" TEXT,
+        "github_token" TEXT,
+        "github_data" JSONB,
+        "leetcode_username" TEXT,
+        "leetcode_data" JSONB,
+        "codeforces_username" TEXT,
+        "codeforces_data" JSONB,
+        "sync_status" JSONB,
+        "last_synced_at" TIMESTAMP(3),
+        "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "github_username" TEXT`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "github_token" TEXT`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "github_data" JSONB`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "leetcode_username" TEXT`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "leetcode_data" JSONB`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "codeforces_username" TEXT`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "codeforces_data" JSONB`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "sync_status" JSONB`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "last_synced_at" TIMESTAMP(3)`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP`,
+    `ALTER TABLE "PlatformStats" ADD COLUMN IF NOT EXISTS "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP`,
 
     // Ensure at least 1 default profile exists so updates don't fail
     `INSERT INTO "Profile" ("id", "full_name", "role", "connect_message")

@@ -11,7 +11,8 @@ import {
   Share2, 
   GraduationCap, 
   Palette, 
-  User 
+  User,
+  Activity
 } from 'lucide-react';
 
 const DashboardOverview = () => {
@@ -107,6 +108,15 @@ const DashboardOverview = () => {
       color: 'text-rose-400',
       bg: 'rgba(244, 63, 94, 0.1)',
       border: 'rgba(244, 63, 94, 0.3)',
+    },
+    {
+      title: 'Platform & Coding Stats',
+      count: 'Database Sync',
+      icon: Activity,
+      link: '/admin/stats',
+      color: 'text-emerald-400',
+      bg: 'rgba(16, 185, 129, 0.1)',
+      border: 'rgba(16, 185, 129, 0.3)',
     },
   ];
 

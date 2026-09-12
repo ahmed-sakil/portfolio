@@ -13,8 +13,10 @@ import {
   KeyRound, 
   Lock, 
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  Activity
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ProfileManager = () => {
   const token = useAuthStore((state) => state.token);
@@ -459,6 +461,19 @@ const ProfileManager = () => {
                 onChange={(e) => setFormData({ ...formData, codeforces_username: e.target.value })}
               />
             </div>
+          </div>
+
+          <div className="mt-4 p-3.5 rounded-xl bg-teal-500/10 border border-teal-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 text-xs text-teal-300">
+              <Activity className="w-4 h-4 text-teal-400 shrink-0" />
+              <span>Need to re-fetch live data, inspect diagnostic errors, or override stats?</span>
+            </div>
+            <Link
+              to="/admin/stats"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-teal-400 text-slate-900 hover:bg-teal-300 transition whitespace-nowrap"
+            >
+              Open Platform Stats Studio →
+            </Link>
           </div>
         </div>
 
