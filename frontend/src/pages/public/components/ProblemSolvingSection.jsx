@@ -28,37 +28,37 @@ const ProblemSolvingSection = ({ profile, stats }) => {
   };
 
   return (
-    <section id="problem-solving" className="w-[90%] max-w-7xl mx-auto mb-28 md:mb-36 scroll-mt-28">
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 md:p-14 relative overflow-hidden">
+    <section id="problem-solving" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
             Problem Solving <span style={{ color: 'var(--accent)' }}>Skill</span>
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Track record on competitive programming platforms, algorithmic challenges, and data structures.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
         
         {/* Card 1: LeetCode (Col 7) */}
-        <div className="lg:col-span-7 glass-section rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-7 glass-section rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col justify-between space-y-5 sm:space-y-6">
           <div>
             {/* Platform Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400">
-                  <Code2 className="w-5 h-5" />
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 sm:pb-4 border-b border-white/10">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 shrink-0">
+                  <Code2 className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                     <span>LeetCode</span>
-                    <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white/5 text-gray-400">
+                    <span className="text-[10px] sm:text-xs font-mono px-2 py-0.5 rounded-full bg-white/5 text-gray-400">
                       @{lcUser}
                     </span>
                   </h3>
-                  <span className="text-xs text-gray-400">Algorithm & Data Structure Drills</span>
+                  <span className="text-[11px] sm:text-xs text-gray-400">Algorithm & Data Structure Drills</span>
                 </div>
               </div>
 
@@ -66,7 +66,7 @@ const ProblemSolvingSection = ({ profile, stats }) => {
                 href={`https://leetcode.com/u/${lcUser}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 hover:border-yellow-400/50 hover:bg-yellow-400/10 text-xs font-semibold text-yellow-400 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 hover:border-yellow-400/50 hover:bg-yellow-400/10 text-xs font-semibold text-yellow-400 transition ml-auto"
               >
                 <span>Profile</span>
                 <ExternalLink className="w-3 h-3" />
@@ -74,44 +74,44 @@ const ProblemSolvingSection = ({ profile, stats }) => {
             </div>
 
             {/* Solved Problems Counter */}
-            <div className="my-6 flex items-baseline gap-3">
-              <span className="text-4xl sm:text-5xl font-black text-white">{totalSolved}</span>
-              <span className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+            <div className="my-4 sm:my-6 flex items-baseline gap-2.5 sm:gap-3">
+              <span className="text-3xl sm:text-4xl md:text-5xl font-black text-white">{totalSolved}</span>
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-gray-400">
                 Problems Solved
               </span>
             </div>
 
             {/* Difficulty Breakdown Cards */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6">
-              <div className="p-3.5 sm:p-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/5">
-                <span className="text-xs font-bold text-emerald-400 block mb-1">Easy</span>
-                <span className="text-2xl font-black text-white">{easySolved}</span>
-                <div className="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+              <div className="p-2 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border border-emerald-400/20 bg-emerald-400/5 text-center sm:text-left">
+                <span className="text-[10px] sm:text-xs font-bold text-emerald-400 block mb-0.5 sm:mb-1">Easy</span>
+                <span className="text-lg sm:text-2xl font-black text-white">{easySolved}</span>
+                <div className="w-full bg-white/10 h-1 sm:h-1.5 rounded-full mt-1.5 sm:mt-2 overflow-hidden">
                   <div className="bg-emerald-400 h-full rounded-full" style={{ width: `${totalSolved > 0 ? Math.min(100, (easySolved / totalSolved) * 100) : 0}%` }} />
                 </div>
               </div>
 
-              <div className="p-3.5 sm:p-4 rounded-2xl border border-amber-400/20 bg-amber-400/5">
-                <span className="text-xs font-bold text-amber-400 block mb-1">Medium</span>
-                <span className="text-2xl font-black text-white">{mediumSolved}</span>
-                <div className="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+              <div className="p-2 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border border-amber-400/20 bg-amber-400/5 text-center sm:text-left">
+                <span className="text-[10px] sm:text-xs font-bold text-amber-400 block mb-0.5 sm:mb-1">Medium</span>
+                <span className="text-lg sm:text-2xl font-black text-white">{mediumSolved}</span>
+                <div className="w-full bg-white/10 h-1 sm:h-1.5 rounded-full mt-1.5 sm:mt-2 overflow-hidden">
                   <div className="bg-amber-400 h-full rounded-full" style={{ width: `${totalSolved > 0 ? Math.min(100, (mediumSolved / totalSolved) * 100) : 0}%` }} />
                 </div>
               </div>
 
-              <div className="p-3.5 sm:p-4 rounded-2xl border border-rose-400/20 bg-rose-400/5">
-                <span className="text-xs font-bold text-rose-400 block mb-1">Hard</span>
-                <span className="text-2xl font-black text-white">{hardSolved}</span>
-                <div className="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+              <div className="p-2 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border border-rose-400/20 bg-rose-400/5 text-center sm:text-left">
+                <span className="text-[10px] sm:text-xs font-bold text-rose-400 block mb-0.5 sm:mb-1">Hard</span>
+                <span className="text-lg sm:text-2xl font-black text-white">{hardSolved}</span>
+                <div className="w-full bg-white/10 h-1 sm:h-1.5 rounded-full mt-1.5 sm:mt-2 overflow-hidden">
                   <div className="bg-rose-400 h-full rounded-full" style={{ width: `${totalSolved > 0 ? Math.min(100, (hardSolved / totalSolved) * 100) : 0}%` }} />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-gray-400">
+          <div className="pt-3 sm:pt-4 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-0 text-[11px] sm:text-xs text-gray-400">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-teal-400" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
               Verified Submissions
             </span>
             <span>Focus: Dynamic Programming, Trees & Graphs</span>
@@ -119,22 +119,22 @@ const ProblemSolvingSection = ({ profile, stats }) => {
         </div>
 
         {/* Card 2: Codeforces (Col 5) */}
-        <div className="lg:col-span-5 glass-section rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div className="lg:col-span-5 glass-section rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col justify-between space-y-5 sm:space-y-6">
           <div>
             {/* Platform Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-400/10 border border-blue-400/30 flex items-center justify-center text-blue-400">
-                  <Terminal className="w-5 h-5" />
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 sm:pb-4 border-b border-white/10">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-400/10 border border-blue-400/30 flex items-center justify-center text-blue-400 shrink-0">
+                  <Terminal className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                     <span>Codeforces</span>
-                    <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-white/5 text-gray-400">
+                    <span className="text-[10px] sm:text-xs font-mono px-2 py-0.5 rounded-full bg-white/5 text-gray-400">
                       @{cfUser}
                     </span>
                   </h3>
-                  <span className="text-xs text-gray-400">Competitive Programming Contests</span>
+                  <span className="text-[11px] sm:text-xs text-gray-400">Competitive Programming Contests</span>
                 </div>
               </div>
 
@@ -142,7 +142,7 @@ const ProblemSolvingSection = ({ profile, stats }) => {
                 href={`https://codeforces.com/profile/${cfUser}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 hover:border-blue-400/50 hover:bg-blue-400/10 text-xs font-semibold text-blue-400 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 hover:border-blue-400/50 hover:bg-blue-400/10 text-xs font-semibold text-blue-400 transition ml-auto"
               >
                 <span>Profile</span>
                 <ExternalLink className="w-3 h-3" />
@@ -150,42 +150,42 @@ const ProblemSolvingSection = ({ profile, stats }) => {
             </div>
 
             {/* Rating Grid */}
-            <div className="grid grid-cols-2 gap-4 my-6">
-              <div className="p-4 rounded-2xl border border-white/5 bg-white/5">
-                <span className="text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-1">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 my-4 sm:my-6">
+              <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-white/5 bg-white/5 text-center sm:text-left">
+                <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-0.5 sm:mb-1">
                   Current Rating
                 </span>
-                <span className="text-3xl font-black text-cyan-400">{cfRating}</span>
+                <span className="text-2xl sm:text-3xl font-black text-cyan-400">{cfRating}</span>
               </div>
 
-              <div className="p-4 rounded-2xl border border-white/5 bg-white/5">
-                <span className="text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-1">
+              <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-white/5 bg-white/5 text-center sm:text-left">
+                <span className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold text-gray-400 block mb-0.5 sm:mb-1">
                   Max Rating
                 </span>
-                <span className="text-3xl font-black text-blue-400">{cfMaxRating}</span>
+                <span className="text-2xl sm:text-3xl font-black text-blue-400">{cfMaxRating}</span>
               </div>
             </div>
 
             {/* Rank Status */}
-            <div className="p-4 rounded-2xl border border-white/5 bg-[#121826]/60 space-y-2">
+            <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-white/5 bg-[#121826]/60 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-gray-400">Current Rank:</span>
-                <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full border ${getRankBadgeColor(cfRank)}`}>
+                <span className={`text-[10px] sm:text-xs uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full border ${getRankBadgeColor(cfRank)}`}>
                   {cfRank}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-gray-400">Max Rank:</span>
-                <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full border ${getRankBadgeColor(cfMaxRank)}`}>
+                <span className={`text-[10px] sm:text-xs uppercase tracking-wider font-bold px-2.5 py-0.5 rounded-full border ${getRankBadgeColor(cfMaxRank)}`}>
                   {cfMaxRank}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-gray-400">
+          <div className="pt-3 sm:pt-4 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-0 text-[11px] sm:text-xs text-gray-400">
             <span className="flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-cyan-400" />
+              <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
               Div 2 & Div 3 Regular Contestant
             </span>
             <span>Contest Rating</span>

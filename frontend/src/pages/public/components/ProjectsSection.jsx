@@ -11,20 +11,20 @@ const ProjectsSection = ({ projects = [] }) => {
   if (!sortedProjects || sortedProjects.length === 0) return null;
 
   return (
-    <section id="projects" className="w-[90%] max-w-7xl mx-auto mb-28 md:mb-36 scroll-mt-28">
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 md:p-14 relative overflow-hidden">
+    <section id="projects" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
             Featured <span style={{ color: 'var(--accent)' }}>Projects</span>
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Real-world systems, full stack products, and open source creations.
           </p>
         </div>
 
         {/* Featured Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
           {sortedProjects.map((project) => (
             <div
               key={project.id}
@@ -40,17 +40,17 @@ const ProjectsSection = ({ projects = [] }) => {
                   />
                 </div>
               ) : (
-                <div className="aspect-video bg-white/5 flex items-center justify-center text-gray-500 text-sm">
+                <div className="aspect-video bg-white/5 flex items-center justify-center text-gray-500 text-xs sm:text-sm">
                   No Preview Available
                 </div>
               )}
 
-              <div className="p-6 flex-1 flex flex-col justify-between">
+              <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition">
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition">
                     {project.title}
                   </h3>
-                  <p className="text-sm leading-relaxed mb-4 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
+                  <p className="text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
                     {project.description}
                   </p>
 

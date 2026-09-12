@@ -7,6 +7,25 @@ import { useEffect } from 'react';
  */
 const SmoothScroll = () => {
   useEffect(() => {
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+    // On touch screens (phones & tablets), let the browser handle natural 120Hz/60Hz touch momentum scrolling
+    if (isTouchDevice) {
+      const onAnchorClickMobile = (e) => {
+        const anchor = e.target.closest('a[href^="#"]');
+        if (!anchor) return;
+        const hash = anchor.getAttribute('href');
+        if (!hash || hash === '#') return;
+        const targetEl = document.querySelector(hash);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+      document.addEventListener('click', onAnchorClickMobile);
+      return () => document.removeEventListener('click', onAnchorClickMobile);
+    }
+
     let targetY = window.scrollY;
     let currentY = window.scrollY;
     let isRunning = false;

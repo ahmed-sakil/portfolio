@@ -1,23 +1,23 @@
 const ExperienceSection = ({ experiences }) => {
   return (
-    <section id="experience" className="w-[90%] max-w-7xl mx-auto mb-28 md:mb-36 scroll-mt-28">
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 md:p-14 relative overflow-hidden">
+    <section id="experience" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
             Career <span style={{ color: 'var(--accent)' }}>Timeline</span>
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Education background and professional industry experience.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
           {/* Education Column */}
           <div>
-            <div className="flex items-center gap-3 mb-8">
-              <span className="text-3xl">🎓</span>
-              <h3 className="text-2xl font-bold text-white">Education</h3>
+            <div className="flex items-center gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+              <span className="text-2xl sm:text-3xl">🎓</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Education</h3>
             </div>
 
             <div className="space-y-6">

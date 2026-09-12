@@ -9,6 +9,11 @@ import {
   Terminal,
   GraduationCap,
   Briefcase,
+  Home,
+  User,
+  BookOpen,
+  MessageCircle,
+  FileText,
 } from 'lucide-react';
 import { useThemeStore } from '../../../store/themeStore';
 import GithubIcon from '../../../components/icons/GithubIcon';
@@ -59,13 +64,13 @@ const Navbar = ({ profile }) => {
   }, []);
 
   return (
-    <header className="sticky top-4 z-50 w-[90%] max-w-7xl mx-auto" ref={navRef}>
-      <nav className="glass-panel rounded-2xl px-5 md:px-7 py-3.5 flex items-center justify-between">
+    <header className="sticky top-3 sm:top-4 z-50 w-[94%] sm:w-[90%] max-w-7xl mx-auto" ref={navRef}>
+      <nav className="glass-panel rounded-2xl px-4 sm:px-5 md:px-7 py-3 sm:py-3.5 flex items-center justify-between">
         
         {/* Brand Logo with Glowing Avatar & sakil.me */}
-        <a href="#home" className="flex items-center gap-3 group">
+        <a href="#home" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
           <div className="relative">
-            <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-teal-400/40 group-hover:border-teal-400 group-hover:shadow-[0_0_16px_rgba(0,229,160,0.8)] transition-all duration-300">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border-2 border-teal-400/40 group-hover:border-teal-400 group-hover:shadow-[0_0_16px_rgba(0,229,160,0.8)] transition-all duration-300">
               {(profile?.icon_image_url || profile?.profile_image_url) ? (
                 <img
                   src={profile.icon_image_url || profile.profile_image_url}
@@ -265,81 +270,90 @@ const Navbar = ({ profile }) => {
 
       </nav>
 
-      {/* Mobile Full List Menu (All shown as list, no nested dropdown) */}
+      {/* Mobile Full List Menu (All shown as list with icons, max-height scrolling, touch safe) */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-2 glass rounded-2xl p-4 border border-white/10 shadow-2xl backdrop-blur-2xl animate-in fade-in duration-200">
+        <div className="md:hidden mt-2 glass-panel rounded-2xl p-3 border border-white/10 shadow-2xl backdrop-blur-2xl max-h-[82vh] overflow-y-auto animate-in fade-in duration-200">
           <div className="flex flex-col space-y-1">
             <a
               href="#home"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Home
+              <Home className="w-4 h-4 text-teal-400 shrink-0" />
+              <span>Home</span>
             </a>
             <a
               href="#journey"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              About
+              <User className="w-4 h-4 text-purple-400 shrink-0" />
+              <span>About</span>
             </a>
             <a
               href="#skills"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Skills
+              <Code2 className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>Skills</span>
             </a>
             <a
               href="#problem-solving"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Problem Solving
+              <Terminal className="w-4 h-4 text-yellow-400 shrink-0" />
+              <span>Problem Solving</span>
             </a>
             <a
               href="#github"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              GitHub Contribution
+              <GithubIcon className="w-4 h-4 text-blue-400 shrink-0" />
+              <span>GitHub Contribution</span>
             </a>
             <a
               href="#experience"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Education & Experience
+              <GraduationCap className="w-4 h-4 text-indigo-400 shrink-0" />
+              <span>Education & Experience</span>
             </a>
             <a
               href="#projects"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Projects
+              <Briefcase className="w-4 h-4 text-teal-400 shrink-0" />
+              <span>Projects</span>
             </a>
             <a
               href="#blogs"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Blogs
+              <BookOpen className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Blogs</span>
             </a>
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+              className="px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-3 hover:bg-white/10 active:bg-white/15 transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              Contact
+              <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>Contact</span>
             </a>
 
             <div className="pt-2">
@@ -348,13 +362,14 @@ const Navbar = ({ profile }) => {
                 target={(profile?.resume_drive_link || profile?.resume_url) ? '_blank' : undefined}
                 rel="noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-2.5 text-xs font-bold rounded-xl text-center block transition-all shadow-md"
+                className="w-full py-3 text-xs font-bold rounded-xl text-center flex items-center justify-center gap-2 transition-all shadow-md active:scale-95"
                 style={{
                   backgroundColor: 'var(--accent)',
                   color: 'var(--text-inverted)',
                 }}
               >
-                Download CV
+                <FileText className="w-3.5 h-3.5" />
+                <span>Download CV</span>
               </a>
             </div>
           </div>

@@ -110,36 +110,36 @@ const GithubContributionSection = ({ profile, stats }) => {
   };
 
   return (
-    <section id="github" className="w-[90%] max-w-7xl mx-auto mb-28 md:mb-36 scroll-mt-28">
+    <section id="github" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
       {/* Main Glass Container Card */}
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 md:p-14 relative overflow-hidden">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
             GitHub <span style={{ color: 'var(--accent)' }}>Contributions</span>
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Open-source activity, commit consistency, and repository contributions.
           </p>
         </div>
 
         {/* Top Header Row: github.com/username and View Profile link */}
-        <div className="flex items-center justify-between mb-6 pb-2 border-b border-white/10">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-6 pb-2 border-b border-white/10">
           <a
             href={`https://github.com/${ghUser}`}
             target="_blank"
             rel="noreferrer"
-            className="text-xs sm:text-sm font-mono text-gray-400 hover:text-teal-400 flex items-center gap-2 transition"
+            className="text-xs sm:text-sm font-mono text-gray-400 hover:text-teal-400 flex items-center gap-2 transition truncate"
           >
-            <GithubIcon className="w-4 h-4 text-gray-400" />
-            <span>github.com/{ghUser}</span>
+            <GithubIcon className="w-4 h-4 text-gray-400 shrink-0" />
+            <span className="truncate">github.com/{ghUser}</span>
           </a>
 
           <a
             href={`https://github.com/${ghUser}`}
             target="_blank"
             rel="noreferrer"
-            className="text-xs sm:text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1.5 transition"
+            className="text-xs sm:text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1.5 transition ml-auto"
           >
             <span>View Profile</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -147,57 +147,57 @@ const GithubContributionSection = ({ profile, stats }) => {
         </div>
 
         {/* 6 Top Metric Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8">
-          <div className="p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 sm:mb-8">
+          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
+            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
               FOLLOWERS
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white mt-2">
+            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
               {followers}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
+          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
+            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
               FOLLOWING
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white mt-2">
+            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
               {following}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
+          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
+            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
               PUBLIC REPOS
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white mt-2">
+            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
               {publicRepos}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
+          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
+            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
               STARRED REPOS
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white mt-2">
+            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
               {starredRepos}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
+          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
+            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
               COMMITS
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white mt-2">
+            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
               {commits}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
+          <div className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/80 flex flex-col justify-between">
+            <span className="text-[9px] sm:text-[11px] uppercase tracking-wider font-semibold text-gray-400">
               PRS + ISSUES
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white mt-2">
+            <span className="text-lg sm:text-2xl font-black text-white mt-1.5 sm:mt-2">
               {prsIssues}
             </span>
           </div>
@@ -228,9 +228,15 @@ const GithubContributionSection = ({ profile, stats }) => {
           </div>
         </div>
 
+        {/* Mobile Swipe Hint */}
+        <div className="sm:hidden flex items-center justify-between text-[11px] text-gray-400 font-mono mb-2 px-1">
+          <span>Heatmap</span>
+          <span className="text-teal-400/80">Swipe horizontally &rarr;</span>
+        </div>
+
         {/* GitHub Contribution Heatmap Grid */}
-        <div className="overflow-x-auto pb-4 pt-1 scrollbar-thin">
-          <div className="w-fit min-w-[760px] mx-auto sm:mx-0">
+        <div className="overflow-x-auto pb-4 pt-1 scrollbar-thin -mx-2 px-2 sm:mx-0 sm:px-0">
+          <div className="w-fit min-w-[720px] sm:min-w-[760px] mx-auto sm:mx-0">
             
             {/* Top Month Labels Row (precisely aligned with day column spacer) */}
             <div className="flex items-start gap-4 mb-2">
@@ -308,7 +314,7 @@ const GithubContributionSection = ({ profile, stats }) => {
                   <strong className="text-white font-semibold">{hoveredDay.count}</strong> contributions on {hoveredDay.date}
                 </span>
               ) : (
-                <span className="opacity-40">Hover over a square to view details</span>
+                <span className="opacity-40">Hover over or tap a square to view details</span>
               )}
             </div>
 
@@ -316,8 +322,8 @@ const GithubContributionSection = ({ profile, stats }) => {
         </div>
 
         {/* TOP REPOSITORIES BY CONTRIBUTIONS */}
-        <div className="mt-10 pt-6 border-t border-white/5">
-          <h3 className="text-xs uppercase tracking-wider font-bold text-gray-400 mb-4">
+        <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-white/5">
+          <h3 className="text-[11px] sm:text-xs uppercase tracking-wider font-bold text-gray-400 mb-3 sm:mb-4">
             TOP REPOSITORIES BY CONTRIBUTIONS
           </h3>
 
@@ -328,16 +334,16 @@ const GithubContributionSection = ({ profile, stats }) => {
                 href={repo.url || `https://github.com/${repo.full_name || repo.name}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-3.5 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/70 hover:bg-[#161f33] hover:border-teal-400/40 transition flex items-center justify-between group"
+                className="p-3 sm:p-4 rounded-xl border border-white/5 bg-[#121826]/70 hover:bg-[#161f33] hover:border-teal-400/40 transition flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-4 group"
               >
-                <div className="flex items-center gap-3">
-                  <GithubIcon className="w-4 h-4 text-gray-400 group-hover:text-teal-400 transition" />
-                  <span className="text-xs sm:text-sm font-mono font-semibold text-gray-200 group-hover:text-white transition">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                  <GithubIcon className="w-4 h-4 text-gray-400 group-hover:text-teal-400 transition shrink-0" />
+                  <span className="text-xs sm:text-sm font-mono font-semibold text-gray-200 group-hover:text-white transition truncate">
                     {repo.full_name || `${ghUser}/${repo.name}`}
                   </span>
                 </div>
 
-                <div className="text-xs font-medium text-gray-400 group-hover:text-gray-300 transition">
+                <div className="text-[11px] sm:text-xs font-medium text-gray-400 group-hover:text-gray-300 transition shrink-0">
                   <span>{repo.contributions || (60 - idx * 6)} contributions</span>
                   <span className="mx-1.5 opacity-40">•</span>
                   <span>{repo.stars || 0} stars</span>

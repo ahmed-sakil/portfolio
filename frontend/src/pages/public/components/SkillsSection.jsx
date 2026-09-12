@@ -53,33 +53,33 @@ const SkillsSection = ({ skills }) => {
   }, []);
 
   return (
-    <section id="skills" ref={sectionRef} className="w-[90%] max-w-7xl mx-auto mb-28 md:mb-36 scroll-mt-28">
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 md:p-14 relative overflow-hidden">
+    <section id="skills" ref={sectionRef} className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-2 sm:mb-3">
             Skills & <span style={{ color: 'var(--accent)' }}>Expertise</span>
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Technologies, frameworks, and specialized tools I work with daily.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {Object.entries(grouped).map(([category, categorySkills]) => {
             const config = CATEGORY_CONFIG[category] || CATEGORY_CONFIG.OTHER;
             const Icon = config.icon;
             return (
               <div
                 key={category}
-                className="rounded-2xl p-6 border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300"
+                className="rounded-2xl p-4 sm:p-6 border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(0,229,160,0.18)] transition-all duration-300"
                 style={{ background: 'rgba(255, 255, 255, 0.03)' }}
               >
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                    <Icon className={`w-5 h-5 ${config.color}`} />
+                <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-white/10">
+                  <div className="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 shrink-0">
+                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${config.color}`} />
                   </div>
-                  <h3 className="text-lg font-bold text-white">{config.label}</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-white truncate">{config.label}</h3>
                 </div>
 
                 <ul className="space-y-4">

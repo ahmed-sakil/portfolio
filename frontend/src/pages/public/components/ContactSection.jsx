@@ -97,24 +97,24 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
   };
 
   return (
-    <section id="contact" className="w-[90%] max-w-7xl mx-auto mb-20 scroll-mt-28">
+    <section id="contact" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-16 sm:mb-20 scroll-mt-28">
       {/* All-over Section Card / Glass Panel */}
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 md:p-14 relative overflow-hidden">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
         {/* Ambient subtle glow elements */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Section Header */}
-        <div className="relative z-10 text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
+        <div className="relative z-10 text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-2 sm:mb-3">
             Let's <span style={{ color: 'var(--accent)' }}>Connect</span>
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             {profile?.connect_message || "Currently open to freelance opportunities and full-time senior roles."}
           </p>
         </div>
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         
         {/* ========================================================
             LEFT COLUMN: Info, Availability, Services, & Socials
@@ -228,17 +228,17 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
             RIGHT COLUMN: Form with Inquiry Selection & Message
            ======================================================== */}
         <div className="lg:col-span-7">
-          <div className="glass-section rounded-3xl p-6 sm:p-8 md:p-10">
+          <div className="glass-section rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10">
             
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
               
               {/* Option Selector: "What brings you here? *" */}
               <div>
-                <label className="block text-sm font-bold text-white mb-3">
+                <label className="block text-xs sm:text-sm font-bold text-white mb-2.5 sm:mb-3">
                   What brings you here? <span className="text-red-400">*</span>
                 </label>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
                   {INQUIRY_OPTIONS.map((opt) => {
                     const Icon = opt.icon;
                     const isSelected = selectedOption === opt.id;
@@ -250,7 +250,7 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                           setSelectedOption(opt.id);
                           setValidationError('');
                         }}
-                        className={`p-4 rounded-2xl border text-left flex flex-col items-center justify-center text-center gap-2.5 transition-all cursor-pointer ${
+                        className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left flex flex-col items-center justify-center text-center gap-2 transition-all cursor-pointer ${
                           isSelected
                             ? 'border-teal-400 bg-teal-400/10 shadow-[0_0_20px_rgba(0,229,160,0.25)] ring-1 ring-teal-400'
                             : 'border-white/10 hover:border-white/20 hover:bg-white/5'
@@ -259,11 +259,11 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                           background: isSelected ? 'rgba(0, 229, 160, 0.12)' : 'rgba(255, 255, 255, 0.03)',
                         }}
                       >
-                        <div className={`p-2 rounded-xl bg-white/5 ${isSelected ? 'text-teal-400' : opt.color}`}>
-                          <Icon className="w-5 h-5" />
+                        <div className={`p-1.5 sm:p-2 rounded-xl bg-white/5 ${isSelected ? 'text-teal-400' : opt.color}`}>
+                          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                         <span
-                          className={`text-xs font-semibold leading-tight ${
+                          className={`text-[11px] sm:text-xs font-semibold leading-tight ${
                             isSelected ? 'text-white' : 'text-gray-300'
                           }`}
                         >
@@ -298,7 +298,7 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="admin-input !pl-11"
+                      className="admin-input !pl-11 text-base sm:text-sm"
                       style={{ paddingLeft: '2.75rem' }}
                     />
                   </div>
@@ -318,7 +318,7 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                       placeholder="john@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="admin-input !pl-11"
+                      className="admin-input !pl-11 text-base sm:text-sm"
                       style={{ paddingLeft: '2.75rem' }}
                     />
                   </div>
@@ -339,7 +339,7 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                     placeholder="Your Company or Studio"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    className="admin-input !pl-11"
+                    className="admin-input !pl-11 text-base sm:text-sm"
                     style={{ paddingLeft: '2.75rem' }}
                   />
                 </div>
@@ -351,28 +351,28 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
                   Your Message <span className="text-red-400">*</span>
                 </label>
                 <textarea
-                  rows={5}
+                  rows={4}
                   required
                   placeholder="Tell me about your project, goals, and how I can help..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="admin-input font-sans text-sm"
+                  className="admin-input font-sans text-base sm:text-sm"
                 />
               </div>
 
               {/* Feedback Alerts */}
               {feedback && (
                 <div
-                  className={`p-4 rounded-2xl border text-sm font-medium flex items-center gap-2.5 animate-in fade-in duration-200 ${
+                  className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border text-xs sm:text-sm font-medium flex items-center gap-2.5 animate-in fade-in duration-200 ${
                     feedback.type === 'success'
                       ? 'bg-teal-500/10 border-teal-500/30 text-teal-300'
                       : 'bg-red-500/10 border-red-500/30 text-red-300'
                   }`}
                 >
                   {feedback.type === 'success' ? (
-                    <CheckCircle2 className="w-5 h-5 shrink-0 text-teal-400" />
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-teal-400" />
                   ) : (
-                    <AlertCircle className="w-5 h-5 shrink-0 text-red-400" />
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-red-400" />
                   )}
                   <span>{feedback.message}</span>
                 </div>
@@ -382,7 +382,7 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-4 rounded-2xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 shadow-xl transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 shadow-xl transition-all transform hover:-translate-y-0.5 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   backgroundColor: 'var(--accent)',
                   color: 'var(--text-inverted)',

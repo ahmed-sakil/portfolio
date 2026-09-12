@@ -49,14 +49,14 @@ const Footer = ({ profile, socialLinks = [] }) => {
   };
 
   return (
-    <footer className="w-[90%] max-w-7xl mx-auto mb-16 scroll-mt-28">
+    <footer className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-12 sm:mb-16 scroll-mt-28">
       {/* Uniform Glass Panel Container */}
-      <div className="glass-panel rounded-3xl p-8 sm:p-12 md:p-14 relative overflow-hidden">
+      <div className="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-10 md:p-14 relative overflow-hidden">
         {/* Ambient subtle glow elements */}
         <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -top-20 -left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 pb-12 border-b border-white/10">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 pb-8 sm:pb-12 border-b border-white/10">
           {/* Column 1: Brand & Direct Contact Info (Col 6) */}
           <div className="lg:col-span-6 space-y-6">
             {/* Logo */}
