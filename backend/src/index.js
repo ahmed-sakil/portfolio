@@ -152,6 +152,7 @@ async function autoMigrate() {
         "project_type" TEXT DEFAULT 'Personal',
         "type" TEXT DEFAULT 'Web Application',
         "icon_url" TEXT,
+        "details" TEXT,
         "team_members" JSONB
     )`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "is_featured" BOOLEAN NOT NULL DEFAULT true`,
@@ -161,6 +162,7 @@ async function autoMigrate() {
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "project_type" TEXT DEFAULT 'Personal'`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "type" TEXT DEFAULT 'Web Application'`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "icon_url" TEXT`,
+    `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "details" TEXT`,
     `ALTER TABLE "Project" ADD COLUMN IF NOT EXISTS "team_members" JSONB`,
 
     // Blog table

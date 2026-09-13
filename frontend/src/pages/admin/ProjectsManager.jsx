@@ -55,7 +55,8 @@ const ProjectsManager = () => {
     level: 'Intermediate',
     category: 'Personal',
     type: 'Full Stack Web App',
-    icon_url: ''
+    icon_url: '',
+    details: ''
   });
 
   const [techStack, setTechStack] = useState([]);
@@ -73,6 +74,7 @@ const ProjectsManager = () => {
   const [iconPreview, setIconPreview] = useState(null);
 
   const [editingId, setEditingId] = useState(null);
+  const [showHtmlPreview, setShowHtmlPreview] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -107,7 +109,8 @@ const ProjectsManager = () => {
       level: 'Intermediate',
       category: 'Personal',
       type: 'Full Stack Web App',
-      icon_url: ''
+      icon_url: '',
+      details: ''
     });
     setTechStack([]);
     setCustomTech('');
@@ -243,7 +246,8 @@ const ProjectsManager = () => {
       level: project.level || 'Intermediate',
       category: categoryVal,
       type: project.type || 'Full Stack Web App',
-      icon_url: project.icon_url || ''
+      icon_url: project.icon_url || '',
+      details: project.details || ''
     });
 
     // Parse tech stack
@@ -709,6 +713,58 @@ const ProjectsManager = () => {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 required
               />
+            </div>
+
+            {/* Project Details / Case Study (HTML Supported) */}
+            <div className="md:col-span-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <label className="admin-label !mb-0 flex items-center gap-2">
+                  <span>Project Details / Case Study</span>
+                  <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-bold">
+                    HTML Supported
+                  </span>
+                </label>
+
+                {formData.details && (
+                  <button
+                    type="button"
+                    onClick={() => setShowHtmlPreview(!showHtmlPreview)}
+                    className="text-xs px-2.5 py-1 rounded-lg border transition font-medium"
+                    style={{
+                      borderColor: 'var(--border-subtle)',
+                      backgroundColor: showHtmlPreview ? 'var(--accent-dim)' : 'var(--bg-surface-hover)',
+                      color: showHtmlPreview ? 'var(--accent)' : 'var(--text-secondary)'
+                    }}
+                  >
+                    {showHtmlPreview ? 'Hide HTML Preview' : 'Preview HTML Output'}
+                  </button>
+                )}
+              </div>
+
+              <textarea
+                placeholder="Paste deep case study or raw HTML code (e.g. <h3>Architecture</h3>, <p>Deep dive...</p>, <ul><li>Key Result</li></ul>, <b>bold</b>, <code>code</code>, <a href='...'>link</a>)..."
+                className="admin-input font-mono text-xs leading-relaxed"
+                rows={7}
+                value={formData.details}
+                onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+              />
+
+              <p className="text-[11px] mt-1.5" style={{ color: 'var(--text-muted)' }}>
+                💡 Paste formatted HTML text using standard tags like &lt;h3&gt;, &lt;p&gt;, &lt;b&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;code&gt;, &lt;blockquote&gt;, &lt;a&gt;, etc. It will render in the public Project Details page right below the Overview.
+              </p>
+
+              {showHtmlPreview && formData.details && (
+                <div className="mt-3 p-4 rounded-xl border" style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-surface)' }}>
+                  <div className="text-[10px] uppercase font-bold tracking-wider mb-2" style={{ color: 'var(--accent)' }}>
+                    Live HTML Render Preview:
+                  </div>
+                  <div
+                    className="project-case-study text-xs sm:text-sm leading-relaxed"
+                    style={{ color: 'var(--text-secondary)' }}
+                    dangerouslySetInnerHTML={{ __html: formData.details }}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Feature Toggle & Priority Sequence */}

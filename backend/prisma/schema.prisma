@@ -82,6 +82,7 @@ model Project {
   category     String?  @default("Personal")     // 'Personal' | 'Group'
   project_type String?  @default("Personal")     // Backwards compat
   type         String?  @default("Web Application") // Custom string e.g. "Full Stack Web App"
+  details      String?                              // Project details / Case study (HTML supported)
   team_members Json?                             // [{ name: string, role?: string, portfolio_url?: string, avatar_url?: string }]
 }
 

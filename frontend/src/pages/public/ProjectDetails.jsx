@@ -254,6 +254,23 @@ const ProjectDetails = () => {
             </p>
           </div>
 
+          {/* Project Details / Case Study */}
+          {project.details && project.details.trim() && (
+            <div className="space-y-3">
+              <h2
+                className="text-sm font-bold uppercase tracking-wider pb-2 border-b border-white/10"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                Project Details &amp; Case Study
+              </h2>
+              <div
+                className="project-case-study text-sm sm:text-base leading-relaxed"
+                style={{ color: 'var(--text-secondary)' }}
+                dangerouslySetInnerHTML={{ __html: project.details }}
+              />
+            </div>
+          )}
+
           {/* Tech Stack Badges */}
           {techStack.length > 0 && (
             <div className="space-y-3">
@@ -299,51 +316,71 @@ const ProjectDetails = () => {
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-                {teamMembers.map((member, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-2xl border border-white/10 hover:border-accent transition flex items-center justify-between gap-3"
-                    style={{ backgroundColor: 'var(--bg-surface)' }}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      {member.avatar_url ? (
-                        <img
-                          src={member.avatar_url}
-                          alt={member.name}
-                          className="w-10 h-10 rounded-full object-cover border border-accent shrink-0"
-                        />
-                      ) : (
-                        <div
-                          className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0"
-                          style={{ borderColor: 'var(--accent-dim)', backgroundColor: 'var(--accent-dim)', color: 'var(--accent)' }}
-                        >
-                          <User className="w-4 h-4" />
-                        </div>
-                      )}
-                      <div className="min-w-0">
-                        <div className="text-xs font-bold truncate" style={{ color: 'var(--text-primary)' }}>
-                          {member.name}
-                        </div>
-                        <div className="text-[11px] truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                          {member.role || 'Contributor'}
+                {teamMembers.map((member, idx) => {
+                  const hasLink = Boolean(member.portfolio_url);
+                  const CardTag = hasLink ? 'a' : 'div';
+                  const cardProps = hasLink
+                    ? {
+                        href: member.portfolio_url,
+                        target: '_blank',
+                        rel: 'noreferrer',
+                        title: 'Open Portfolio'
+                      }
+                    : {};
+
+                  return (
+                    <CardTag
+                      key={idx}
+                      {...cardProps}
+                      className={`group/member p-3.5 rounded-2xl border border-white/10 flex items-center justify-between gap-3 transition-all duration-200 ${
+                        hasLink
+                          ? 'cursor-pointer hover:border-accent hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5'
+                          : ''
+                      }`}
+                      style={{ backgroundColor: 'var(--bg-surface)' }}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {member.avatar_url ? (
+                          <img
+                            src={member.avatar_url}
+                            alt={member.name}
+                            className="w-10 h-10 rounded-full object-cover border border-accent/60 shrink-0 group-hover/member:scale-105 group-hover/member:border-accent transition-all"
+                          />
+                        ) : (
+                          <div
+                            className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0 group-hover/member:scale-105 transition-transform"
+                            style={{ borderColor: 'var(--accent-dim)', backgroundColor: 'var(--accent-dim)', color: 'var(--accent)' }}
+                          >
+                            <User className="w-4 h-4" />
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <div
+                            className="text-xs font-bold truncate group-hover/member:text-accent transition-colors"
+                            style={{ color: 'var(--text-primary)' }}
+                          >
+                            {member.name}
+                          </div>
+                          <div className="text-[11px] truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                            {member.role || 'Contributor'}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {member.portfolio_url && (
-                      <a
-                        href={member.portfolio_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="p-2 rounded-xl bg-white/5 hover:bg-white/15 transition shrink-0"
-                        style={{ color: 'var(--accent)' }}
-                        title={`${member.name}'s Portfolio`}
-                      >
-                        <LinkIcon className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                  </div>
-                ))}
+                      {hasLink && (
+                        <div
+                          className="flex items-center gap-1.5 px-2 py-1 rounded-xl border border-transparent group-hover/member:border-accent/40 group-hover/member:bg-accent/10 transition-all shrink-0"
+                          style={{ color: 'var(--accent)' }}
+                        >
+                          <span className="max-w-0 overflow-hidden group-hover/member:max-w-[120px] transition-all duration-300 ease-in-out whitespace-nowrap opacity-0 group-hover/member:opacity-100 text-[11px] font-semibold">
+                            Open Portfolio
+                          </span>
+                          <ExternalLink className="w-3.5 h-3.5 shrink-0 group-hover/member:translate-x-0.5 group-hover/member:-translate-y-0.5 transition-transform" />
+                        </div>
+                      )}
+                    </CardTag>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -200,6 +200,9 @@ export const createProject = async (req, res) => {
     if (data.icon_url !== undefined && !data.icon_url) {
       delete data.icon_url;
     }
+    if (data.details !== undefined) {
+      data.details = typeof data.details === 'string' && data.details.trim() ? data.details : null;
+    }
     
     const project = await prisma.project.create({ data });
     res.json(project);
@@ -248,6 +251,9 @@ export const updateProject = async (req, res) => {
     }
     if (data.type !== undefined) {
       data.type = data.type?.trim() || 'Web Application';
+    }
+    if (data.details !== undefined) {
+      data.details = typeof data.details === 'string' && data.details.trim() ? data.details : null;
     }
     
     const project = await prisma.project.update({ where: { id: parseInt(req.params.id) }, data });
