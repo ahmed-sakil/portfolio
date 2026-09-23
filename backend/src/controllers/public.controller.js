@@ -16,10 +16,11 @@ export const getPortfolio = async (req, res) => {
       }
     }
 
-    const skills = await prisma.skill.findMany().catch(err => {
+    const rawSkills = await prisma.skill.findMany().catch(err => {
       console.warn('Skills query notice:', err.message);
       return [];
     });
+    const skills = rawSkills.filter(s => s.is_featured !== false);
 
     const experiences = await prisma.experience.findMany({ orderBy: { start_date: 'desc' } }).catch(err => {
       console.warn('Experience query notice:', err.message);
@@ -90,6 +91,7 @@ export const getPortfolio = async (req, res) => {
         journey_image_url: '/assets/glowing_programmer.jpg'
       },
       skills: skills || [],
+      allSkills: rawSkills || [],
       experiences: experiences || [],
       projects: projects || [],
       blogs: blogs || [],

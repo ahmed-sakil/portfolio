@@ -1,21 +1,52 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import api from '../../utils/api';
 import { useAuthStore } from '../../store/authStore';
-import { Edit2, Trash2, Plus, X, Code2, Layers, Sun, Moon, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { 
+  Edit2, 
+  Trash2, 
+  Plus, 
+  X, 
+  Code2, 
+  Layers, 
+  Sun, 
+  Moon, 
+  Sparkles, 
+  Image as ImageIcon,
+  Eye,
+  EyeOff,
+  Check
+} from 'lucide-react';
 import AppIcon from '../../components/icons/AppIcon';
+
+const categoryLabels = {
+  PROGRAMMING_LANGUAGE: 'Programming Languages',
+  MARKUP_STYLING: 'Markup / Styling Languages',
+  DATABASE: 'Databases',
+  LIBRARY: 'Libraries & Frameworks',
+  TOOL: 'Tools & DevOps',
+  PLATFORM: 'Platforms & Cloud',
+  TECHNOLOGY: 'Technologies',
+  OTHER: 'Others'
+};
 
 const SkillsManager = () => {
   const token = useAuthStore((state) => state.token);
   const [skills, setSkills] = useState([]);
   const [customIcons, setCustomIcons] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [togglingId, setTogglingId] = useState(null);
+
+  const formRef = useRef(null);
+  const nameInputRef = useRef(null);
+
   const [formData, setFormData] = useState({ 
     name: '', 
     category: 'PROGRAMMING_LANGUAGE', 
-    percentage: '', 
+    percentage: 80, 
     icon_name: '',
     icon_url: '',
-    icon_type: 'light'
+    icon_type: 'light',
+    is_featured: true
   });
   const [editingId, setEditingId] = useState(null);
 
@@ -25,7 +56,8 @@ const SkillsManager = () => {
         api.get('/portfolio'),
         api.get('/admin/icons').catch(() => ({ data: [] }))
       ]);
-      setSkills(portfolioRes.data.skills || []);
+      // Use allSkills if available so admin sees both visible and hidden skills
+      setSkills(portfolioRes.data.allSkills || portfolioRes.data.skills || []);
       setCustomIcons(iconsRes.data || []);
     } catch (err) {
       console.error(err);
@@ -34,17 +66,20 @@ const SkillsManager = () => {
     }
   };
 
-  useEffect(() => { fetchSkills(); }, []);
+  useEffect(() => { 
+    fetchSkills(); 
+  }, []);
 
   const resetForm = () => {
     setEditingId(null);
     setFormData({ 
       name: '', 
       category: 'PROGRAMMING_LANGUAGE', 
-      percentage: '', 
+      percentage: 80, 
       icon_name: '',
       icon_url: '',
-      icon_type: 'light'
+      icon_type: 'light',
+      is_featured: true
     });
   };
 
@@ -69,12 +104,43 @@ const SkillsManager = () => {
     setFormData({
       name: skill.name,
       category: skill.category,
-      percentage: skill.percentage,
+      percentage: skill.percentage ?? 80,
       icon_name: skill.icon_name || '',
       icon_url: skill.icon_url || '',
-      icon_type: skill.icon_type || 'light'
+      icon_type: skill.icon_type || 'light',
+      is_featured: skill.is_featured !== false
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Auto-scroll directly to the form
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setTimeout(() => {
+      nameInputRef.current?.focus();
+    }, 250);
+  };
+
+  const toggleVisibility = async (skill) => {
+    const nextState = skill.is_featured === false ? true : false;
+    setTogglingId(skill.id);
+
+    // Optimistic state update
+    setSkills((prev) =>
+      prev.map((s) => (s.id === skill.id ? { ...s, is_featured: nextState } : s))
+    );
+
+    try {
+      await api.put(`/admin/skills/${skill.id}`, { is_featured: nextState });
+    } catch (err) {
+      console.error('Error toggling skill visibility:', err);
+      // Revert optimistic update on error
+      setSkills((prev) =>
+        prev.map((s) => (s.id === skill.id ? { ...s, is_featured: !nextState } : s))
+      );
+      alert('Could not update visibility.');
+    } finally {
+      setTogglingId(null);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -88,38 +154,40 @@ const SkillsManager = () => {
     }
   };
 
-  const categoryLabels = {
-    PROGRAMMING_LANGUAGE: 'Programming Languages',
-    MARKUP_STYLING: 'Markup / Styling Languages',
-    DATABASE: 'Databases',
-    LIBRARY: 'Libraries & Frameworks',
-    TOOL: 'Tools & DevOps',
-    PLATFORM: 'Platforms & Cloud',
-    TECHNOLOGY: 'Technologies',
-    OTHER: 'Others'
-  };
-
   const groupedSkills = skills.reduce((acc, skill) => {
     if (!acc[skill.category]) acc[skill.category] = [];
     acc[skill.category].push(skill);
     return acc;
   }, {});
 
+  const totalVisible = skills.filter((s) => s.is_featured !== false).length;
+  const totalHidden = skills.length - totalVisible;
+
   return (
     <div className="space-y-8">
       {/* Skill Form Card */}
-      <div className="admin-card p-6 md:p-8">
-        <div className="flex items-center justify-between pb-4 mb-6 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+      <div 
+        ref={formRef} 
+        className={`admin-card p-5 sm:p-7 transition-all duration-300 ${
+          editingId ? 'ring-2 ring-accent/60 shadow-lg' : ''
+        }`}
+      >
+        <div className="flex items-center justify-between pb-4 mb-5 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center border border-teal-400/30 bg-teal-400/10 text-teal-400">
               <Code2 className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                {editingId ? 'Update Skill' : 'Add New Skill'}
+              <h2 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                {editingId ? `Update Skill: ${formData.name || '...'}` : 'Add New Skill'}
+                {editingId && (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-accent/30 font-medium">
+                    Editing Mode
+                  </span>
+                )}
               </h2>
               <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                Highlight programming languages, libraries, tools, and platforms.
+                Configure technology name, icon, category, and homepage visibility.
               </p>
             </div>
           </div>
@@ -134,11 +202,12 @@ const SkillsManager = () => {
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="admin-label">Skill Name *</label>
               <input
+                ref={nameInputRef}
                 type="text"
                 placeholder="e.g. TypeScript, React, Docker"
                 className="admin-input"
@@ -162,25 +231,24 @@ const SkillsManager = () => {
             </div>
 
             <div>
-              <label className="admin-label">Proficiency % (0 - 100) *</label>
+              <label className="admin-label">Proficiency % (Stored in DB)</label>
               <input
                 type="number"
                 min="0"
                 max="100"
-                placeholder="85"
+                placeholder="80"
                 className="admin-input"
                 value={formData.percentage}
                 onChange={(e) => setFormData({ ...formData, percentage: parseInt(e.target.value) || 0 })}
-                required
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="admin-label mb-0">Select from Uploaded Icons</label>
+                <label className="admin-label mb-0">Custom Uploaded Icon</label>
                 {customIcons.length > 0 && (
                   <span className="text-[10px] text-teal-400 font-medium">
-                    {customIcons.length} in library
+                    {customIcons.length} available
                   </span>
                 )}
               </div>
@@ -207,10 +275,10 @@ const SkillsManager = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="admin-label mb-0">Or SimpleIcon Slug / Name</label>
+                <label className="admin-label mb-0">Or SimpleIcon Slug</label>
               </div>
               <input
                 type="text"
@@ -225,7 +293,7 @@ const SkillsManager = () => {
             </div>
 
             <div>
-              <label className="admin-label">Icon Visual Type</label>
+              <label className="admin-label">Icon Visual Plate</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -236,7 +304,7 @@ const SkillsManager = () => {
                       : 'border-white/10 bg-slate-800/40 text-gray-400 hover:border-white/20'
                   }`}
                 >
-                  <Sun className="w-3.5 h-3.5 text-amber-400" /> Light / Color
+                  <Sun className="w-3.5 h-3.5 text-amber-400" /> Light / Normal
                 </button>
                 <button
                   type="button"
@@ -247,12 +315,9 @@ const SkillsManager = () => {
                       : 'border-white/10 bg-slate-800/40 text-gray-400 hover:border-white/20'
                   }`}
                 >
-                  <Moon className="w-3.5 h-3.5 text-cyan-400" /> Dark (Highlighted)
+                  <Moon className="w-3.5 h-3.5 text-cyan-400" /> Dark Plate
                 </button>
               </div>
-              <span className="text-[10px] text-gray-400 mt-1 block">
-                Dark icons get a light contrast plate so they pop on dark UI
-              </span>
             </div>
 
             <div>
@@ -277,7 +342,38 @@ const SkillsManager = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+          {/* Visibility Checkbox */}
+          <div className="p-3 rounded-xl border border-white/10 bg-white/5 flex items-center justify-between">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.is_featured}
+                onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+                className="w-4 h-4 rounded text-accent focus:ring-accent border-gray-600 bg-gray-700"
+              />
+              <div>
+                <span className="text-xs sm:text-sm font-semibold block" style={{ color: 'var(--text-primary)' }}>
+                  Show on Public Homepage
+                </span>
+                <span className="text-[11px] block" style={{ color: 'var(--text-secondary)' }}>
+                  When enabled, this skill is featured in the public Skills & Expertise section.
+                </span>
+              </div>
+            </label>
+            <div className="shrink-0 flex items-center gap-1.5 text-xs font-semibold">
+              {formData.is_featured ? (
+                <span className="flex items-center gap-1 text-teal-400">
+                  <Eye className="w-4 h-4" /> Visible
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-gray-400">
+                  <EyeOff className="w-4 h-4" /> Hidden
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-3 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
             <button type="submit" className="admin-btn-primary">
               <Plus className="w-4 h-4 mr-1.5" />
               {editingId ? 'Save Changes' : 'Add Skill'}
@@ -291,12 +387,30 @@ const SkillsManager = () => {
         </form>
       </div>
 
-      {/* Skills Inventory Card */}
-      <div className="admin-card p-6 md:p-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            Skills Inventory ({skills.length})
-          </h2>
+      {/* Skills Inventory Card with Short Cards */}
+      <div className="admin-card p-5 sm:p-7">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-white/10">
+          <div>
+            <h2 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+              Skills Inventory
+              <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-white/10 text-accent">
+                {skills.length} Total
+              </span>
+            </h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+              Click the eye icon to toggle public homepage visibility instantly.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs px-2.5 py-1 rounded-lg bg-teal-400/10 border border-teal-400/30 text-teal-400 font-semibold flex items-center gap-1.5">
+              <Eye className="w-3.5 h-3.5" /> {totalVisible} Visible
+            </span>
+            {totalHidden > 0 && (
+              <span className="text-xs px-2.5 py-1 rounded-lg bg-amber-400/10 border border-amber-400/30 text-amber-400 font-semibold flex items-center gap-1.5">
+                <EyeOff className="w-3.5 h-3.5" /> {totalHidden} Hidden
+              </span>
+            )}
+          </div>
         </div>
 
         {loading ? (
@@ -308,9 +422,9 @@ const SkillsManager = () => {
             No skills cataloged yet. Add your primary tech stack above!
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {Object.entries(groupedSkills).map(([catKey, catSkills]) => (
-              <div key={catKey} className="space-y-3">
+              <div key={catKey} className="space-y-2.5">
                 <div className="flex items-center gap-2">
                   <span className="text-xs uppercase tracking-wider font-bold" style={{ color: 'var(--accent)' }}>
                     {categoryLabels[catKey] || catKey}
@@ -320,65 +434,95 @@ const SkillsManager = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {catSkills.map((skill) => (
-                    <div
-                      key={skill.id}
-                      className="p-4 rounded-2xl border flex flex-col justify-between group hover:border-teal-400/40 transition-all"
-                      style={{
-                        background: 'var(--bg-surface-hover)',
-                        borderColor: 'var(--border-subtle)'
-                      }}
-                    >
-                      <div className="mb-3">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2 min-w-0">
+                {/* Short Compact Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5">
+                  {catSkills.map((skill) => {
+                    const isVisible = skill.is_featured !== false;
+                    const isCurrentlyEditing = editingId === skill.id;
+
+                    return (
+                      <div
+                        key={skill.id}
+                        className={`px-3 py-2.5 rounded-xl border flex items-center justify-between gap-2.5 transition-all duration-200 group ${
+                          isCurrentlyEditing 
+                            ? 'ring-2 ring-accent border-accent bg-accent/10' 
+                            : !isVisible 
+                              ? 'border-white/5 bg-slate-900/40 opacity-70 hover:opacity-100' 
+                              : 'border-white/10 hover:border-accent/40 bg-slate-800/40 hover:bg-slate-800/70'
+                        }`}
+                      >
+                        {/* Left: Icon + Name */}
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-white/10 bg-black/25">
                             <AppIcon
                               iconUrl={skill.icon_url}
                               iconName={skill.icon_name}
                               iconType={skill.icon_type}
-                              className="w-5 h-5 shrink-0"
+                              className="w-4 h-4"
                               alt={skill.name}
                             />
-                            <span className="font-bold text-sm truncate" style={{ color: 'var(--text-primary)' }}>
-                              {skill.name}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-xs truncate" style={{ color: 'var(--text-primary)' }}>
+                                {skill.name}
+                              </span>
+                              {!isVisible && (
+                                <span className="text-[9px] uppercase font-bold tracking-wider px-1 py-0.2 rounded bg-amber-500/15 text-amber-400 border border-amber-500/25 shrink-0">
+                                  Hidden
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] font-mono text-gray-400 block truncate">
+                              {skill.percentage}% proficiency
                             </span>
                           </div>
-                          <span className="text-xs font-mono font-bold shrink-0 ml-2" style={{ color: 'var(--accent)' }}>
-                            {skill.percentage}%
-                          </span>
                         </div>
 
-                        {/* Progress Bar */}
-                        <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                          <div
-                            className="h-full rounded-full transition-all duration-500"
-                            style={{
-                              width: `${skill.percentage}%`,
-                              background: 'var(--accent)'
-                            }}
-                          />
+                        {/* Right: Actions (Eye Toggle, Edit with auto-scroll, Delete) */}
+                        <div className="flex items-center gap-1 shrink-0">
+                          {/* Eye Toggle Option */}
+                          <button
+                            type="button"
+                            onClick={() => toggleVisibility(skill)}
+                            disabled={togglingId === skill.id}
+                            className={`p-1.5 rounded-lg border transition cursor-pointer ${
+                              isVisible
+                                ? 'text-teal-400 border-teal-400/30 bg-teal-400/10 hover:bg-teal-400/20'
+                                : 'text-gray-500 border-white/10 bg-white/5 hover:text-gray-300 hover:bg-white/10'
+                            }`}
+                            title={isVisible ? 'Visible on homepage (Click to hide)' : 'Hidden from homepage (Click to show)'}
+                          >
+                            {isVisible ? (
+                              <Eye className="w-3.5 h-3.5 text-accent" />
+                            ) : (
+                              <EyeOff className="w-3.5 h-3.5 text-gray-400" />
+                            )}
+                          </button>
+
+                          {/* Edit Icon with Auto Scroll */}
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(skill)}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-teal-400 hover:bg-white/10 border border-transparent hover:border-white/10 transition cursor-pointer"
+                            title="Edit Skill (auto-scrolls to form)"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Delete Icon */}
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(skill.id)}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition cursor-pointer"
+                            title="Delete Skill"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       </div>
-
-                      <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/5">
-                        <button
-                          onClick={() => handleEdit(skill)}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-teal-400 transition"
-                          title="Edit Skill"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(skill.id)}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-400 transition"
-                          title="Delete Skill"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}

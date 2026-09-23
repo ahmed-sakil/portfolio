@@ -100,7 +100,8 @@ export const createSkill = async (req, res) => {
       percentage: parseInt(req.body.percentage, 10) || 0,
       icon_name: req.body.icon_name ? req.body.icon_name.trim() : null,
       icon_url: req.body.icon_url ? req.body.icon_url.trim() : null,
-      icon_type: req.body.icon_type || 'light'
+      icon_type: req.body.icon_type || 'light',
+      is_featured: req.body.is_featured === undefined ? true : (req.body.is_featured === 'true' || req.body.is_featured === true)
     };
     const skill = await prisma.skill.create({ data });
     res.json(skill);
@@ -123,6 +124,9 @@ export const updateSkill = async (req, res) => {
     }
     if (req.body.icon_type !== undefined) {
       data.icon_type = req.body.icon_type || 'light';
+    }
+    if (req.body.is_featured !== undefined) {
+      data.is_featured = req.body.is_featured === 'true' || req.body.is_featured === true;
     }
     const skill = await prisma.skill.update({ where: { id: parseInt(req.params.id) }, data });
     res.json(skill);

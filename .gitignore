@@ -19,3 +19,10 @@ frontend/.env
 .vscode/
 *.log
 npm-debug.log*
+
+# AI Memory & Operational Governance (Local only - do not push to remote)
+memory.md
+rules.md
+*memory*.md
+*rules*.md
+

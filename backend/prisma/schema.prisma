@@ -51,6 +51,7 @@ model Skill {
   icon_name   String?
   icon_url    String?
   icon_type   String?       @default("light") // 'light' or 'dark'
+  is_featured Boolean       @default(true)
 }
 
 model Experience {

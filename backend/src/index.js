@@ -117,6 +117,7 @@ async function autoMigrate() {
     `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_name" TEXT`,
     `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_url" TEXT`,
     `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "icon_type" TEXT DEFAULT 'light'`,
+    `ALTER TABLE "Skill" ADD COLUMN IF NOT EXISTS "is_featured" BOOLEAN NOT NULL DEFAULT true`,
 
     // Experience table
     `CREATE TABLE IF NOT EXISTS "Experience" (
