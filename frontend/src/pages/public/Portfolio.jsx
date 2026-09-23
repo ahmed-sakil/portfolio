@@ -56,7 +56,7 @@ const Portfolio = () => {
         const currentProfile = portfolioRes.data?.profile || DEFAULT_PORTFOLIO.profile;
         updatePageMeta({
           title: `${currentProfile.full_name || 'Sakil Ahmed'} — ${currentProfile.role || currentProfile.title || 'Full Stack Developer'}`,
-          faviconUrl: currentProfile.favicon_url || currentProfile.icon_image_url || '/favicon.svg'
+          faviconUrl: currentProfile.favicon_url || currentProfile.icon_image_url || '/favicon.png'
         });
 
         const gh = currentProfile.github_username || 'protik0939';

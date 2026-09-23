@@ -56,7 +56,7 @@ const AdminLayout = () => {
     const fetchMeta = async () => {
       try {
         const res = await api.get('/portfolio');
-        const fav = res.data?.profile?.favicon_url || res.data?.profile?.icon_image_url || '/favicon.svg';
+        const fav = res.data?.profile?.favicon_url || res.data?.profile?.icon_image_url || '/favicon.png';
         setProfileFavicon(fav);
         updatePageMeta({ faviconUrl: fav });
       } catch (e) {}

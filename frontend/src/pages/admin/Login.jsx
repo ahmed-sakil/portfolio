@@ -16,7 +16,7 @@ const Login = () => {
   useEffect(() => {
     updatePageMeta({ title: 'Admin Login | Sakil Ahmed' });
     api.get('/portfolio').then((res) => {
-      const fav = res.data?.profile?.favicon_url || res.data?.profile?.icon_image_url || '/favicon.svg';
+      const fav = res.data?.profile?.favicon_url || res.data?.profile?.icon_image_url || '/favicon.png';
       updatePageMeta({ faviconUrl: fav });
     }).catch(() => {});
   }, []);

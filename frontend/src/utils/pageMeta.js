@@ -30,6 +30,11 @@ export const updatePageMeta = ({ title, faviconUrl } = {}) => {
     }
     if (link.getAttribute('href') !== activeFavicon) {
       link.href = activeFavicon;
+      if (activeFavicon.includes('.png')) {
+        link.type = 'image/png';
+      } else if (activeFavicon.includes('.svg')) {
+        link.type = 'image/svg+xml';
+      }
     }
   }
 };

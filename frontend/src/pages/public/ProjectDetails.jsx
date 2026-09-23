@@ -44,7 +44,7 @@ const ProjectDetails = () => {
 
         updatePageMeta({
           title: `${proj.title || 'Project Details'} — Portfolio`,
-          faviconUrl: portRes.data?.profile?.favicon_url || '/favicon.svg'
+          faviconUrl: portRes.data?.profile?.favicon_url || '/favicon.png'
         });
       } catch (err) {
         console.error('Fetch project error:', err);

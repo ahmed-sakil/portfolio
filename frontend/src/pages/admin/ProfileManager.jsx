@@ -666,12 +666,12 @@ const ProfileManager = () => {
 
               <div className="mt-4 flex items-center gap-3 pt-3 border-t border-white/5">
                 <img
-                  src={formData.favicon_url || formData.icon_image_url || '/favicon.svg'}
+                  src={formData.favicon_url || formData.icon_image_url || '/favicon.png'}
                   alt="Favicon"
                   className="w-8 h-8 object-contain rounded-md border border-white/10 p-1 bg-white/5 shadow"
                 />
                 <a
-                  href={formData.favicon_url || formData.icon_image_url || '/favicon.svg'}
+                  href={formData.favicon_url || formData.icon_image_url || '/favicon.png'}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 text-xs font-semibold hover:underline"
