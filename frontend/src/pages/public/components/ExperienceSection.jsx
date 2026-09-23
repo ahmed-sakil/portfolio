@@ -4,13 +4,13 @@ const ExperienceSection = ({ experiences }) => {
   return (
     <section id="experience" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
+        {/* Section Header - Left-Aligned & Developer Typography */}
+        <div className="mb-8 sm:mb-12 text-left">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-2" style={{ color: 'var(--text-primary)' }}>
             Career <span style={{ color: 'var(--accent)' }}>Timeline</span>
           </h2>
-          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            Education background and professional industry experience.
+          <p className="font-mono text-xs sm:text-sm tracking-wide" style={{ color: 'var(--text-muted)' }}>
+            // Education background and professional industry experience
           </p>
         </div>
 

@@ -55,8 +55,11 @@ const SkillsSection = ({ skills }) => {
     <section id="skills" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-20 sm:mb-28 md:mb-36 scroll-mt-28">
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-12 relative overflow-hidden">
         
-        {/* Top Developer Code Comment */}
-        <div className="mb-8 sm:mb-12">
+        {/* Section Header - Left-Aligned & Developer Typography */}
+        <div className="mb-8 sm:mb-12 text-left">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-2" style={{ color: 'var(--text-primary)' }}>
+            Skills & <span style={{ color: 'var(--accent)' }}>Expertise</span>
+          </h2>
           <p className="font-mono text-xs sm:text-sm tracking-wide" style={{ color: 'var(--text-muted)' }}>
             // Technologies, frameworks, and tools powering my daily workflow
           </p>

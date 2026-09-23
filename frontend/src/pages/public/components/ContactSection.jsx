@@ -97,13 +97,13 @@ const ContactSection = ({ profile, services = [], socialLinks = [] }) => {
     <section id="contact" className="w-[92%] sm:w-[90%] max-w-7xl mx-auto mb-16 sm:mb-20 scroll-mt-28">
       {/* All-over Section Card / Glass Panel */}
       <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-14 relative overflow-hidden">
-        {/* Section Header */}
-        <div className="relative z-10 text-center max-w-2xl mx-auto mb-8 sm:mb-12 md:mb-14">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
+        {/* Section Header - Left-Aligned & Developer Typography */}
+        <div className="relative z-10 mb-8 sm:mb-12 text-left">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-2" style={{ color: 'var(--text-primary)' }}>
             Let's <span style={{ color: 'var(--accent)' }}>Connect</span>
           </h2>
-          <p className="text-xs sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            {profile?.connect_message || "Currently open to freelance opportunities and full-time senior roles."}
+          <p className="font-mono text-xs sm:text-sm tracking-wide" style={{ color: 'var(--text-muted)' }}>
+            // {profile?.connect_message || "Currently open to freelance opportunities and full-time senior roles."}
           </p>
         </div>
 
