@@ -17,7 +17,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter: (_req, file, cb) => {
+  fileFilter: (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -56,7 +56,7 @@ router.post('/', authenticateAdmin, upload.single('image'), async (req: Request,
       }
     );
 
-    uploadStream.end(req.file.buffer);
+    (uploadStream as any).end(req.file.buffer);
   } catch (error: any) {
     console.error('Upload error:', error);
     res.status(500).json({ message: error.message || 'File upload failed' });
