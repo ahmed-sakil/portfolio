@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Theme {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  bg          String   // e.g. #09090b
+  surface     String   // e.g. #121215
+  border      String   // e.g. #27272a
+  text        String   // e.g. #f4f4f5
+  textMuted   String   // e.g. #a1a1aa
+  accent      String   // e.g. #10b981
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id                  String   @id @default(uuid())
+  title               String
+  slug                String   @unique
+  category            String   @default("Full Stack Web App") // e.g. "Full Stack Web App", "Android App"
+  icon                String?  // Lucide icon name or image URL
+  summary             String   // Project Overview
+  caseStudy           String?  // Project details & case study stored as HTML
+  descriptionMarkdown String?  // Kept for backward compatibility
+  thumbnail           String?
+  screenshots         String[] @default([]) // Multiple screenshots for project
+  galleryUrls         String[] @default([]) // Kept for backward compatibility
+  liveUrl             String?  // Optional live URL
+  githubUrl           String?  // Optional GitHub URL
+  tags                String[] @default([]) // Tech stack
+  level               String   @default("Intermediate") // Beginner, Intermediate, Expert
+  projectType         String   @default("Personal Project") // Personal Project, Group Project
+  isFeatured          Boolean  @default(false)
+  featuredPriority    Int      @default(0) // Higher priority displayed first
+  order               Int      @default(0)
+  authors             Author[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Author {
+  id           String    @id @default(uuid())
+  name         String
+  icon         String?   // Lucide icon name or avatar/image URL
+  portfolioUrl String?   // URL to author's portfolio or profile
+  projects     Project[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Skill {
+  id        String   @id @default(uuid())
+  name      String
+  category  String   // e.g. "Programming Languages", "Frameworks & Libraries", "Databases & Tools"
+  icon      String?  // lucide icon name or image url
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Experience {
+  id          String   @id @default(uuid())
+  company     String
+  role        String
+  location    String?
+  startDate   String   // e.g. "2022" or "Jan 2022"
+  endDate     String?  // e.g. "Present" or "Dec 2023"
+  current     Boolean  @default(false)
+  logoUrl     String?  // image url for company / institute
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Education {
+  id          String   @id @default(uuid())
+  institution String
+  degree      String   // e.g. "B.Sc. in Computer Science & Engineering"
+  field       String?  // e.g. "Computer Science"
+  startDate   String   // e.g. "2018"
+  endDate     String?  // e.g. "2022"
+  current     Boolean  @default(false)
+  grade       String?  // e.g. "CGPA 3.85 / 4.00"
+  location    String?
+  logoUrl     String?  // image url for university / institute
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SocialLink {
+  id           String   @id @default(uuid())
+  title        String   // e.g. "GitHub", "LinkedIn", "Upwork", "Resume"
+  icon         String   // Lucide icon name (e.g. "Github", "Linkedin", "FileText")
+  link         String
+  showOnHero   Boolean  @default(true)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id              String   @id @default(uuid())
+  name            String
+  title           String   // e.g. "Full Stack Developer"
+  bio             String
+  avatarUrl       String?
+  faviconUrl      String?  // Dynamic favicon image URL
+  nationality     String?
+  experienceYears String?  // e.g. "5+ years"
+  languages       String?  // e.g. "English, Bengali"
+  resumeUrl       String?
+  email           String?  // e.g. "sakil@example.com"
+  phone           String?  // e.g. "+880 1700-000000"
+  location        String?  // e.g. "Dhaka, Bangladesh"
+  availableForWork Boolean @default(true) // Admin selectable status
+  fontFamily      String?  @default("JetBrains Mono") // Developer font choice: "JetBrains Mono" | "Fira Code" | "Geist Mono" | "Space Mono"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SpecializedService {
+  id        String   @id @default(uuid())
+  title     String   // e.g. "Full Stack Web Engineering", "Cloud Architecture & DevOps"
+  icon      String?  // Lucide icon name or image url
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  purpose     String?  // e.g. "Freelance Project", "Full-Time Position", "Consultation", etc.
+  company     String?  // optional company / studio
+  subject     String?
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model VisitorActivity {
+  id             String   @id @default(uuid())
+  sessionId      String   // Unique visitor session
+  device         String?  // e.g. "Mobile", "Desktop", "Tablet"
+  browser        String?  // e.g. "Chrome", "Firefox", "Safari"
+  referrer       String?  // e.g. "google.com", "direct"
+  path           String   @default("/")
+  durationSeconds Int     @default(0) // Time spent on portfolio in seconds
+  lastPingAt     DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([sessionId])
+  @@index([createdAt])
+}

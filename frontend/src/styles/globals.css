@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default Obsidian Minimal tokens */
+  --color-bg: #09090b;
+  --color-surface: #121215;
+  --color-surface-hover: #18181d;
+  --color-border: #27272a;
+  --color-border-subtle: #1c1c20;
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-accent: #ffffff;
+  --color-accent-hover: #e4e4e7;
+  
+  /* Dynamic Developer Font Family */
+  --font-portfolio: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+body {
+  font-family: var(--font-portfolio);
+}
+
+/* Custom Scrollbar - Universal cross-browser support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-muted);
+}
+
+/* Barcode separator repeating pattern */
+.barcode-divider {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-border) 0px,
+    var(--color-border) 2px,
+    transparent 2px,
+    transparent 5px,
+    var(--color-accent) 5px,
+    var(--color-accent) 6px,
+    transparent 6px,
+    transparent 10px,
+    var(--color-border) 10px,
+    var(--color-border) 13px,
+    transparent 13px,
+    transparent 16px
+  );
+  opacity: 0.35;
+}
+
+/* Universal Smooth Scrolling & Clean Viewport Rules */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#main-content-scroll.lenis-smooth {
+  scroll-behavior: auto !important;
+}
