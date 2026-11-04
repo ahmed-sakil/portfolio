@@ -100,6 +100,26 @@ export function resolveLucideIcon(iconName?: string | null): LucideIcon | null {
   return null;
 }
 
+/**
+ * Normalizes an external icon URL (especially opensourceicon.com).
+ * Strips hardcoded colors or provides responsive SVG mask rendering.
+ */
+export function normalizeExternalIconUrl(url: string, themeColor?: string): string {
+  if (!url) return url;
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes('opensourceicon.com')) {
+      if (themeColor) {
+        parsed.searchParams.set('color', themeColor.startsWith('#') ? themeColor : `#${themeColor}`);
+      }
+      return parsed.toString();
+    }
+  } catch {
+    // If not a full URL or relative, return as-is
+  }
+  return url;
+}
+
 export function renderResolvedIcon(
   iconStr?: string | null,
   fallback = <Terminal className="w-3.5 h-3.5 text-accent" />,
@@ -107,9 +127,41 @@ export function renderResolvedIcon(
 ) {
   if (!iconStr || !iconStr.trim()) return fallback;
   const str = iconStr.trim();
+
+  // Check if it's an external URL (e.g. opensourceicon.com, Cloudinary, etc.)
   if (str.startsWith('http://') || str.startsWith('https://') || str.startsWith('/')) {
-    return <img src={str} alt="Icon" className={cn("object-contain rounded-xs", sizeClass)} />;
+    const isSvgUrl = str.includes('.svg') || str.includes('opensourceicon.com');
+
+    // If it's an SVG from opensourceicon or similar vector CDN, use CSS mask so currentColor / theme responds dynamically!
+    if (isSvgUrl) {
+      return (
+        <span
+          className={cn("inline-block bg-current flex-shrink-0 align-middle", sizeClass)}
+          style={{
+            maskImage: `url("${str}")`,
+            WebkitMaskImage: `url("${str}")`,
+            maskSize: 'contain',
+            WebkitMaskSize: 'contain',
+            maskRepeat: 'no-repeat',
+            WebkitMaskRepeat: 'no-repeat',
+            maskPosition: 'center',
+            WebkitMaskPosition: 'center',
+          }}
+          aria-hidden="true"
+        />
+      );
+    }
+
+    return (
+      <img
+        src={str}
+        alt="Icon"
+        loading="lazy"
+        className={cn("object-contain rounded-xs flex-shrink-0", sizeClass)}
+      />
+    );
   }
+
   const IconComp = resolveLucideIcon(str);
   if (IconComp) {
     return <IconComp className={sizeClass} />;

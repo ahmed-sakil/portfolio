@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../lib/api';
-import { Share2, Plus, Trash2, Edit2, ExternalLink, LucideIcon } from 'lucide-react';
-import * as Icons from 'lucide-react';
+import { Share2, Plus, Trash2, Edit2 } from 'lucide-react';
+import { renderResolvedIcon } from '../../lib/iconResolver';
+import { IconSelector } from './IconSelector';
 
 interface SocialLink {
   id: string;
@@ -90,11 +91,6 @@ export const SocialsManager: React.FC = () => {
     });
   };
 
-  const renderIconPreview = (name: string) => {
-    const IconComp = (Icons as unknown as Record<string, LucideIcon>)[name] || ExternalLink;
-    return <IconComp className="w-4 h-4 text-accent" />;
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between pb-3 border-b border-border">
@@ -141,39 +137,13 @@ export const SocialsManager: React.FC = () => {
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-mono uppercase text-text-muted">Lucide Icon Name</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder="e.g. Github, Linkedin, Globe"
-                  value={form.icon}
-                  onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                  className="flex-1 px-3 py-2 rounded-lg bg-background border border-border text-xs text-text-main focus:outline-none focus:border-accent font-mono"
-                />
-                <div className="w-9 h-9 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0">
-                  {renderIconPreview(form.icon)}
-                </div>
-              </div>
-
-              {/* Quick Pick Icon Chips */}
-              <div className="flex flex-wrap gap-1 pt-1">
-                {COMMON_ICONS.map((ic) => (
-                  <button
-                    key={ic}
-                    type="button"
-                    onClick={() => setForm({ ...form, icon: ic })}
-                    className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors ${
-                      form.icon === ic
-                        ? 'bg-accent text-background font-bold border-accent'
-                        : 'bg-background border-border text-text-muted hover:text-text-main'
-                    }`}
-                  >
-                    {ic}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <IconSelector
+              label="Social Icon (Lucide / Upload / OpenSourceIcon Link)"
+              value={form.icon}
+              onChange={(val) => setForm({ ...form, icon: val })}
+              presets={COMMON_ICONS}
+              fallbackIcon={<Share2 className="w-4 h-4 text-accent" />}
+            />
 
             <div className="pt-2">
               <label className="flex items-center gap-2 text-xs font-mono text-text-main cursor-pointer select-none">
@@ -230,8 +200,8 @@ export const SocialsManager: React.FC = () => {
                   className="flex items-center justify-between p-3 rounded-lg bg-background border border-border text-xs"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0">
-                      {renderIconPreview(s.icon)}
+                    <div className="w-8 h-8 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0 text-accent">
+                      {renderResolvedIcon(s.icon, <Share2 className="w-4 h-4 text-accent" />, "w-4 h-4 text-accent")}
                     </div>
                     <div className="truncate">
                       <div className="flex items-center gap-2">

@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../lib/api';
 import { Project, Author } from '../projects/ProjectCard';
 import { ImageUploader } from './ImageUploader';
+import { IconSelector } from './IconSelector';
 import {
   Plus,
   Trash2,
@@ -371,60 +372,14 @@ export async function getCachedOrFetch<T>(key: string, fetcher: () => Promise<T>
               </div>
             </div>
 
-            {/* Project Icon */}
-            <div className="space-y-2 p-3 rounded-lg bg-surface/50 border border-border">
-              <label className="text-[10px] uppercase text-text-muted font-bold block">
-                Project Icon / Logo (Upload Image or Type Lucide Name)
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={formData.icon}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, icon: e.target.value }))}
-                  placeholder="Upload image or type Lucide name (e.g. FolderGit2)"
-                  className="flex-1 px-3 py-2 rounded-lg bg-background border border-border text-xs text-text-main focus:outline-none focus:border-accent"
-                />
-                <div className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0 p-0 overflow-hidden">
-                  {renderResolvedIcon(formData.icon, <FolderGit2 className="w-5 h-5 text-accent" />, "w-full h-full object-cover sm:object-contain text-accent")}
-                </div>
-              </div>
-
-              {/* Direct Image Upload for Project Icon */}
-              <div className="flex items-center gap-2">
-                <div className="flex-1">
-                  <ImageUploader
-                    label="Upload Project Icon / Logo"
-                    onUploadSuccess={(url) => setFormData((prev) => ({ ...prev, icon: url }))}
-                  />
-                </div>
-                {formData.icon && (
-                  <button
-                    type="button"
-                    onClick={() => setFormData((prev) => ({ ...prev, icon: '' }))}
-                    className="px-2.5 py-1.5 rounded-lg border border-border text-[11px] text-rose-400 hover:bg-rose-500/10 transition-colors"
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
-
-              <div className="flex flex-wrap gap-1 pt-1">
-                {COMMON_PROJECT_ICONS.map((ic) => (
-                  <button
-                    key={ic}
-                    type="button"
-                    onClick={() => setFormData((prev) => ({ ...prev, icon: ic }))}
-                    className={`px-2 py-0.5 rounded text-[10px] border transition-colors ${
-                      formData.icon === ic
-                        ? 'bg-accent text-background font-bold border-accent'
-                        : 'bg-background border-border text-text-muted hover:text-text-main'
-                    }`}
-                  >
-                    {ic}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Project Icon (Lucide / Upload / OpenSourceIcon Link) */}
+            <IconSelector
+              label="Project Icon / Logo"
+              value={formData.icon}
+              onChange={(iconVal) => setFormData((prev) => ({ ...prev, icon: iconVal }))}
+              presets={COMMON_PROJECT_ICONS}
+              fallbackIcon={<FolderGit2 className="w-5 h-5 text-accent" />}
+            />
 
             {/* Level & Project Type Dropdowns */}
             <div className="grid grid-cols-2 gap-2">
@@ -708,40 +663,24 @@ export async function getCachedOrFetch<T>(key: string, fetcher: () => Promise<T>
                     onChange={(e) => setNewAuthor({ ...newAuthor, name: e.target.value })}
                     className="w-full px-2.5 py-1.5 rounded bg-background border border-border text-xs text-text-main focus:outline-none"
                   />
-                  <div className="space-y-1.5">
-                    <div className="flex gap-2">
-                      <div className="flex-1 space-y-1">
-                        <label className="text-[10px] uppercase text-text-muted">Author Icon / Avatar</label>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            placeholder="Type Lucide name or upload below..."
-                            value={newAuthor.icon}
-                            onChange={(e) => setNewAuthor({ ...newAuthor, icon: e.target.value })}
-                            className="flex-1 px-2.5 py-1.5 rounded bg-background border border-border text-xs text-text-main focus:outline-none"
-                          />
-                          <div className="w-8 h-8 rounded bg-background border border-border flex items-center justify-center p-1 overflow-hidden flex-shrink-0">
-                            {renderResolvedIcon(newAuthor.icon, <User className="w-3.5 h-3.5 text-accent" />, "w-full h-full object-contain text-accent")}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-1 space-y-1">
-                        <label className="text-[10px] uppercase text-text-muted">Portfolio / Profile URL</label>
-                        <input
-                          type="url"
-                          placeholder="https://..."
-                          value={newAuthor.portfolioUrl}
-                          onChange={(e) => setNewAuthor({ ...newAuthor, portfolioUrl: e.target.value })}
-                          className="w-full px-2.5 py-1.5 rounded bg-background border border-border text-xs text-text-main focus:outline-none"
-                        />
-                      </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase text-text-muted">Portfolio / Profile URL</label>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={newAuthor.portfolioUrl}
+                        onChange={(e) => setNewAuthor({ ...newAuthor, portfolioUrl: e.target.value })}
+                        className="w-full px-2.5 py-1.5 rounded bg-background border border-border text-xs text-text-main focus:outline-none"
+                      />
                     </div>
 
-                    <ImageUploader
-                      label="Upload Author Avatar / Icon"
-                      onUploadSuccess={(url) => setNewAuthor((prev) => ({ ...prev, icon: url }))}
+                    <IconSelector
+                      label="Author Icon / Avatar"
+                      value={newAuthor.icon}
+                      onChange={(val) => setNewAuthor((prev) => ({ ...prev, icon: val }))}
+                      presets={['User', 'Sparkles', 'Code2', 'Terminal', 'Github', 'Globe']}
+                      fallbackIcon={<User className="w-4 h-4 text-accent" />}
                     />
-                  </div>
                   <div className="flex justify-end gap-2 pt-1">
                     <button
                       type="button"

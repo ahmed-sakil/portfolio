@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../lib/api';
 import { Code2, Trash2, Edit2, FolderPlus } from 'lucide-react';
 import { renderResolvedIcon } from '../../lib/iconResolver';
+import { IconSelector } from './IconSelector';
 
 interface Skill {
   id: string;
@@ -191,38 +192,13 @@ export const SkillsManager: React.FC = () => {
               </select>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[10px] uppercase text-text-muted">Icon Name or Image URL</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder="e.g. Atom, Database, Terminal"
-                  value={form.icon}
-                  onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                  className="flex-1 px-3 py-2 rounded-lg bg-background border border-border text-xs text-text-main focus:outline-none focus:border-accent"
-                />
-                <div className="w-8 h-8 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0">
-                  {renderResolvedIcon(form.icon, <Code2 className="w-3.5 h-3.5 text-accent" />)}
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-1 pt-1">
-                {COMMON_SKILL_ICONS.map((ic) => (
-                  <button
-                    key={ic}
-                    type="button"
-                    onClick={() => setForm({ ...form, icon: ic })}
-                    className={`px-1.5 py-0.5 rounded text-[10px] border transition-colors ${
-                      form.icon === ic
-                        ? 'bg-accent text-background font-bold border-accent'
-                        : 'bg-background border-border text-text-muted hover:text-text-main'
-                    }`}
-                  >
-                    {ic}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <IconSelector
+              label="Skill Icon (Lucide / Upload / OpenSourceIcon Link)"
+              value={form.icon}
+              onChange={(val) => setForm({ ...form, icon: val })}
+              presets={COMMON_SKILL_ICONS}
+              fallbackIcon={<Code2 className="w-4 h-4 text-accent" />}
+            />
 
             <div className="space-y-1">
               <label className="text-[10px] uppercase text-text-muted">Order</label>
