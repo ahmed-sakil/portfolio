@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default Obsidian Minimal tokens */
+  --color-bg: #09090b;
+  --color-surface: #121215;
+  --color-surface-hover: #18181d;
+  --color-border: #27272a;
+  --color-border-subtle: #1c1c20;
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-accent: #ffffff;
+  --color-accent-hover: #e4e4e7;
+  
+  /* Dynamic Developer Font Family */
+  --font-portfolio: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+body {
+  font-family: var(--font-portfolio);
+}
+
+/* Custom Scrollbar - Universal cross-browser support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-muted);
+}
+
+/* Barcode separator repeating pattern */
+.barcode-divider {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-border) 0px,
+    var(--color-border) 2px,
+    transparent 2px,
+    transparent 5px,
+    var(--color-accent) 5px,
+    var(--color-accent) 6px,
+    transparent 6px,
+    transparent 10px,
+    var(--color-border) 10px,
+    var(--color-border) 13px,
+    transparent 13px,
+    transparent 16px
+  );
+  opacity: 0.35;
+}
+
+/* Universal Smooth Scrolling & Clean Viewport Rules */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#main-content-scroll.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* High-Performance Glassmorphic Elevation Panel */
+.glass-panel {
+  background-color: color-mix(in srgb, var(--color-surface) 35%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-border) 45%, transparent);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 36px -12px rgba(0, 0, 0, 0.35);
+}
+
+/* Translucent Glass Sub-cards (For cards nested inside sections) */
+.glass-subcard {
+  background-color: color-mix(in srgb, var(--color-surface) 45%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+}
+
+.glass-subcard-nested {
+  background-color: color-mix(in srgb, var(--color-background) 45%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 35%, transparent);
+}
+
+/* Outlined Display Typography (Transparent fill with crisp stroke) */
+.stroke-display-text {
+  font-family: 'Syne', sans-serif;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-text) 32%, transparent);
+  text-stroke: 1.5px color-mix(in srgb, var(--color-text) 32%, transparent);
+  transition: -webkit-text-stroke 0.4s ease, text-stroke 0.4s ease, opacity 0.4s ease;
+}
+
+.group\/hero:hover .stroke-display-text {
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-accent) 60%, transparent);
+  text-stroke: 1.5px color-mix(in srgb, var(--color-accent) 60%, transparent);
+}
