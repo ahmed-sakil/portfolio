@@ -882,12 +882,26 @@ export async function getCachedOrFetch<T>(key: string, fetcher: () => Promise<T>
                     <div className="w-14 h-14 rounded-lg bg-surface border border-border overflow-hidden flex-shrink-0 relative">
                       {project.thumbnail ? (
                         <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover" />
+                      ) : project.icon ? (
+                        <div className="w-full h-full flex items-center justify-center p-1.5 bg-background">
+                          {renderResolvedIcon(
+                            project.icon,
+                            <FolderGit2 className="w-6 h-6 text-accent" />,
+                            "w-6 h-6 text-accent",
+                            "w-full h-full object-contain p-0"
+                          )}
+                        </div>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-[10px] text-text-muted">N/A</div>
                       )}
-                      {project.icon && (
-                        <div className="absolute bottom-1 right-1 w-5 h-5 rounded bg-background/90 flex items-center justify-center text-accent">
-                          {renderResolvedIcon(project.icon, <FolderGit2 className="w-3 h-3 text-accent" />, "w-3 h-3 text-accent")}
+                      {project.thumbnail && project.icon && (
+                        <div className="absolute bottom-1 right-1 w-6 h-6 rounded-md bg-background/95 border border-border flex items-center justify-center text-accent p-0.5 overflow-hidden shadow-xs">
+                          {renderResolvedIcon(
+                            project.icon,
+                            <FolderGit2 className="w-3.5 h-3.5 text-accent" />,
+                            "w-3.5 h-3.5 text-accent",
+                            "w-full h-full object-contain p-0"
+                          )}
                         </div>
                       )}
                     </div>

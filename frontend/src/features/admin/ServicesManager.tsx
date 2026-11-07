@@ -156,8 +156,8 @@ export const ServicesManager: React.FC = () => {
                 className="flex items-center justify-between p-3.5 rounded-xl bg-surface border border-border gap-3 text-xs"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0">
-                    {renderResolvedIcon(s.icon, <Layers className="w-4 h-4 text-accent" />)}
+                  <div className="w-9 h-9 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0 p-0.5 overflow-hidden">
+                    {renderResolvedIcon(s.icon, <Layers className="w-4 h-4 text-accent" />, "w-4 h-4 text-accent", "w-full h-full object-contain")}
                   </div>
                   <div>
                     <span className="font-bold text-text-main block truncate">{s.title}</span>

@@ -239,8 +239,8 @@ export const SkillsManager: React.FC = () => {
                       className="flex items-center justify-between p-2.5 rounded-lg bg-background border border-border text-xs"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-6 h-6 rounded bg-surface border border-border flex items-center justify-center flex-shrink-0">
-                          {renderResolvedIcon(s.icon, <Code2 className="w-3 h-3 text-accent" />)}
+                        <div className="w-6 h-6 rounded bg-surface border border-border flex items-center justify-center flex-shrink-0 p-0.5 overflow-hidden">
+                          {renderResolvedIcon(s.icon, <Code2 className="w-3 h-3 text-accent" />, "w-3 h-3 text-accent", "w-full h-full object-contain")}
                         </div>
                         <span className="font-semibold text-text-main truncate">{s.name}</span>
                         <span className="text-[9px] text-text-muted">#{s.order}</span>

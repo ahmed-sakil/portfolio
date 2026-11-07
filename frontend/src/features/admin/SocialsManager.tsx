@@ -200,8 +200,8 @@ export const SocialsManager: React.FC = () => {
                   className="flex items-center justify-between p-3 rounded-lg bg-background border border-border text-xs"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0 text-accent">
-                      {renderResolvedIcon(s.icon, <Share2 className="w-4 h-4 text-accent" />, "w-4 h-4 text-accent")}
+                    <div className="w-8 h-8 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0 text-accent p-0.5 overflow-hidden">
+                      {renderResolvedIcon(s.icon, <Share2 className="w-4 h-4 text-accent" />, "w-4 h-4 text-accent", "w-full h-full object-contain")}
                     </div>
                     <div className="truncate">
                       <div className="flex items-center gap-2">

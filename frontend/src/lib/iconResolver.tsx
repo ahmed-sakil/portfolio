@@ -1,6 +1,37 @@
+import React, { useState } from 'react';
 import { LucideIcon, Terminal } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { cn } from './utils';
+
+export interface ResolvedIconImageProps {
+  src: string;
+  alt?: string;
+  className?: string;
+  fallback?: React.ReactNode;
+}
+
+export const ResolvedIconImage: React.FC<ResolvedIconImageProps> = ({
+  src,
+  alt = 'Icon',
+  className,
+  fallback,
+}) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return <>{fallback}</>;
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setHasError(true)}
+      className={className}
+    />
+  );
+};
 
 export const TECH_ICONS_MAP: Record<string, string> = {
   react: 'Atom',
@@ -122,18 +153,19 @@ export function normalizeExternalIconUrl(url: string, themeColor?: string): stri
 
 export function renderResolvedIcon(
   iconStr?: string | null,
-  fallback = <Terminal className="w-3.5 h-3.5 text-accent" />,
-  sizeClass = "w-3.5 h-3.5 text-accent"
+  fallback: React.ReactNode = <Terminal className="w-3.5 h-3.5 text-accent" />,
+  sizeClass = "w-3.5 h-3.5 text-accent",
+  imgClass?: string
 ) {
   if (!iconStr || !iconStr.trim()) return fallback;
   const str = iconStr.trim();
 
-  // Check if it's an external URL (e.g. opensourceicon.com, Cloudinary, etc.)
+  // Check if it's an external URL (Cloudinary, opensourceicon, etc.) or relative path
   if (str.startsWith('http://') || str.startsWith('https://') || str.startsWith('/')) {
-    const isSvgUrl = str.includes('.svg') || str.includes('opensourceicon.com');
+    // Only opensourceicon.com vector icons use CSS mask for dynamic theme recoloring
+    const isOpenSourceIconCdn = str.includes('opensourceicon.com');
 
-    // If it's an SVG from opensourceicon or similar vector CDN, use CSS mask so currentColor / theme responds dynamically!
-    if (isSvgUrl) {
+    if (isOpenSourceIconCdn) {
       return (
         <span
           className={cn("inline-block bg-current flex-shrink-0 align-middle", sizeClass)}
@@ -152,12 +184,13 @@ export function renderResolvedIcon(
       );
     }
 
+    // Direct image rendering with automatic fallback on load error
     return (
-      <img
+      <ResolvedIconImage
         src={str}
         alt="Icon"
-        loading="lazy"
-        className={cn("object-contain rounded-xs flex-shrink-0", sizeClass)}
+        className={cn("w-full h-full object-contain flex-shrink-0", imgClass || sizeClass)}
+        fallback={fallback}
       />
     );
   }

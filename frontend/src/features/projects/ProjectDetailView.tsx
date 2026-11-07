@@ -87,7 +87,12 @@ export const ProjectDetailView: React.FC<ProjectDetailViewProps> = ({ project, o
         {/* 2. ICON AND TITLE IN BIG FONT */}
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-background border border-border flex items-center justify-center text-accent flex-shrink-0 shadow-md p-0 overflow-hidden">
-            {renderResolvedIcon(project.icon, <FolderGit2 className="w-8 h-8 sm:w-10 sm:h-10 text-accent" />, "w-full h-full object-cover sm:object-contain text-accent")}
+            {renderResolvedIcon(
+              project.icon,
+              <FolderGit2 className="w-8 h-8 sm:w-10 sm:h-10 text-accent" />,
+              "w-8 h-8 sm:w-10 sm:h-10 text-accent",
+              "w-full h-full object-contain p-0"
+            )}
           </div>
           <div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-main tracking-tight leading-tight">

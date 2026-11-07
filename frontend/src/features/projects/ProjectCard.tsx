@@ -75,7 +75,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onHo
           {/* Enlarge icon on top-left corner */}
           {project.icon ? (
             <div className="absolute top-3 left-3 w-11 h-11 rounded-lg bg-background/90 backdrop-blur-md border border-border flex items-center justify-center text-accent shadow-md group-hover:border-accent/60 transition-colors p-0 overflow-hidden">
-              {renderResolvedIcon(project.icon, <FolderGit2 className="w-6 h-6 text-accent" />, "w-full h-full object-cover sm:object-contain text-accent")}
+              {renderResolvedIcon(
+                project.icon,
+                <FolderGit2 className="w-6 h-6 text-accent" />,
+                "w-6 h-6 text-accent",
+                "w-full h-full object-contain p-0"
+              )}
             </div>
           ) : (
             <div className="absolute top-3 left-3 w-11 h-11 rounded-lg bg-background/90 backdrop-blur-md border border-border flex items-center justify-center text-accent shadow-md">

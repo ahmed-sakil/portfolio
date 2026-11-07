@@ -24,7 +24,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills = [], isLoa
     return renderResolvedIcon(
       icon,
       <Terminal className="w-3.5 h-3.5 text-accent" />,
-      "w-3.5 h-3.5 text-accent"
+      "w-3.5 h-3.5 text-accent",
+      "w-full h-full object-contain p-0"
     );
   };
 
@@ -66,7 +67,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills = [], isLoa
                       key={skill.id}
                       className="flex items-center gap-2.5 p-2.5 rounded-lg glass-subcard-nested hover:border-accent/40 transition-all duration-150 group"
                     >
-                      <div className="w-7 h-7 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0 group-hover:border-accent/40 transition-colors">
+                      <div className="w-7 h-7 rounded-md bg-surface border border-border flex items-center justify-center flex-shrink-0 p-0.5 overflow-hidden group-hover:border-accent/40 transition-colors">
                         {renderSkillIcon(skill.icon)}
                       </div>
                       <span className="text-xs font-medium text-text-main truncate group-hover:text-accent transition-colors font-mono">
