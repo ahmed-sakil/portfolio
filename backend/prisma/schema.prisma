@@ -80,6 +80,15 @@ model Skill {
   updatedAt DateTime @updatedAt
 }
 
+model SkillCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  icon      String?  // Lucide icon name, image URL, or OpenSourceIcon URL
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Experience {
   id          String   @id @default(uuid())
   company     String

@@ -3,7 +3,14 @@ import { Terminal } from 'lucide-react';
 import { SectionHeader } from '../../components/ui/SectionHeader';
 import { renderResolvedIcon } from '../../lib/iconResolver';
 
-interface Skill {
+export interface SkillCategory {
+  id: string;
+  name: string;
+  icon?: string | null;
+  order: number;
+}
+
+export interface Skill {
   id: string;
   name: string;
   category: string;
@@ -13,12 +20,29 @@ interface Skill {
 
 interface SkillsSectionProps {
   skills: Skill[];
+  categories?: SkillCategory[];
   isLoading?: boolean;
 }
 
-export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills = [], isLoading = false }) => {
-  // Group skills by category
-  const categories = Array.from(new Set(skills.map((s) => s.category)));
+export const SkillsSection: React.FC<SkillsSectionProps> = ({
+  skills = [],
+  categories = [],
+  isLoading = false,
+}) => {
+  // Map categories for rapid lookup
+  const categoryMap = new Map<string, SkillCategory>();
+  categories.forEach((cat) => {
+    categoryMap.set(cat.name, cat);
+  });
+
+  // Extract unique category names present in skills and sort by category.order
+  const skillCategoryNames = Array.from(new Set(skills.map((s) => s.category).filter(Boolean)));
+  const sortedCategoryNames = skillCategoryNames.sort((a, b) => {
+    const orderA = categoryMap.get(a)?.order ?? 999;
+    const orderB = categoryMap.get(b)?.order ?? 999;
+    if (orderA !== orderB) return orderA - orderB;
+    return a.localeCompare(b);
+  });
 
   const renderSkillIcon = (icon?: string | null) => {
     return renderResolvedIcon(
@@ -42,21 +66,29 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills = [], isLoa
         <div className="p-8 rounded-lg glass-subcard text-center text-xs font-mono text-text-muted">
           Loading skills repository...
         </div>
-      ) : categories.length === 0 ? (
+      ) : sortedCategoryNames.length === 0 ? (
         <div className="p-8 rounded-lg glass-subcard text-center text-xs font-mono text-text-muted space-y-1">
           <p className="text-text-main font-semibold">// NO_SKILLS_REGISTERED</p>
           <p className="text-[11px] text-text-muted">No technical skills found in the database.</p>
         </div>
       ) : (
         <div className="space-y-6">
-          {categories.map((category) => {
-            const categorySkills = skills.filter((s) => s.category === category);
-            const formattedCategory = category.toUpperCase().replace(/\s+/g, '_');
+          {sortedCategoryNames.map((categoryName) => {
+            const categorySkills = skills
+              .filter((s) => s.category === categoryName)
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+            const categoryInfo = categoryMap.get(categoryName);
+            const formattedCategory = categoryName.toUpperCase().replace(/\s+/g, '_');
             return (
-              <div key={category} className="rounded-lg glass-subcard p-5 sm:p-6 space-y-4">
+              <div key={categoryName} className="rounded-lg glass-subcard p-5 sm:p-6 space-y-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-md bg-background border border-border flex items-center justify-center text-accent">
-                    <Terminal className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-md bg-background border border-border flex items-center justify-center text-accent p-1 overflow-hidden flex-shrink-0">
+                    {renderResolvedIcon(
+                      categoryInfo?.icon,
+                      <Terminal className="w-4 h-4 text-accent" />,
+                      "w-4 h-4 text-accent",
+                      "w-full h-full object-contain p-0"
+                    )}
                   </div>
                   <h3 className="text-sm font-bold text-text-main font-mono">// {formattedCategory}</h3>
                 </div>

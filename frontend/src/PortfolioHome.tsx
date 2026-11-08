@@ -44,6 +44,12 @@ interface ProfileData {
     icon?: string | null;
     order: number;
   }>;
+  skillCategories?: Array<{
+    id: string;
+    name: string;
+    icon?: string | null;
+    order: number;
+  }>;
   experiences: Array<{
     id: string;
     company: string;
@@ -336,7 +342,11 @@ export const PortfolioHome: React.FC = () => {
             educations={profileData?.educations || []}
           />
 
-          <SkillsSection skills={profileData?.skills || []} isLoading={isProfileLoading} />
+          <SkillsSection
+            skills={profileData?.skills || []}
+            categories={profileData?.skillCategories || []}
+            isLoading={isProfileLoading}
+          />
 
           <ProjectsSection
             projects={projects}

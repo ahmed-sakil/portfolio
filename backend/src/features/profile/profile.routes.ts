@@ -5,20 +5,56 @@ import { authenticateAdmin } from '../../core/auth.middleware';
 
 const router = Router();
 
-// GET profile overview (Profile, Skills, Experiences, Education, Specialized Services)
+// GET profile overview (Profile, Skills, Skill Categories, Experiences, Education, Specialized Services)
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const [profile, skills, experiences, educations, services] = await Promise.all([
+    const [profile, skills, rawCategories, experiences, educations, services] = await Promise.all([
       prisma.profile.findFirst(),
       prisma.skill.findMany({ orderBy: [{ category: 'asc' }, { order: 'asc' }] }),
+      prisma.skillCategory.findMany({ orderBy: [{ order: 'asc' }, { createdAt: 'asc' }] }),
       prisma.experience.findMany({ orderBy: [{ startDate: 'desc' }, { order: 'asc' }] }),
       prisma.education.findMany({ orderBy: [{ startDate: 'desc' }, { order: 'asc' }] }),
       prisma.specializedService.findMany({ orderBy: [{ order: 'asc' }, { createdAt: 'asc' }] }),
     ]);
 
+    let skillCategories = [...rawCategories];
+
+    // Ensure all unique categories present in skills exist in skillCategories
+    const existingCatNames = new Set(skillCategories.map((c) => c.name));
+    const skillCatNames = Array.from(new Set(skills.map((s) => s.category).filter(Boolean)));
+
+    const DEFAULT_CAT_ICONS: Record<string, string> = {
+      'Programming Languages': 'Terminal',
+      'Frameworks & Libraries': 'Atom',
+      'Databases & Tools': 'Database',
+      'Databases & Caching': 'Database',
+      'Cloud & DevOps': 'Cloud',
+    };
+
+    const missingCats = skillCatNames.filter((cat) => !existingCatNames.has(cat));
+    if (missingCats.length > 0) {
+      let nextOrder = skillCategories.length;
+      for (const missing of missingCats) {
+        try {
+          const created = await prisma.skillCategory.create({
+            data: {
+              name: missing,
+              icon: DEFAULT_CAT_ICONS[missing] || 'FolderGit2',
+              order: nextOrder++,
+            },
+          });
+          skillCategories.push(created);
+        } catch {
+          // Ignore unique race condition
+        }
+      }
+      skillCategories.sort((a, b) => a.order - b.order);
+    }
+
     res.json({
       profile,
       skills,
+      skillCategories,
       experiences,
       educations,
       services,
@@ -81,6 +117,20 @@ const skillSchema = z.object({
 router.post('/skills', authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const data = skillSchema.parse(req.body);
+    
+    // Auto-create skill category if it doesn't exist
+    const catExists = await prisma.skillCategory.findUnique({ where: { name: data.category.trim() } });
+    if (!catExists) {
+      const count = await prisma.skillCategory.count();
+      await prisma.skillCategory.create({
+        data: {
+          name: data.category.trim(),
+          icon: 'FolderGit2',
+          order: count,
+        },
+      });
+    }
+
     const skill = await prisma.skill.create({ data });
     res.status(201).json(skill);
   } catch (error: any) {
@@ -92,6 +142,21 @@ router.put('/skills/:id', authenticateAdmin, async (req: Request, res: Response)
   try {
     const id = req.params.id as string;
     const data = skillSchema.partial().parse(req.body);
+
+    if (data.category) {
+      const catExists = await prisma.skillCategory.findUnique({ where: { name: data.category.trim() } });
+      if (!catExists) {
+        const count = await prisma.skillCategory.count();
+        await prisma.skillCategory.create({
+          data: {
+            name: data.category.trim(),
+            icon: 'FolderGit2',
+            order: count,
+          },
+        });
+      }
+    }
+
     const updated = await prisma.skill.update({ where: { id }, data });
     res.json(updated);
   } catch (error: any) {
@@ -106,6 +171,101 @@ router.delete('/skills/:id', authenticateAdmin, async (req: Request, res: Respon
     res.json({ message: 'Skill deleted' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to delete skill' });
+  }
+});
+
+// SKILL CATEGORY CRUD
+const skillCategorySchema = z.object({
+  name: z.string().min(1, 'Category name is required'),
+  icon: z.string().optional().nullable(),
+  order: z.number().int().optional(),
+});
+
+// POST new skill category
+router.post('/skill-categories', authenticateAdmin, async (req: Request, res: Response) => {
+  try {
+    const data = skillCategorySchema.parse(req.body);
+    const existing = await prisma.skillCategory.findUnique({ where: { name: data.name.trim() } });
+    if (existing) {
+      res.status(400).json({ message: 'A skill category with this name already exists' });
+      return;
+    }
+    const cat = await prisma.skillCategory.create({
+      data: {
+        name: data.name.trim(),
+        icon: data.icon || null,
+        order: data.order ?? 0,
+      },
+    });
+    res.status(201).json(cat);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message || 'Failed to create skill category' });
+  }
+});
+
+// PUT update skill category (with cascading skill update if name changes)
+router.put('/skill-categories/:id', authenticateAdmin, async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const data = skillCategorySchema.partial().parse(req.body);
+
+    const currentCat = await prisma.skillCategory.findUnique({ where: { id } });
+    if (!currentCat) {
+      res.status(404).json({ message: 'Skill category not found' });
+      return;
+    }
+
+    const oldName = currentCat.name;
+    const newName = data.name !== undefined ? data.name.trim() : oldName;
+
+    if (newName !== oldName) {
+      const duplicate = await prisma.skillCategory.findUnique({ where: { name: newName } });
+      if (duplicate && duplicate.id !== id) {
+        res.status(400).json({ message: 'A skill category with this name already exists' });
+        return;
+      }
+    }
+
+    const updated = await prisma.$transaction(async (tx) => {
+      const category = await tx.skillCategory.update({
+        where: { id },
+        data: {
+          name: newName,
+          icon: data.icon !== undefined ? data.icon : currentCat.icon,
+          order: data.order !== undefined ? data.order : currentCat.order,
+        },
+      });
+
+      if (newName !== oldName) {
+        await tx.skill.updateMany({
+          where: { category: oldName },
+          data: { category: newName },
+        });
+      }
+
+      return category;
+    });
+
+    res.json(updated);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message || 'Failed to update skill category' });
+  }
+});
+
+// DELETE skill category
+router.delete('/skill-categories/:id', authenticateAdmin, async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const category = await prisma.skillCategory.findUnique({ where: { id } });
+    if (!category) {
+      res.status(404).json({ message: 'Skill category not found' });
+      return;
+    }
+
+    await prisma.skillCategory.delete({ where: { id } });
+    res.json({ message: 'Skill category deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to delete skill category' });
   }
 });
 
